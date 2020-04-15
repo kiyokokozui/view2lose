@@ -7,15 +7,15 @@
 //
 
 import SwiftUI
+import Combine
 
-struct UserStore: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+class UserStore  {
 
-struct UserStore_Previews: PreviewProvider {
-    static var previews: some View {
-        UserStore()
+    let email: String
+    let name: String
+    
+    init(email: String, name: String) {
+        self.email = email
+        self.name = name
     }
 }
