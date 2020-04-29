@@ -9,8 +9,9 @@
 import SwiftUI
 import Combine
 
-class UserStore  {
+class UserStore : Codable  {
 
+    let id = UUID()
     let email: String
     let name: String
     

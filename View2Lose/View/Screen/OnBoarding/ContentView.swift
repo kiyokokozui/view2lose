@@ -7,19 +7,25 @@
 //
 
 import SwiftUI
+import Combine
+
+
+
 
 struct ContentView: View {
     @State private var age: Double = 0
-    @State var percentage: Float = 50
-    @State var height: Float = 50
-    @State private var switchMetric = true
+    @State var percentage: Double = 40
+    @State var height: Double = 180
+    @State private var switchMetric = false
     @State var isFemale = false
     @State var isMale = false
+    @ObservedObject var userViewModel: UserViewModel
     
-    init()
+    init(viewModel: UserViewModel)
     {
+        self.userViewModel = viewModel
         UISwitch.appearance().onTintColor = #colorLiteral(red: 0.589797318, green: 0.4313705266, blue: 0.9223902822, alpha: 1)
-    }
+            }
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -30,6 +36,39 @@ struct ContentView: View {
             
             Image(systemName: "chevron.left")
                 .foregroundColor(.black)
+        }
+    }
+
+    
+    private func changeMetrics(metricType: MetricType, unit: unitType, value: Int) -> Int {
+        
+        
+        if metricType == .imperial {
+            if unit == .height {
+                                let changedMeasurement = Measurement(value: Double(value), unit: UnitLength.centimeters)
+                                let changedValue = changedMeasurement.converted(to: UnitLength.inches)
+                
+                return Int(changedValue.value)
+
+            } else {
+                 let changedMeasurement = Measurement(value: Double(value), unit: UnitMass.kilograms)
+                                let changedValue = changedMeasurement.converted(to: UnitMass.pounds)
+                
+                                return Int(changedValue.value)
+            }
+            
+        } else {
+            if unit == .height {
+                  let changedMeasurement = Measurement(value: Double(value), unit: UnitLength.inches)
+                                let changedValue = changedMeasurement.converted(to: UnitLength.centimeters)
+                
+                                return Int(changedValue.value)
+            } else {
+                let changedMeasurement = Measurement(value: Double(value), unit: UnitMass.kilograms)
+                                let changedValue = changedMeasurement.converted(to: UnitMass.pounds)
+                
+                                return Int(changedValue.value)
+            }
         }
     }
     
@@ -44,26 +83,30 @@ struct ContentView: View {
                             .foregroundColor(Color("primary"))
                         Circle()
                             .frame(width: 15, height: 15)
-                            .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                            .foregroundColor(Color("secondary"))
                         Circle()
                             .frame(width: 15, height: 15)
-                            .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                            .foregroundColor(Color("secondary"))
                         Circle()
                         .frame(width: 15, height: 15)
-                        .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                        .foregroundColor(Color("secondary"))
                         
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .padding(.top, -30)
                     
                 }
-                Text("Lets get to \nknow you Parisa!")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                Text("Lets get to \nknow you \(self.userViewModel.getFirstName(fullName: userViewModel.userObect?.name ?? "") )!")
+//                    .font(.largeTitle)
+//                    .fontWeight(.bold)
                     .lineLimit(2)
+                    .modifier(CustomHeaderFontModifier(size: 35))
+
                 
-                Text("Pick your genger")
-                    .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                Text("Pick your gender")
+                    .foregroundColor(Color("secondary"))
+                .modifier(CustomBodyFontModifier(size: 16))
+
                 
                 
                 HStack (alignment: .center, spacing: 20) {
@@ -77,53 +120,45 @@ struct ContentView: View {
                 VStack {
                     HStack {
                         Text("Age")
-                            .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                            .foregroundColor(Color("secondary"))
                             .fontWeight(.bold)
+                        .modifier(CustomBoldBodyFontModifier(size: 16))
+
                         
                         Spacer()
                         
                         Text("\(Int(percentage)) years")
-                            .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                            .foregroundColor(Color("secondary"))
+                        .modifier(CustomBodyFontModifier(size: 16))
+
                         
                     }
-                    SliderView(percentage: $percentage, hideTicker: false).frame( height: 20)
+                    SliderView(percentage: $percentage, hideTicker: false, range: (10, 60)).frame( height: 20)
                         .padding(.bottom, 20)
     
                     
 
-                }
+                }.padding(.bottom, 10)
                 
                 VStack {
                     HStack {
                         Text("Height")
-                            .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                            .foregroundColor(Color("secondary"))
                         .fontWeight(.bold)
+                        .modifier(CustomBoldBodyFontModifier(size: 16))
+
 
                         Spacer()
                         
-                        Text("\(Int(height)) cm")
-                            .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                        Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .height, value: Int(height)) : changeMetrics(metricType: .imperial, unit: .height, value: Int(height))) \(switchMetric ? "cm" : "inches")")
+                            .foregroundColor(Color("secondary"))
                         
                     }
-                    SliderView(percentage: $height, hideTicker: false).frame( height: 15).frame( height: 20)
+                    SliderView(percentage:  $height, hideTicker: false, range: (150, 200)).frame( height: 15).frame( height: 20)
                     .padding(.bottom, 20)
                     //SliderTick()
                 }
-                HStack (alignment: .center) {
-                    Text ("Imperial").font(.system(size: 14))
-                        .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
-                    Toggle(isOn: $switchMetric) {
-                        Text("")
-                        
-                    }
-                    .labelsHidden()
-                    .padding()
-                    Text ("Metric").font(.system(size: 14))
-                        .foregroundColor(Color.init(#colorLiteral(red: 0.8044032454, green: 0.8044223189, blue: 0.8044120669, alpha: 1)))
-                    
-                    
-                    
-                }.frame(minWidth: 0, maxWidth: .infinity)
+                MetricsConversionView(switchMetric: $switchMetric)
                 
                 
                 Spacer()
@@ -135,7 +170,8 @@ struct ContentView: View {
                             Text("Continue")
                                 .padding()
                                 .foregroundColor(.white)
-                                
+                                .modifier(CustomBodyFontModifier(size: 16))
+
                                 .frame(maxWidth: .infinity, alignment: .center)
                         }.background(Color("primary"))
                             .cornerRadius(30)
@@ -156,7 +192,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(viewModel: UserViewModel())
     }
 }
 var genderData = ["👩🏻", "👦🏻"]

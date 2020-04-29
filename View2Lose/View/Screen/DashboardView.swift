@@ -30,7 +30,8 @@ struct DashboardView: View {
                 if facebookManager.isUserAuthenticated == .undefined {
                     LoginView()
                 } else if facebookManager.isUserAuthenticated == .userOnBoard {
-                    ContentView()
+                    
+                    ContentView(viewModel: UserViewModel())
                 } else if facebookManager.isUserAuthenticated == .signedIn {
                     
                     DashboardSectionView()
@@ -48,10 +49,12 @@ struct DashboardView_Previews: PreviewProvider {
 
 struct DashboardSectionView: View {
     @State private var selectedItem = 1
-    @State var desiredWeight: Float = 50
+    @State var desiredWeight: Double = 50
     @State var showActionSheet: Bool = false
     @State var showingImagePicker = false
     @State var image: Image? = nil
+    
+    @State var index = 0
 
     var actionSheet: ActionSheet {
         ActionSheet(title: Text("Photo Picker"), message: Text("Choose option"), buttons: [
@@ -66,7 +69,6 @@ struct DashboardSectionView: View {
     
 
     var body: some View {
-        TabView (selection: $selectedItem) {
             VStack (alignment: .leading, spacing: 10) {
                 HStack {
                     Text("Your better \nbody image")
@@ -78,12 +80,8 @@ struct DashboardSectionView: View {
                 }
                 
                 VStack {
-                                               
-         
-                                           
                     ZStack (alignment: .topLeading) {
                         
-                       
                         VStack {
                             if image == nil {
                                 Image("woman-placeholder")
@@ -126,7 +124,10 @@ struct DashboardSectionView: View {
                             .cornerRadius(20)
                             .actionSheet(isPresented: $showActionSheet, content: {
                                                       self.actionSheet })
-                            .sheet(isPresented: $showingImagePicker, content: {
+                                .sheet(isPresented: $showingImagePicker, onDismiss: {
+                                    TestView()
+                                    print("Image Picker Dismissed")
+                                }, content: {
                                 ImagePicker.shared.view
                             }).onReceive(ImagePicker.shared.$image) { (image) in
                                 self.image = image
@@ -147,29 +148,61 @@ struct DashboardSectionView: View {
                     .foregroundColor(Color("primary"))
                     .fontWeight(.bold)
                     
-                    SliderView(percentage: $desiredWeight, hideTicker: true)
+                    SliderViewDashboard(percentage: $desiredWeight, hideTicker: false, range: (40, 120))
+                    
+                    Divider()
+                    HStack {
+                        Button(action: {
+                            self.index = 0
+                        }) {
+                            Image(systemName: "hexagon")
+                                .resizable().frame(width: 25, height: 25)
+                        }.foregroundColor(Color("primary"))
+                        Spacer(minLength: 0)
+                        
+                        Button(action: {
+                            self.index = 1
+                        }) {
+                            Image(systemName: "heart")
+                            .resizable().frame(width: 25, height: 25)
+
+                        
+                        }.foregroundColor(Color("primary"))
+                        Spacer(minLength: 0)
+
+                        Button(action: {
+                            self.index = 2
+                        }) {
+                            Image(systemName: "hexagon")
+                        .resizable().frame(width: 25, height: 25)
+
+                        }.foregroundColor(Color("primary"))
+                        Spacer(minLength: 0)
+
+                        Button(action: {
+                            self.index = 3
+                        }) {
+                            Image(systemName: "person")
+                        .resizable().frame(width: 25, height: 25)
+
+                        }.foregroundColor(Color("primary"))
+
+                        }
+                    .background(Color("red"))
+                        .padding(.horizontal, 35).frame(width: UIScreen.main.bounds.width - 40, height: 40)
+                    
                 }.frame(minWidth: 0, maxHeight: .infinity)
+                    .padding(.horizontal, 20)
+
                 
-                Spacer()
             }.padding()
                 .frame(minWidth: 0, maxWidth: .infinity)
                 
             
-           
-            .tabItem {
-                    Image(systemName: "hexagon")
-                    Text("My View")
-            }
-            Text("Second Section")
-                .tabItem {
-                    Image(systemName: "heart")
-                    Text("Health")
-            }
-            Text("Third Section")
-                .tabItem {
-                    Image(systemName: "person")
-                    Text("Profile")
-            }
-        }
+        
+    
     }
 }
+
+
+

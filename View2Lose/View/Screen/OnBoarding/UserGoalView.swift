@@ -10,9 +10,12 @@ import SwiftUI
 
 struct UserGoalView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State var currentWeight: Float = 65
-    @State var desiredWeight: Float = 50
+    @State var currentWeight: Double = 65
+    @State var desiredWeight: Double = 50
     @EnvironmentObject var facebookManager: FacebookManager
+    @ObservedObject var userViewModel: UserViewModel = UserViewModel()
+    
+    @State private var switchMetric = true
 
     var bckButton: some View {
         Button(action: {
@@ -30,60 +33,69 @@ struct UserGoalView: View {
                 
                 Circle()
                     .frame(width: 15, height: 15)
-                    .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                    .foregroundColor(Color("secondary"))
                 Circle()
                     .frame(width: 15, height: 15)
-                    .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                    .foregroundColor(Color("secondary"))
                 Circle()
                 .frame(width: 15, height: 15)
                 .foregroundColor(Color("primary"))
                 Circle()
                 .frame(width: 15, height: 15)
-                .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                .foregroundColor(Color("secondary"))
                 
             }
             .frame(minWidth: 0, maxWidth: .infinity)
             .padding(.top, -30)
             
-            Text("What's your \ngoal Parisa?")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            Text("What's your \ngoal \(self.userViewModel.getFirstName(fullName: userViewModel.userObect?.name ?? ""))?")
+//                .font(.largeTitle)
+//                .fontWeight(.bold)
                 .lineLimit(2)
                 .padding(.bottom, 20)
+                .modifier(CustomHeaderFontModifier(size: 35))
             
             VStack {
                 HStack {
                     Text("Current Weight")
-                        .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                        .foregroundColor(Color("secondary"))
                     .fontWeight(.bold)
 
                     
                     Spacer()
                     
-                    Text("\(Int(currentWeight)) kg")
-                        .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                    
+                    Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .weight, value: Int(currentWeight)) : changeMetrics(metricType: .imperial, unit: .weight, value: Int(currentWeight))) \(switchMetric ? "Kg" : "Pound")")
+                    .foregroundColor(Color("secondary"))
                     
                 }
-                SliderView(percentage: $currentWeight, hideTicker: false).frame( height: 20)
+                SliderView(percentage: $currentWeight, hideTicker: false, range: (40, 120)).frame( height: 20)
                 .padding(.bottom, 40)
             }
             
             VStack {
                 HStack {
                     Text("Desired Weight")
-                        .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                        .foregroundColor(Color("secondary"))
                     .fontWeight(.bold)
 
                     
                     Spacer()
                     
-                    Text("\(Int(desiredWeight)) kg")
-                        .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                    
+                    Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .weight, value: Int(desiredWeight)) : changeMetrics(metricType: .imperial, unit: .weight, value: Int(desiredWeight))) \(switchMetric ? "Kg" : "Pound")")
+                    .foregroundColor(Color("secondary"))
+
                     
                 }
-                SliderView(percentage: $desiredWeight, hideTicker: false).frame( height: 20)
+                
+                SliderView(percentage: $desiredWeight, hideTicker: false, range: (currentWeight - (currentWeight * 0.1), currentWeight))
                 .padding(.bottom, 20)
+                //range: (currentWeight-(currentWeight * 0.10),
             }
+            
+            MetricsConversionView(switchMetric: $switchMetric)
+
             Spacer()
             
             HStack(alignment: .center) {

@@ -45,8 +45,9 @@ struct ActivityView: View {
             VStack (alignment: .leading, spacing: 10) {
                 navView().padding(.top, -30)
                 Text("What's your \nactivity level? ")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+//                    .font(.largeTitle)
+//                    .fontWeight(.bold)
+                    .modifier(CustomHeaderFontModifier(size: 35))
                     .padding(.bottom, 20)
                     .lineLimit(2)
                 
@@ -120,8 +121,8 @@ struct ActivityListView: View {
                 .cornerRadius(10)
                 .padding(.top, 20)
 
-                .shadow(color: self.selected == index ? Color("primary") : Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)), radius: 2, x: 1, y: 2)
-                .shadow(color: self.selected == index ? Color("primary") : Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)), radius: 2, x: 1, y: -1)
+                .shadow(color: self.selected == index ? Color("primary") : Color("secondary"), radius: 2, x: 1, y: 2)
+                .shadow(color: self.selected == index ? Color("primary") : Color("secondary"), radius: 2, x: 1, y: -1)
 
         }
         
@@ -136,16 +137,16 @@ struct navView: View {
                 
                 Circle()
                     .frame(width: 15, height: 15)
-                    .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                    .foregroundColor(Color("secondary"))
                 Circle()
                     .frame(width: 15, height: 15)
                     .foregroundColor(Color("primary"))
                 Circle()
                     .frame(width: 15, height: 15)
-                    .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                    .foregroundColor(Color("secondary"))
                 Circle()
                 .frame(width: 15, height: 15)
-                .foregroundColor(Color.init(#colorLiteral(red: 0.7675911784, green: 0.7676092982, blue: 0.7675995827, alpha: 1)))
+                .foregroundColor(Color("secondary"))
                 
             }
             .frame(minWidth: 0, maxWidth: .infinity)
