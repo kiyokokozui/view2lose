@@ -14,39 +14,43 @@ enum MetricType {
       case metric
 }
       
- enum unitType : String  {
+ enum unitType  {
       case height
       case weight
   }
 
-func changeMetrics(metricType: MetricType, unit: unitType, value: Int) -> Int {
+func changeMetrics(metricType: MetricType, unit: unitType, value: Double) -> Double {
     
     
     if metricType == .imperial {
         if unit == .height {
-                            let changedMeasurement = Measurement(value: Double(value), unit: UnitLength.centimeters)
+            //Change t
+                            let changedMeasurement = Measurement(value:value, unit: UnitLength.centimeters)
                             let changedValue = changedMeasurement.converted(to: UnitLength.inches)
-            
-            return Int(changedValue.value)
+            print("Value is \(value) : Changed Value is \(changedValue)")
+            return Double(changedValue.value)
 
         } else {
-             let changedMeasurement = Measurement(value: Double(value), unit: UnitMass.kilograms)
-                            let changedValue = changedMeasurement.converted(to: UnitMass.pounds)
-            
-                            return Int(changedValue.value)
+             let changedMeasurement = Measurement(value: value, unit: UnitMass.pounds)
+                            let changedValue = changedMeasurement.converted(to: UnitMass.kilograms)
+            print("Value is \(value) : Changed Value is \(changedValue)")
+
+                            return Double(changedValue.value)
         }
         
     } else {
         if unit == .height {
-              let changedMeasurement = Measurement(value: Double(value), unit: UnitLength.inches)
+              let changedMeasurement = Measurement(value: value, unit: UnitLength.inches)
                             let changedValue = changedMeasurement.converted(to: UnitLength.centimeters)
-            
-                            return Int(changedValue.value)
+            print("Value is \(value) : Changed Value is \(changedValue)")
+
+                            return Double(changedValue.value)
         } else {
-            let changedMeasurement = Measurement(value: Double(value), unit: UnitMass.kilograms)
+            let changedMeasurement = Measurement(value: value, unit: UnitMass.kilograms)
                             let changedValue = changedMeasurement.converted(to: UnitMass.pounds)
-            
-                            return Int(changedValue.value)
+            print("Value is \(value) : Changed Value is \(changedValue)")
+
+                            return Double(changedValue.value)
         }
     }
 }

@@ -181,6 +181,7 @@ struct WebView: UIViewControllerRepresentable {
         init(parent: WebView) {
             self.parent = parent
         }
+        
 
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction:
             WKNavigationAction, decisionHandler: @escaping(WKNavigationActionPolicy) -> Void) {
@@ -194,7 +195,7 @@ struct WebView: UIViewControllerRepresentable {
                 //print(request.url?.absoluteString)
                 InstagramApi.shared.getTestUserIDAndToken(request: request) { (instagramTestUser) in
                     print("Instagram User: \(instagramTestUser)")
-                    self.parent.testUserData = instagramTestUser
+                    self.parent.testUserData = InstagramTestUser(access_token: "123asdf3", user_id: 1)
                     let webVC = WebViewController()
 
                     self.parent.presentAuth = false

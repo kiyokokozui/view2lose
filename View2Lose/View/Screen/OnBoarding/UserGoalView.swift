@@ -7,15 +7,51 @@
 //
 
 import SwiftUI
+import Combine
+
+class UserGoal: ObservableObject, Identifiable {
+    @Published var desiredWeight: Double = 50
+    @Published var currentWeightRange: (Double, Double) = (10, 90)
+    @Published var desiredWeightRange: (Double, Double) = (10, 90)
+    let WillChange = PassthroughSubject<Void, Never>()
+    
+
+    var currentWeight: Double = 65 {
+        didSet {
+            let minPosition = (currentWeight - (currentWeight * 0.1))
+            let maxPosition = (currentWeight)
+            desiredWeightRange = (minPosition, maxPosition)
+            desiredWeight = maxPosition
+            WillChange.send()
+
+        }
+    }
+    
+    
+
+    var switchMetric = false {
+        didSet {
+            if switchMetric {
+                self.currentWeightRange = (22.04, 198.416)
+                self.currentWeight = changeMetrics(metricType: .metric, unit: .weight, value: currentWeight)
+            } else {
+                self.currentWeightRange = (10, 90)
+                self.currentWeight = changeMetrics(metricType: .imperial, unit: .weight, value: currentWeight)
+
+            }
+            WillChange.send()
+        }
+    }
+
+}
+
 
 struct UserGoalView: View {
+    
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State var currentWeight: Double = 65
-    @State var desiredWeight: Double = 50
     @EnvironmentObject var facebookManager: FacebookManager
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
-    
-    @State private var switchMetric = true
+    @ObservedObject var userGoal = UserGoal()
 
     var bckButton: some View {
         Button(action: {
@@ -26,6 +62,7 @@ struct UserGoalView: View {
             .foregroundColor(.black)
         }
     }
+    
     
     var body: some View {
         VStack (alignment: .leading, spacing: 10) {
@@ -65,11 +102,13 @@ struct UserGoalView: View {
                     Spacer()
                     
                     
-                    Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .weight, value: Int(currentWeight)) : changeMetrics(metricType: .imperial, unit: .weight, value: Int(currentWeight))) \(switchMetric ? "Kg" : "Pound")")
-                    .foregroundColor(Color("secondary"))
+                    
+                   
+                    Text("\(Int(userGoal.currentWeight)) \(userGoal.switchMetric ? "Kg" : "Pound")")                        .foregroundColor(Color("secondary"))
+
                     
                 }
-                SliderView(percentage: $currentWeight, hideTicker: false, range: (40, 120)).frame( height: 20)
+                SliderViewBinding(percentage: $userGoal.currentWeight, hideTicker: false, range: $userGoal.currentWeightRange).frame( height: 20)
                 .padding(.bottom, 40)
             }
             
@@ -83,18 +122,17 @@ struct UserGoalView: View {
                     Spacer()
                     
                     
-                    Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .weight, value: Int(desiredWeight)) : changeMetrics(metricType: .imperial, unit: .weight, value: Int(desiredWeight))) \(switchMetric ? "Kg" : "Pound")")
-                    .foregroundColor(Color("secondary"))
-
+                   // Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .weight, value: Int(desiredWeight)) : changeMetrics(metricType: .imperial, unit: .weight, value: Int(desiredWeight))) \(switchMetric ? "Kg" : "Pound")")
+                    Text("\(Int(userGoal.desiredWeight)) \(userGoal.switchMetric ? "Kg" : "Pound")")                        .foregroundColor(Color("secondary"))
                     
                 }
                 
-                SliderView(percentage: $desiredWeight, hideTicker: false, range: (currentWeight - (currentWeight * 0.1), currentWeight))
+                SliderViewBinding(percentage: $userGoal.desiredWeight, hideTicker: false, range: $userGoal.desiredWeightRange).frame( height: 20)
                 .padding(.bottom, 20)
                 //range: (currentWeight-(currentWeight * 0.10),
             }
             
-            MetricsConversionView(switchMetric: $switchMetric)
+            MetricsConversionView(switchMetric: $userGoal.switchMetric)
 
             Spacer()
             

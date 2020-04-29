@@ -9,23 +9,45 @@
 import SwiftUI
 import Combine
 
+class Order: ObservableObject, Identifiable {
+    @Published var age: Double = 0
+    @Published var percentage: Double = 40
+    @Published var height: Double = 80
+    @Published var heightRange : (Double, Double) = (40,120)
+    let WillChange = PassthroughSubject<Void, Never>()
+    
+    var switchMetric = false {
+        didSet {
+            if switchMetric {
+                self.heightRange = (101.6, 304.8)
+                self.height = changeMetrics(metricType: .metric, unit: .height, value: height)
+            } else {
+                self.heightRange = (40, 120)
+                self.height = changeMetrics(metricType: .imperial, unit: .height, value: height)
+
+            }
+            WillChange.send()
+        }
+    }
+    @Published var isFemale = false
+    @Published var isMale = false
+    
+
+    
+}
 
 
 
 struct ContentView: View {
-    @State private var age: Double = 0
-    @State var percentage: Double = 40
-    @State var height: Double = 180
-    @State private var switchMetric = false
-    @State var isFemale = false
-    @State var isMale = false
-    @ObservedObject var userViewModel: UserViewModel
     
+    @ObservedObject var order = Order()
+    @ObservedObject var userViewModel: UserViewModel
+
     init(viewModel: UserViewModel)
     {
         self.userViewModel = viewModel
         UISwitch.appearance().onTintColor = #colorLiteral(red: 0.589797318, green: 0.4313705266, blue: 0.9223902822, alpha: 1)
-            }
+    }
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -39,38 +61,6 @@ struct ContentView: View {
         }
     }
 
-    
-    private func changeMetrics(metricType: MetricType, unit: unitType, value: Int) -> Int {
-        
-        
-        if metricType == .imperial {
-            if unit == .height {
-                                let changedMeasurement = Measurement(value: Double(value), unit: UnitLength.centimeters)
-                                let changedValue = changedMeasurement.converted(to: UnitLength.inches)
-                
-                return Int(changedValue.value)
-
-            } else {
-                 let changedMeasurement = Measurement(value: Double(value), unit: UnitMass.kilograms)
-                                let changedValue = changedMeasurement.converted(to: UnitMass.pounds)
-                
-                                return Int(changedValue.value)
-            }
-            
-        } else {
-            if unit == .height {
-                  let changedMeasurement = Measurement(value: Double(value), unit: UnitLength.inches)
-                                let changedValue = changedMeasurement.converted(to: UnitLength.centimeters)
-                
-                                return Int(changedValue.value)
-            } else {
-                let changedMeasurement = Measurement(value: Double(value), unit: UnitMass.kilograms)
-                                let changedValue = changedMeasurement.converted(to: UnitMass.pounds)
-                
-                                return Int(changedValue.value)
-            }
-        }
-    }
     
     var body: some View {
         NavigationView {
@@ -111,7 +101,7 @@ struct ContentView: View {
                 
                 HStack (alignment: .center, spacing: 20) {
                     
-                    GenderButton(isSelected: $isFemale, type: "👩🏻")
+                    GenderButton(isSelected: $order.isFemale, type: "👩🏻")
                     
                 }
                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -127,13 +117,13 @@ struct ContentView: View {
                         
                         Spacer()
                         
-                        Text("\(Int(percentage)) years")
+                        Text("\(Int(order.percentage)) years")
                             .foregroundColor(Color("secondary"))
                         .modifier(CustomBodyFontModifier(size: 16))
 
                         
                     }
-                    SliderView(percentage: $percentage, hideTicker: false, range: (10, 60)).frame( height: 20)
+                    SliderView(percentage: $order.percentage, hideTicker: false, range: (10, 60)).frame( height: 20)
                         .padding(.bottom, 20)
     
                     
@@ -150,15 +140,16 @@ struct ContentView: View {
 
                         Spacer()
                         
-                        Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .height, value: Int(height)) : changeMetrics(metricType: .imperial, unit: .height, value: Int(height))) \(switchMetric ? "cm" : "inches")")
-                            .foregroundColor(Color("secondary"))
-                        
+                       // Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .height, value: height) : changeMetrics(metricType: .imperial, unit: .height, value: height)) \(switchMetric ? "cm" : "inches")"))
+                        Text(" \(Int(order.height)) \(order.switchMetric ? "cm" : "inches")").foregroundColor(Color("secondary"))
                     }
-                    SliderView(percentage:  $height, hideTicker: false, range: (150, 200)).frame( height: 15).frame( height: 20)
+                    SliderViewBinding(percentage:  $order.height, hideTicker: false, range: $order.heightRange).frame( height: 15).frame( height: 20)
                     .padding(.bottom, 20)
                     //SliderTick()
                 }
-                MetricsConversionView(switchMetric: $switchMetric)
+                MetricsConversionView(switchMetric: $order.switchMetric)
+                
+                    
                 
                 
                 Spacer()

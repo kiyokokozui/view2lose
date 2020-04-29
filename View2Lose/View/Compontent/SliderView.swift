@@ -10,13 +10,98 @@ import SwiftUI
 
 struct SliderView: View {
     @Binding var percentage: Double
+ 
     @State private var currentPosition: CGSize = .zero
     @State private var newPosition: CGSize = .zero
     @State var hideTicker: Bool
     
  
-    @State var range: (Double, Double) = (40, 120)
+    @State  var range: (Double, Double) = (40, 120)
     @State private var knobWidth: CGFloat?
+    
+    
+    
+    var body: some View {
+        
+        GeometryReader  { geometry in
+            ZStack(alignment: .leading) {
+                
+                
+                
+                Rectangle()
+                    .frame(width: geometry.size.width , height: 7)
+                    .foregroundColor(Color.init(#colorLiteral(red: 0.8581427932, green: 0.822361052, blue: 0.9280666709, alpha: 1)))
+                    .cornerRadius(3)
+                
+                ZStack (alignment: .trailing) {
+                    
+                    ZStack(alignment: .center) {
+                        
+                        
+                        Circle()
+                            .overlay(
+                                Circle()
+                                    .stroke(Color(#colorLiteral(red: 0.589797318, green: 0.4313705266, blue: 0.9223902822, alpha: 1)).opacity(0.5), style: StrokeStyle(lineWidth: 8))
+                        )
+                            
+                            .foregroundColor(Color("primary"))
+                            
+                            .frame(width: 14 , height: 14)
+                        
+                    }
+                    
+                    
+                    Rectangle()
+                        .frame(width: self.getOffsetX(frame: geometry.frame(in:.local)), height: 7)
+                        .foregroundColor(Color("primary"))
+                        .cornerRadius(3)
+                }
+                    
+                .gesture(DragGesture(minimumDistance: 0).onChanged({ (value) in
+
+                    self.onDragChange(value, geometry.frame(in: .global))
+                }))
+                
+            }.padding(.bottom, 5)
+            
+            TickerView(isHidden: self.hideTicker)
+                .frame(width: geometry.size.width - 10)
+                .padding(.horizontal, 5)
+
+
+        }
+    
+    }
+    
+    private func onDragChange(_ drag: DragGesture.Value,_ frame: CGRect) {
+        let width = (knob: Double(knobWidth ?? frame.size.height), view: Double(frame.size.width))
+        let xrange = (min: Double(0), max: Double(width.view - width.knob))
+        var value = Double(drag.startLocation.x + drag.translation.width) // knob center x
+        value -= 0.5*width.knob // offset from center to leading edge of knob
+        value = value > xrange.max ? xrange.max : value // limit to leading edge
+        value = value < xrange.min ? xrange.min : value // limit to trailing edge
+        value = value.convert(fromRange: (xrange.min, xrange.max), toRange: range)
+        self.percentage = Double(value)
+    }
+    
+    private func getOffsetX(frame: CGRect) -> CGFloat {
+        let width = (knob: knobWidth ?? frame.size.height, view: frame.size.width + 20)
+        let xrange: (Double, Double) = (0, Double(width.view - width.knob))
+       let result = self.percentage.convert(fromRange: range, toRange: xrange)
+        return CGFloat(result)
+    }
+}
+struct SliderViewBinding: View {
+    @Binding var percentage: Double
+ 
+    @State private var currentPosition: CGSize = .zero
+    @State private var newPosition: CGSize = .zero
+    @State var hideTicker: Bool
+    
+ 
+    @Binding  var range: (Double, Double)
+    @State private var knobWidth: CGFloat?
+    
     
     
     var body: some View {
@@ -92,16 +177,25 @@ struct SliderView: View {
 
 struct SliderViewWithBinding: View {
     @Binding var percentage: Double
+    @Binding var maxNumber: Double
+     @Binding var minNumber : Double
+    
     @State private var currentPosition: CGSize = .zero
     @State private var newPosition: CGSize = .zero
     @State var hideTicker: Bool
-    @Binding var position: Double
+    //@Binding var position: Double
  
-    @State private var range: (Double, Double)
     
     @State private var knobWidth: CGFloat?
     
-
+//    init(percentage: Double, maxNumber: Double, minNumber: Double, hideTicker: Bool) {
+//        self.percentage = percentage
+//        self.maxNumber = maxNumber
+//        self.minNumber = minNumber
+//        self.hideTicker = hideTicker
+//
+//
+//    }
     
     
     var body: some View {
@@ -164,14 +258,14 @@ struct SliderViewWithBinding: View {
         value -= 0.5*width.knob // offset from center to leading edge of knob
         value = value > xrange.max ? xrange.max : value // limit to leading edge
         value = value < xrange.min ? xrange.min : value // limit to trailing edge
-        value = value.convert(fromRange: (xrange.min, xrange.max), toRange: range)
+        value = value.convert(fromRange: (xrange.min, xrange.max), toRange: (minNumber, maxNumber))
         self.percentage = Double(value)
     }
     
     private func getOffsetX(frame: CGRect) -> CGFloat {
         let width = (knob: knobWidth ?? frame.size.height, view: frame.size.width + 20)
         let xrange: (Double, Double) = (0, Double(width.view - width.knob))
-       let result = self.percentage.convert(fromRange: range, toRange: xrange)
+       let result = self.percentage.convert(fromRange: (minNumber, maxNumber), toRange: xrange)
         return CGFloat(result)
     }
 }
