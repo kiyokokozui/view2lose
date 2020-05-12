@@ -58,6 +58,4 @@ struct FBLoginProvider: UIViewControllerRepresentable {
             }
         }
     }
-    
-    
 }

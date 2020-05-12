@@ -36,6 +36,7 @@
 		1B4D5CEE24441B7F00828099 /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4D5CED24441B7F00828099 /* SessionStore.swift */; };
 		1B4D5CFD244451B900828099 /* AuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4D5CFC244451B900828099 /* AuthState.swift */; };
 		1B4D5CFF2444520A00828099 /* FacebookManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4D5CFE2444520A00828099 /* FacebookManager.swift */; };
+		1B861325246A335900BA1CD3 /* TakeMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B861324246A335900BA1CD3 /* TakeMeasurement.swift */; };
 		1BCAF35E2450555C009E2A59 /* HelperMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCAF35D2450555C009E2A59 /* HelperMethods.swift */; };
 		1BCAF360245056F6009E2A59 /* MetricsConversionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCAF35F245056F6009E2A59 /* MetricsConversionView.swift */; };
 		1BCAF3622451099A009E2A59 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCAF3612451099A009E2A59 /* Constants.swift */; };
@@ -43,6 +44,10 @@
 		1BCAF36624510C14009E2A59 /* InstagramResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCAF36524510C14009E2A59 /* InstagramResponse.swift */; };
 		1BCAF36824510C1B009E2A59 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCAF36724510C1B009E2A59 /* WebView.swift */; };
 		1BCAF36A245113B5009E2A59 /* InstagramManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCAF369245113B5009E2A59 /* InstagramManager.swift */; };
+		1BDB9CA7245E4C1000921821 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB9CA6245E4C1000921821 /* CameraView.swift */; };
+		1BDB9CA9245E4C5D00921821 /* CameraState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB9CA8245E4C5D00921821 /* CameraState.swift */; };
+		1BDB9CAB245E4C7600921821 /* CameraViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB9CAA245E4C7600921821 /* CameraViewDelegate.swift */; };
+		1BDB9CAD245E4CC400921821 /* UserCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB9CAC245E4CC400921821 /* UserCameraView.swift */; };
 		1BFE4BE224584866001BA44B /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE4BE124584866001BA44B /* TestView.swift */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +101,7 @@
 		1B4D5CED24441B7F00828099 /* SessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionStore.swift; sourceTree = "<group>"; };
 		1B4D5CFC244451B900828099 /* AuthState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthState.swift; sourceTree = "<group>"; };
 		1B4D5CFE2444520A00828099 /* FacebookManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookManager.swift; sourceTree = "<group>"; };
+		1B861324246A335900BA1CD3 /* TakeMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeMeasurement.swift; sourceTree = "<group>"; };
 		1BCAF35D2450555C009E2A59 /* HelperMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelperMethods.swift; sourceTree = "<group>"; };
 		1BCAF35F245056F6009E2A59 /* MetricsConversionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetricsConversionView.swift; sourceTree = "<group>"; };
 		1BCAF3612451099A009E2A59 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -103,6 +109,10 @@
 		1BCAF36524510C14009E2A59 /* InstagramResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InstagramResponse.swift; sourceTree = "<group>"; };
 		1BCAF36724510C1B009E2A59 /* WebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		1BCAF369245113B5009E2A59 /* InstagramManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstagramManager.swift; sourceTree = "<group>"; };
+		1BDB9CA6245E4C1000921821 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		1BDB9CA8245E4C5D00921821 /* CameraState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraState.swift; sourceTree = "<group>"; };
+		1BDB9CAA245E4C7600921821 /* CameraViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewDelegate.swift; sourceTree = "<group>"; };
+		1BDB9CAC245E4CC400921821 /* UserCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCameraView.swift; sourceTree = "<group>"; };
 		1BFE4BE124584866001BA44B /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -242,6 +252,7 @@
 		1B33719C24430CB200116EE2 /* Compontent */ = {
 			isa = PBXGroup;
 			children = (
+				1BDB9CA5245E4BFA00921821 /* Camera */,
 				1B33719224430B4800116EE2 /* SliderView.swift */,
 				1B33FCD82450244300698080 /* CarouselView.swift */,
 				1BCAF35F245056F6009E2A59 /* MetricsConversionView.swift */,
@@ -255,6 +266,8 @@
 				1B3371A92443207100116EE2 /* OnBoarding */,
 				1B33719E24430D4200116EE2 /* LoginView.swift */,
 				1B3371A724431FE300116EE2 /* DashboardView.swift */,
+				1BDB9CAC245E4CC400921821 /* UserCameraView.swift */,
+				1B861324246A335900BA1CD3 /* TakeMeasurement.swift */,
 			);
 			path = Screen;
 			sourceTree = "<group>";
@@ -290,6 +303,16 @@
 				1BCAF36724510C1B009E2A59 /* WebView.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		1BDB9CA5245E4BFA00921821 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				1BDB9CA6245E4C1000921821 /* CameraView.swift */,
+				1BDB9CA8245E4C5D00921821 /* CameraState.swift */,
+				1BDB9CAA245E4C7600921821 /* CameraViewDelegate.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -444,10 +467,13 @@
 				1B33719F24430D4200116EE2 /* LoginView.swift in Sources */,
 				1B33716324430B2600116EE2 /* AppDelegate.swift in Sources */,
 				1BCAF36424510C0D009E2A59 /* InstagramApi.swift in Sources */,
+				1BDB9CA9245E4C5D00921821 /* CameraState.swift in Sources */,
 				1BCAF36824510C1B009E2A59 /* WebView.swift in Sources */,
+				1BDB9CAB245E4C7600921821 /* CameraViewDelegate.swift in Sources */,
 				1B4C978C2449278A0022A643 /* UserViewModel.swift in Sources */,
 				1B4D5CFF2444520A00828099 /* FacebookManager.swift in Sources */,
 				1B30B0742446A1FC00129CED /* BodyTypeView.swift in Sources */,
+				1B861325246A335900BA1CD3 /* TakeMeasurement.swift in Sources */,
 				1B33719324430B4800116EE2 /* SliderView.swift in Sources */,
 				1BCAF3622451099A009E2A59 /* Constants.swift in Sources */,
 				1B33716524430B2600116EE2 /* SceneDelegate.swift in Sources */,
@@ -455,8 +481,10 @@
 				1B4D5CEC244416E100828099 /* UserStore.swift in Sources */,
 				1B4D5CEA2443EDB600828099 /* FBLoginProvider.swift in Sources */,
 				1B33716724430B2600116EE2 /* ContentView.swift in Sources */,
+				1BDB9CA7245E4C1000921821 /* CameraView.swift in Sources */,
 				1BCAF35E2450555C009E2A59 /* HelperMethods.swift in Sources */,
 				1B4D5CEE24441B7F00828099 /* SessionStore.swift in Sources */,
+				1BDB9CAD245E4CC400921821 /* UserCameraView.swift in Sources */,
 				1BCAF360245056F6009E2A59 /* MetricsConversionView.swift in Sources */,
 				1BFE4BE224584866001BA44B /* TestView.swift in Sources */,
 				1B33719524430B7500116EE2 /* UserActivity.swift in Sources */,

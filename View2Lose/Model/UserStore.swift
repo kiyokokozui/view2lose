@@ -15,6 +15,7 @@ class UserStore : Codable  {
     let email: String
     let name: String
     
+    
     init(email: String, name: String) {
         self.email = email
         self.name = name

@@ -17,6 +17,7 @@ class UserViewModel: ObservableObject, Identifiable {
             if let encoder = try? encoder.encode(userObect) {
                 let defaults = UserDefaults.standard
                 defaults.set(encoder, forKey: "userObject")
+                
             }
         }
     }
@@ -28,6 +29,7 @@ class UserViewModel: ObservableObject, Identifiable {
             if let loadedUser = try? decoder.decode(UserStore.self, from: saveUser) {
                 self.userObect = loadedUser
                 print("From Int \(self.userObect?.name)")
+                
                 return
             }
         }
