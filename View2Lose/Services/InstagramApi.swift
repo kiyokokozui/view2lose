@@ -30,7 +30,7 @@ class InstagramApi {
     
     func authorizeApp(completion: @escaping (_ url: URL?) -> Void ) {
       let urlString = "\(BaseURL.displayApi.rawValue)\(Method.authorize.rawValue)?app_id=\(instagramAppID)&redirect_uri=\(redirectURIURLEncoded)&scope=user_profile,user_media&response_type=code"
-      let request = URLRequest(url: URL(string: urlString)!)
+        let request = URLRequest(url: Foundation.URL(string: urlString)!)
       let session = URLSession.shared
       let task = session.dataTask(with: request, completionHandler: {  data, response, error in
         if let response = response {
@@ -45,7 +45,7 @@ class InstagramApi {
         let requestURLString = (request.url?.absoluteString)! as String
         
         if (requestURLString.starts(with: "\(redirectURI)?code=")) {
-            //print("Response uri:",requestURLString)
+            print("Response uri:",requestURLString)
         
             if let range = requestURLString.range(of: "\(redirectURI)?code=") {
                 let checkKey = String(requestURLString[range.upperBound...].dropLast(2))
@@ -123,7 +123,7 @@ class InstagramApi {
             ]
         ]
         
-        var request = URLRequest(url: URL(string:   BaseURL.displayApi.rawValue + Method.access_token.rawValue)!)
+        var request = URLRequest(url: Foundation.URL(string:   BaseURL.displayApi.rawValue + Method.access_token.rawValue)!)
         
         let postData = getFormBody(parameters, boundary)
         request.httpMethod = "POST"
@@ -151,8 +151,9 @@ class InstagramApi {
     
     func getInstagramUser(testUserData: InstagramTestUser, completion: @escaping (InstagramUser) -> Void) {
         let urlString = "\(BaseURL.graphApi.rawValue)\(testUserData.user_id)?fields=id,username&access_token=\(testUserData.access_token)"
-        let request = URLRequest(url: URL(string: urlString)!)
+        let request = URLRequest(url: Foundation.URL(string: urlString)!)
         let session = URLSession.shared
+        print("urlString")
         let dataTask = session.dataTask(with: request, completionHandler: {(data, response, error) in
             if (error != nil) {
                 print(error!)

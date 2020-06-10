@@ -12,17 +12,18 @@ import Combine
 class Order: ObservableObject, Identifiable {
     @Published var age: Double = 0
     @Published var percentage: Double = 40
-    @Published var height: Double = 80
-    @Published var heightRange : (Double, Double) = (40,120)
+    @Published var height: Double = 180
+    @Published var heightRange : (Double, Double) = (150,200)
     let WillChange = PassthroughSubject<Void, Never>()
+
     
-    var switchMetric = false {
+    var switchMetric = true {
         didSet {
             if switchMetric {
-                self.heightRange = (101.6, 304.8)
+                self.heightRange = (150, 200)
                 self.height = changeMetrics(metricType: .metric, unit: .height, value: height)
             } else {
-                self.heightRange = (40, 120)
+                self.heightRange = (59.05, 78.74)
                 self.height = changeMetrics(metricType: .imperial, unit: .height, value: height)
 
             }
@@ -42,12 +43,17 @@ struct ContentView: View {
     
     @ObservedObject var order = Order()
     @ObservedObject var userViewModel: UserViewModel
+    let ageTickRange :[Int] = [10,20,30,40,50,60]
+     let heightTickRange: [Int] = [150, 160, 170, 180, 190, 200]
 
     init(viewModel: UserViewModel)
     {
         self.userViewModel = viewModel
         UISwitch.appearance().onTintColor = #colorLiteral(red: 0.589797318, green: 0.4313705266, blue: 0.9223902822, alpha: 1)
+        
+        BBIModelEndpoint.sharedService.createNewUsername(username: "sagar1212", email: "test@gmail.com", fullName: "Sagar Chhetri", gender: "M", height: 157, weight: 65, waistSize: 33, bodyTypeId: 1, activityLevelId: 12, firstName: "Sagar", lastName: "Chhetri", BMR: "test", GoalWeightChange: 1, GoalWeight: 2, GoalType: 123, Password: "Password")
     }
+    
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -60,7 +66,29 @@ struct ContentView: View {
                 .foregroundColor(.black)
         }
     }
+/*
+     
+     
+     var changeToFrontCamera = true {
+     didSet {
+         if changeToFrontCamera {
+             if let device = AVCaptureDevice.default(.builtInDualCamera,
+                                                     for: .video, position: .back) {
+                 currentCamera = device
+             } else if let device = AVCaptureDevice.default(.builtInWideAngleCamera,
+                                                            for: .video, position: .back) {
+                 currentCamera = device
+             } else {
+                 fatalError("Missing expected back camera device.")
+             }
+         } else {
+             if let frontCameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front) {
+                 currentCamera = frontCameraDevice
+             }
 
+         }
+     }
+     */
     
     var body: some View {
         NavigationView {
@@ -86,14 +114,14 @@ struct ContentView: View {
                     .padding(.top, -30)
                     
                 }
-                Text("Lets get to \nknow you \(self.userViewModel.getFirstName(fullName: userViewModel.userObect?.name ?? "") )!")
+                Text("Lets get to \nknow you \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? UserDefaults.standard.string(forKey: "nameFromApple")) ?? "") )!")
 //                    .font(.largeTitle)
 //                    .fontWeight(.bold)
                     .lineLimit(2)
                     .modifier(CustomHeaderFontModifier(size: 35))
 
                 
-                Text("Pick your gender")
+                Text("My gender is")
                     .foregroundColor(Color("secondary"))
                 .modifier(CustomBodyFontModifier(size: 16))
 
@@ -123,7 +151,7 @@ struct ContentView: View {
 
                         
                     }
-                    SliderView(percentage: $order.percentage, hideTicker: false, range: (10, 60)).frame( height: 20)
+                    SliderView(percentage: $order.percentage, hideTicker: false, range: (10, 60),rangleLabel: ageTickRange).frame( height: 20)
                         .padding(.bottom, 20)
     
                     
@@ -143,7 +171,7 @@ struct ContentView: View {
                        // Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .height, value: height) : changeMetrics(metricType: .imperial, unit: .height, value: height)) \(switchMetric ? "cm" : "inches")"))
                         Text(" \(Int(order.height)) \(order.switchMetric ? "cm" : "inches")").foregroundColor(Color("secondary"))
                     }
-                    SliderViewBinding(percentage:  $order.height, hideTicker: false, range: $order.heightRange).frame( height: 15).frame( height: 20)
+                    SliderViewBinding(percentage:  $order.height, hideTicker: false, range: $order.heightRange, rangleLabel: self.heightTickRange).frame( height: 15).frame( height: 20)
                     .padding(.bottom, 20)
                     //SliderTick()
                 }

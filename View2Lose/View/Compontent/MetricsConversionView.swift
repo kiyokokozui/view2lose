@@ -13,18 +13,20 @@ struct MetricsConversionView: View {
     @Binding var switchMetric : Bool
     var body: some View {
         HStack (alignment: .center) {
-            Text ("Imperial")                        .modifier(CustomBodyFontModifier(size: 14))
+            Text ("U.S.")
+                .modifier(CustomBodyFontModifier(size: 14))
                 
-                .foregroundColor(Color("secondary"))
+                .foregroundColor(self.switchMetric ? Color("secondary") : Color("primary"))
             Toggle(isOn: $switchMetric) {
                 Text("")
                 
             }
             .labelsHidden()
             .padding()
-            Text ("Metric")                        .modifier(CustomBodyFontModifier(size: 14))
+            Text ("Metric")
+                .modifier(CustomBodyFontModifier(size: 14))
                 
-                .foregroundColor(Color("secondary"))
+                .foregroundColor(self.switchMetric ? Color("primary") : Color("seconday"))
             
             
             

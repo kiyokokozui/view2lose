@@ -9,19 +9,24 @@
 import SwiftUI
 import FBSDKLoginKit
 import SafariServices
+import AuthenticationServices
 
 
 struct LoginView: View {
     @State var fbLogin = FBLoginProvider()
     @EnvironmentObject var user: SessionStore
     @EnvironmentObject var facebookManager: FacebookManager
+    @EnvironmentObject var signInWithAppleManager: SignInWithAppleManager
+    
+    @State private var signInWithappleDelegates : SignInWithAppleDelegates! = nil
+    @Environment(\.window) var window: UIWindow?
 
     //Instagram
     @State var instagramApi = InstagramApi.shared
     @State var signedIn = false
     @State var presentAuth = false
     @State var testUserData = InstagramTestUser(access_token: "", user_id: 0)
-    @State var instagramUser: InstagramUser? = nil
+    @State var instagramUser: InstagramUser?
     //@EnvironmentObject var instagramManager: InstagramManager
 
 
@@ -51,7 +56,7 @@ struct LoginView: View {
 
                 }.padding(.bottom, 100)
                 
-                VStack (alignment: .trailing, spacing: 10) {
+                VStack (alignment: .center, spacing: 10) {
                     Button(action: {
                         self.facebookManager.checkUserAuth { (auth) in
                             switch(auth) {
@@ -68,6 +73,16 @@ struct LoginView: View {
 
                                 let viewModel = UserViewModel()
                                 ContentView(viewModel: viewModel)
+                            case .cameraOnboard:
+                                FrontFacingCameraView()
+                            case .cameraOnBoard2:
+                                SideFacingCameraView()
+                            
+                            case .frontBodyMeasurement:
+                                print("Authicated frontBodyMeasurement")
+                            case .sideBodyMeasurement:
+                                print("Authicated sideBodyMeasurement")
+
                             }
                         }
                     }, label: {
@@ -90,9 +105,8 @@ struct LoginView: View {
                         .padding(.horizontal, 20)
                         .background(Color(#colorLiteral(red: 0.2673539817, green: 0.4194847345, blue: 0.8548354506, alpha: 1)))
                         .cornerRadius(33)
-                        .padding(.bottom, 15)
+                        .padding(.bottom, 10)
                     
-
                     
                     Button(action: {
 //                        if (self.testUserData.user_id == 0) {
@@ -126,36 +140,115 @@ struct LoginView: View {
                         
                         
                     }).padding()
+                        
                         .padding(.horizontal, 20)
-                        
-                        
+
                         
                         .background(LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.9965491891, green: 0.8538320661, blue: 0.4573215246, alpha: 1)), Color(#colorLiteral(red: 0.980302155, green: 0.4927219152, blue: 0.1199619249, alpha: 1)),Color(#colorLiteral(red: 0.8401840925, green: 0.160092622, blue: 0.463200748, alpha: 1)),Color(#colorLiteral(red: 0.5886078477, green: 0.1843836606, blue: 0.7480129004, alpha: 1)),Color(#colorLiteral(red: 0.3114062548, green: 0.3560265303, blue: 0.8351828456, alpha: 1))]), startPoint: .leading, endPoint: .trailing))
                         .cornerRadius(33)
-                        .padding(.bottom, 15)
+                        .padding(.bottom, 10)
                         
                         .sheet(isPresented: self.$presentAuth , onDismiss: {
 //                            ContentView(viewModel: UserViewModel())
-                            TestView()
+                            self.facebookManager.isUserAuthenticated = .userOnBoard
                             print("Dismissed ")
                         }) {
                             WebView(presentAuth: self.$presentAuth, testUserData:     self.$testUserData, instagramApi: self.$instagramApi)
 
 
                     }
+
+                    
+                   SignInWithAppleButton().cornerRadius(33)
+
+                                      .padding(.horizontal, 30)
+                                      .padding(.bottom, 15)
+                                          .frame(height: 74)
+                    .padding(.bottom, 20)
+                    .onTapGesture {
+                        self.facebookManager.checkAppleUserAuth { (authState) in
+                            switch authState {
+                            case .undefined:
+                                print("Auth State: .undefined")
+                                self.showAppleLogin()
+
+                              //self.performExistingAccountSetupFlows()
+                            case .signedOut:
+                                print("Auth State: .signedOut")
+
+                            case .signedIn:
+                                print("Auth State: .signedIn")
+
+                            case .userOnBoard:
+                                print("Auth State: .userOnBoard")
+                                
+                            case .cameraOnboard:
+                                print("Auth State: .cameraOnboard")
+
+                            case .cameraOnBoard2:
+                                print("Auth State: .cameraOnBoard2")
+
+                            case .frontBodyMeasurement:
+                                print("Auth State: .frontBodyMeasurement")
+
+                            case .sideBodyMeasurement:
+                                print("Auth State: .sideBodyMeasurement")
+
+                            }
+                        }
+                       }
+
+
                     
 
                 }
                 .padding(.bottom, 20)
 
                 
-                
             }
-            .padding(.bottom, 20)
 
         }
     }
+        
+        
 }
+    
+    private func showAppleLogin() {
+        let request = ASAuthorizationAppleIDProvider().createRequest()
+        request.requestedScopes = [.fullName, .email]
+        performSign(using: [request])
+    }
+    
+//    private func performExistingAccountSetupFlows () {
+//        #if !targetEnvironment(simulator)
+//        let request  = [
+//            ASAuthorizationAppleIDProvider().createRequest(),
+//            ASAuthorizationPasswordProvider().createRequest()
+//        ]
+//       // request.requestedScopes = [.fullName, .email]
+//
+//        performSign(using: request)
+//        #endif
+//    }
+    
+    private func performSign(using request: [ASAuthorizationRequest]) {
+        signInWithappleDelegates = SignInWithAppleDelegates(window: window, onSignedIn: { (result) in
+            switch result {
+            case .success(let userId):
+                //UserDefaults.standard.set(userId, forKey: self.facebookManager.userIdentifierKey)
+                //self.signInWithAppleManager.isUserAuthenticated = .signedIn
+                self.facebookManager.isUserAuthenticated = .userOnBoard
+                
+            case .failure(let err):
+                //self.errDescription = err.localizedDescription
+                print("Sign In with App Failure: \(err)")
+            }
+        })
+        let controller = ASAuthorizationController(authorizationRequests: request)
+        controller.delegate = signInWithappleDelegates
+        controller.presentationContextProvider = signInWithappleDelegates
+        controller.performRequests()
+    }
 }
 
 struct LoginView_Previews: PreviewProvider {

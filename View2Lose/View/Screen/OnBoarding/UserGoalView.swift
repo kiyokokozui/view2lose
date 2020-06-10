@@ -10,26 +10,17 @@ import SwiftUI
 import Combine
 
 class UserGoal: ObservableObject, Identifiable {
-    @Published var desiredWeight: Double = 50
-    @Published var currentWeightRange: (Double, Double) = (10, 90)
-    @Published var desiredWeightRange: (Double, Double) = (10, 90)
+    @Published var desiredWeight: Double = 3
+    @Published var currentWeightRange: (Double, Double) = (40, 120)
+    @Published var desiredWeightRange: (Double, Double) = (0, 12)
     let WillChange = PassthroughSubject<Void, Never>()
     
-
-    var currentWeight: Double = 65 {
-        didSet {
-            let minPosition = (currentWeight - (currentWeight * 0.1))
-            let maxPosition = (currentWeight)
-            desiredWeightRange = (minPosition, maxPosition)
-            desiredWeight = maxPosition
-            WillChange.send()
-
-        }
-    }
+ 
+    var currentWeight: Double = 65
     
     
 
-    var switchMetric = false {
+    var switchMetric = true {
         didSet {
             if switchMetric {
                 self.currentWeightRange = (22.04, 198.416)
@@ -52,6 +43,13 @@ struct UserGoalView: View {
     @EnvironmentObject var facebookManager: FacebookManager
     @ObservedObject var userViewModel: UserViewModel = UserViewModel()
     @ObservedObject var userGoal = UserGoal()
+    let weightTickRange :[Int] = [40,60,80,100,110,120]
+        let lostTickRange: [Int] = [0, 2, 5, 7, 9, 12]
+    @State private var desiredWeightRange: (Double, Double) = (0, 12)
+    @State private var currentWeightRange: (Double, Double) = (40, 120)
+    @State private var showingAlert = false
+    @State private var currentWeight: Double = 65
+
 
     var bckButton: some View {
         Button(action: {
@@ -85,7 +83,7 @@ struct UserGoalView: View {
             .frame(minWidth: 0, maxWidth: .infinity)
             .padding(.top, -30)
             
-            Text("What's your \ngoal \(self.userViewModel.getFirstName(fullName: userViewModel.userObect?.name ?? ""))?")
+            Text("What's your \ngoal \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? UserDefaults.standard.string(forKey: "nameFromApple")) ?? ""))?")
 //                .font(.largeTitle)
 //                .fontWeight(.bold)
                 .lineLimit(2)
@@ -108,16 +106,25 @@ struct UserGoalView: View {
 
                     
                 }
-                SliderViewBinding(percentage: $userGoal.currentWeight, hideTicker: false, range: $userGoal.currentWeightRange).frame( height: 20)
+                SliderView(percentage: self.$currentWeight, hideTicker: false, range: self.currentWeightRange, rangleLabel:self.weightTickRange ).frame( height: 20)
                 .padding(.bottom, 40)
             }
             
             VStack {
                 HStack {
-                    Text("Desired Weight")
+                    Text("I want to lose ")
                         .foregroundColor(Color("secondary"))
                     .fontWeight(.bold)
 
+                    Button(action: {
+                        self.showingAlert = true
+
+                        
+                    }) {
+                        Image(systemName:"info.circle").foregroundColor(Color("secondary"))
+                    }        .alert(isPresented: $showingAlert) {
+Alert(title: Text("Health Information"), message: Text("Based on suggested research, 12kg weightloss in 6 weeks is most healthy."), dismissButton: .default(Text("Ok")))
+                    }
                     
                     Spacer()
                     
@@ -127,12 +134,12 @@ struct UserGoalView: View {
                     
                 }
                 
-                SliderViewBinding(percentage: $userGoal.desiredWeight, hideTicker: false, range: $userGoal.desiredWeightRange).frame( height: 20)
+                SliderView(percentage: $userGoal.desiredWeight, hideTicker: false, range: (0,12),rangleLabel: self.lostTickRange).frame( height: 20)
                 .padding(.bottom, 20)
                 //range: (currentWeight-(currentWeight * 0.10),
             }
             
-            MetricsConversionView(switchMetric: $userGoal.switchMetric)
+           // MetricsConversionView(switchMetric: $userGoal.switchMetric)
 
             Spacer()
             

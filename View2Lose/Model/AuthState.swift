@@ -9,5 +9,5 @@
 import Foundation
 
 enum AuthState {
-    case undefined, signedOut, signedIn, userOnBoard
+    case undefined, signedOut, signedIn, userOnBoard, cameraOnboard, cameraOnBoard2, frontBodyMeasurement, sideBodyMeasurement
 }

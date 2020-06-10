@@ -106,6 +106,9 @@ import Combine
 class WebViewController: UIViewController, WKNavigationDelegate,  InstagramLoginDelegate, ObservableObject {
 
     @Published var isUserAuthenticated: AuthState = .undefined
+    
+    @EnvironmentObject var facebookManager: FacebookManager
+
 
     let willChange = PassthroughSubject<InstagramUser?, Never>()
     @Published var instagramUser:InstagramUser? = nil {
@@ -147,11 +150,9 @@ class WebViewController: UIViewController, WKNavigationDelegate,  InstagramLogin
     }
 
     func instagramLoginDidFinish(instagramUser: InstagramUser, error: NSError) {
-        if instagramUser != nil {
-            //self.
-        } else {
-
-        }
+        print("Instagram User")
+            facebookManager.isUserAuthenticated = .userOnBoard
+       
     }
 
     func goToWebView() {
@@ -177,6 +178,8 @@ struct WebView: UIViewControllerRepresentable {
     class Coordinator: NSObject, WKNavigationDelegate {
 
         var parent: WebView
+        //@EnvironmentObject var facebookManager: FacebookManager
+
 
         init(parent: WebView) {
             self.parent = parent
@@ -185,24 +188,26 @@ struct WebView: UIViewControllerRepresentable {
 
         func webView(_ webView: WKWebView, decidePolicyFor navigationAction:
             WKNavigationAction, decisionHandler: @escaping(WKNavigationActionPolicy) -> Void) {
-
-            if let url = navigationAction.request.url?.absoluteString, let range = url.range(of: "code=") {
-               // self.parent.presentAuth = false
-                print("Parent Dismiss")
-                parent.presentationMode.wrappedValue.dismiss()
-                // get instagram test user token and id
-                let request = navigationAction.request
-                //print(request.url?.absoluteString)
-                InstagramApi.shared.getTestUserIDAndToken(request: request) { (instagramTestUser) in
-                    print("Instagram User: \(instagramTestUser)")
-                    self.parent.testUserData = InstagramTestUser(access_token: "123asdf3", user_id: 1)
-                    let webVC = WebViewController()
-
-                    self.parent.presentAuth = false
-                    let instagramManager = InstagramManager()
-                    instagramManager.userSignIn(presentAuth: false)
-                }
+            let request = navigationAction.request
+            self.parent.instagramApi.getTestUserIDAndToken(request: request) { (instagramTestUser) in
+                self.parent.testUserData = instagramTestUser
+                self.parent.presentAuth = false
+                self.parent.presentationMode.wrappedValue.dismiss()
+                print("Test")
             }
+
+//            if let url = navigationAction.request.url?.absoluteString, let range = url.range(of: "code=") {
+//               // self.parent.presentAuth = false
+//                print("Parent Dismiss")
+////                parent.presentationMode.wrappedValue.dismiss()
+//                // get instagram test user token and id
+//                let request = navigationAction.request
+//                //facebookManager.isUserAuthenticated = .userOnBoard
+//                let instagramManager = InstagramManager()
+//                instagramManager.userSignIn(presentAuth: false)
+//                //print(request.url?.absoluteString)
+//
+//            }
             decisionHandler(WKNavigationActionPolicy.allow)
        }
 

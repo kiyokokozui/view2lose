@@ -71,16 +71,16 @@ struct BodyTypeView: View {
                 
             }
                 //.frame(width: UIScreen.main.bounds.width, height: 350)
-                .padding(.vertical, 10)
+                .padding(.top, 10)
             Spacer()
             HStack(alignment: .center) {
                 Button(action: {
-                    self.facebookManager.isUserAuthenticated = .signedIn
-                    
+                    self.facebookManager.isUserAuthenticated = .cameraOnboard
                     //DashboardView()
+                    print("Hello")
                 }, label: {
                     Spacer()
-                        Text("Complete")
+                        Text("I am ready!")
                             .padding()
                             .foregroundColor(.white)
 
@@ -92,8 +92,20 @@ struct BodyTypeView: View {
                     .cornerRadius(30)
                     .padding(.bottom, 10)
                     .padding(.horizontal, 20)
-             
+
             }.frame(minWidth: 0, maxWidth: .infinity)
+//            HStack(alignment: .center) {
+//                Spacer()
+//                  NavigationLink(destination: FrontFacingCameraView()) {
+//                                          Text("Continue")
+//                                              .padding()
+//                                              .foregroundColor(.white)
+//
+//                                              .frame(maxWidth: .infinity, alignment: .center)
+//                                      }.background(Color("primary"))
+//                                          .cornerRadius(30)
+//                                      .padding(.bottom, 10)
+//            }.frame(minWidth: 0, maxWidth: .infinity)
         }
         .padding(.horizontal, 20)
         .navigationBarBackButtonHidden(true)
@@ -146,11 +158,10 @@ struct BodyTypeButton: View {
                 VStack (alignment: .leading) {
                 ForEach(bodyTypes[i], id: \.self) { image in
                     //Text(image)
-                    self.createView(image: image, originalIndex: i)
+                    self.createView(image: image, originalIndex: i).padding(.bottom, 10)
                 }
 
                 }.padding()
-                Spacer()
 
 
             }
@@ -166,10 +177,10 @@ struct BodyTypeButton: View {
                 Image("\(image)").renderingMode(.original).resizable().aspectRatio(contentMode: .fit)
            
             }.padding()
-                .frame(width: 170, height: 170)
+                .frame(width: 170, height: 160)
                 .background(Color.white)
                 .cornerRadius(10)
-                .padding(.bottom,10)
+                //.padding(.bottom,10)
 
 
       
@@ -177,16 +188,18 @@ struct BodyTypeButton: View {
             .shadow(color: self.selected == image ?  Color("primary") : Color("secondary"), radius: 5, x: 1, y: 5)
             .shadow(color: self.selected == image ?  Color("primary") : Color("secondary"), radius: 2, x: 1, y: -1)
             
-            Text("\(bodyTypeText[image]!)")
+            Text("\(bodyTypeText[image]!)").lineLimit(5)
+
                 .modifier(CustomBodyFontModifier(size: 14))
-                .padding(.bottom, 10)
-                .frame(maxHeight: 50)
+                .frame(maxHeight: 350)
                 .multilineTextAlignment(.center)
+                
             
-            .frame(maxWidth: .infinity, alignment: .center)
+            //.frame(maxWidth: .infinity, alignment: .center)
 
 
         }
+
             .onTapGesture {
                 print("\(image)Button is tapped")
                 self.selected = image

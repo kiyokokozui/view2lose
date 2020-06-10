@@ -24,17 +24,29 @@ struct DashboardView: View {
     var body: some View {
         Group {
             if isLoggedIn {
-                DashboardSectionView()
-                
+                //DashboardSectionView()
+                //LoginView()
+                ContentView(viewModel: UserViewModel())
             } else {
                 if facebookManager.isUserAuthenticated == .undefined {
                     LoginView()
                 } else if facebookManager.isUserAuthenticated == .userOnBoard {
                     
                     ContentView(viewModel: UserViewModel())
+                    //TestView()
+                } else if facebookManager.isUserAuthenticated == .cameraOnboard {
+                    FrontFacingCameraView()
+                } else if facebookManager.isUserAuthenticated == .cameraOnBoard2 {
+                    
+                    SideFacingCameraView()
+                } else if facebookManager.isUserAuthenticated == .frontBodyMeasurement {
+                    FrontSideMeasurement()
+                
+                } else if facebookManager.isUserAuthenticated == .sideBodyMeasurement {
+                   // SideSideMeasurement()
                 } else if facebookManager.isUserAuthenticated == .signedIn {
                     
-                    DashboardSectionView()
+                   // DashboardSectionView()
                 }
             }
         }.onAppear(perform: getUser)
@@ -125,7 +137,7 @@ struct DashboardSectionView: View {
                             .actionSheet(isPresented: $showActionSheet, content: {
                                                       self.actionSheet })
                                 .sheet(isPresented: $showingImagePicker, onDismiss: {
-                                    TestView()
+                                    //TestView()
                                     print("Image Picker Dismissed")
                                 }, content: {
                                 ImagePicker.shared.view

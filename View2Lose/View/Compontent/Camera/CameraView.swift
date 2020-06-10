@@ -57,7 +57,7 @@ enum PhotoParseError : Error {
     case takeRetainValueFailed
 }
 
-private class PreviewView: UIView, AVCapturePhotoCaptureDelegate {
+public class PreviewView: UIView, AVCapturePhotoCaptureDelegate {
     
     @EnvironmentObject var cameraState : CameraState
     
@@ -125,11 +125,11 @@ private class PreviewView: UIView, AVCapturePhotoCaptureDelegate {
         self.captureSession?.startRunning()
     }
     
-    override class var layerClass: AnyClass {
+    public override class var layerClass: AnyClass {
         AVCaptureVideoPreviewLayer.self
     }
     
-    override func didMoveToSuperview() {
+    public override func didMoveToSuperview() {
         super.didMoveToSuperview()
         
         if nil != self.superview {
@@ -138,7 +138,7 @@ private class PreviewView: UIView, AVCapturePhotoCaptureDelegate {
         }
     }
     
-    func capturePhoto() {
+   public func capturePhoto() {
         let photoSettings: AVCapturePhotoSettings
         if photoOutput!.availablePhotoCodecTypes.contains(.hevc) {
             photoSettings = AVCapturePhotoSettings(format:
@@ -149,10 +149,9 @@ private class PreviewView: UIView, AVCapturePhotoCaptureDelegate {
         photoSettings.flashMode = .auto
         self.photoOutput?.capturePhoto(with: photoSettings, delegate: self)
         
-        
     }
     
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         if error != nil {
             cameraState.capturedImageError = PhotoParseError.error(error!)
             return
@@ -172,8 +171,7 @@ private class PreviewView: UIView, AVCapturePhotoCaptureDelegate {
         fatalError("init(coder:) not implemented")
     }
 }
-
-private struct PreviewHolder: UIViewRepresentable {
+public struct PreviewHolder: UIViewRepresentable {
     private var delegate: CameraViewDelegate?
     private var cameraType: AVCaptureDevice.DeviceType
     private var cameraPosition: AVCaptureDevice.Position
@@ -186,18 +184,18 @@ private struct PreviewHolder: UIViewRepresentable {
         self.view = PreviewView(delegate: delegate, cameraType: cameraType, cameraPosition: cameraPosition)
     }
     
-    func makeUIView(context: UIViewRepresentableContext<PreviewHolder>) -> PreviewView {
+    public func makeUIView(context: UIViewRepresentableContext<PreviewHolder>) -> PreviewView {
         view
     }
     
-    func updateUIView(_ uiView: PreviewView, context: UIViewRepresentableContext<PreviewHolder>) {
+    public func updateUIView(_ uiView: PreviewView, context: UIViewRepresentableContext<PreviewHolder>) {
     }
     
     func getView() -> PreviewView {
         return self.view
     }
     
-    typealias UIViewType = PreviewView
+    public typealias UIViewType = PreviewView
 }
 
 public struct CameraView_Previews: PreviewProvider {

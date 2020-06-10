@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import AuthenticationServices
 
 class UserStore : Codable  {
 
@@ -19,5 +20,12 @@ class UserStore : Codable  {
     init(email: String, name: String) {
         self.email = email
         self.name = name
+    }
+    
+    init(appleCredentials: ASAuthorizationAppleIDCredential) {
+        //self.id = appleCredentials.user
+        self.email = appleCredentials.email ?? ""
+        self.name = appleCredentials.fullName?.givenName ?? ""
+        
     }
 }

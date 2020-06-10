@@ -47,7 +47,7 @@ struct ActivityView: View {
                 Text("What's your \nactivity level? ")
 //                    .font(.largeTitle)
 //                    .fontWeight(.bold)
-                    .modifier(CustomHeaderFontModifier(size: 35))
+                    .modifier(CustomHeaderFontModifier(size: 28))
                     .padding(.bottom, 20)
                     .lineLimit(2)
                 

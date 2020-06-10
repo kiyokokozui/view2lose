@@ -18,7 +18,8 @@ struct SliderView: View {
  
     @State  var range: (Double, Double) = (40, 120)
     @State private var knobWidth: CGFloat?
-    
+    @State var rangleLabel : [Int]
+
     
     
     var body: some View {
@@ -64,7 +65,7 @@ struct SliderView: View {
                 
             }.padding(.bottom, 5)
             
-            TickerView(isHidden: self.hideTicker)
+            TickerView(isHidden: self.hideTicker, rangleLabel: self.rangleLabel)
                 .frame(width: geometry.size.width - 10)
                 .padding(.horizontal, 5)
 
@@ -101,7 +102,8 @@ struct SliderViewBinding: View {
  
     @Binding  var range: (Double, Double)
     @State private var knobWidth: CGFloat?
-    
+    @State var rangleLabel : [Int]
+
     
     
     var body: some View {
@@ -147,7 +149,7 @@ struct SliderViewBinding: View {
                 
             }.padding(.bottom, 5)
             
-            TickerView(isHidden: self.hideTicker)
+            TickerView(isHidden: self.hideTicker, rangleLabel: self.rangleLabel)
                 .frame(width: geometry.size.width - 10)
                 .padding(.horizontal, 5)
 
@@ -185,7 +187,8 @@ struct SliderViewWithBinding: View {
     @State var hideTicker: Bool
     //@Binding var position: Double
  
-    
+    @State var rangleLabel : [Int] 
+
     @State private var knobWidth: CGFloat?
     
 //    init(percentage: Double, maxNumber: Double, minNumber: Double, hideTicker: Bool) {
@@ -241,8 +244,7 @@ struct SliderViewWithBinding: View {
                 
             }.padding(.bottom, 5)
             
-            TickerView(isHidden: self.hideTicker)
-                .frame(width: geometry.size.width - 10)
+            TickerView(isHidden: self.hideTicker, rangleLabel: self.rangleLabel)                .frame(width: geometry.size.width - 10)
                 .padding(.horizontal, 5)
 
 
@@ -273,6 +275,7 @@ struct SliderViewWithBinding: View {
 struct TickerView: View {
     let ticks: Int = 11
     @State var isHidden : Bool
+    @State var rangleLabel : [Int]
     var body: some View {
         HStack {
             if !isHidden {
@@ -285,25 +288,61 @@ struct TickerView: View {
 
         return HStack (alignment: .center) {
            ForEach(0..<ticks){ i in
-            self.createLargeTicks(postion: i)
+            //self.createLargeTicks(postion: i)
+            
+            TickandLabel(position: i, rangeLabel: self.rangleLabel[(i+1)/2])
             if i != (self.ticks-1) {
                 Spacer()
-
+                
             }
            }
         }
     }
     
      func createLargeTicks(postion: Int) -> some View {
-        if postion % 2 == 0 {
-            return Rectangle().frame(width: 1, height: 9).offset(y: 20).foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1)))
+      
+            return VStack(alignment: .center) {
+                Rectangle().frame(width: 1, height: 9).offset(y: 20).foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1))).padding(10)
+                Text("0")
+            }
+            
+            
+     
+           // return Rectangle().frame(width: 1, height: 4).offset(y: 20).foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1)))
+     
+    }
+    
+    func createTickLabel(position: Int) -> some View {
+        if position % 2 == 0 {
+            return Text("0").foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1)))
         } else {
-            return Rectangle().frame(width: 1, height: 4).offset(y: 20).foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1)))
+            return Text("")
         }
-        
     }
    
 }
+
+struct TickandLabel: View {
+    @State var position: Int
+    @State  var rangeLabel: Int
+    var body: some View {
+        VStack {
+            Rectangle().frame(width: 1, height: self.position % 2 == 0 ? 9 : 4).offset(y: 20).foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1)))
+                .padding(.bottom, 10)
+            createTickLabel(position: self.position, positionlabel: rangeLabel)
+            
+            
+
+        }
+        
+    }
+    
+    func createTickLabel(position: Int, positionlabel: Int) -> some View {
+        Text(position % 2 == 0 ? "\(positionlabel)" : "").foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1))).font(.system(size: 11)).padding(.top, 5)
+    }
+}
+
+
 
 struct TickerView2: View {
     let ticks: Int = 11
@@ -436,5 +475,11 @@ struct SliderViewDashboard: View {
         let xrange: (Double, Double) = (0, Double(width.view - width.knob))
        let result = self.percentage.convert(fromRange: range, toRange: xrange)
         return CGFloat(result)
+    }
+}
+
+struct SliderView_Previews: PreviewProvider {
+    static var previews: some View {
+        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
     }
 }
