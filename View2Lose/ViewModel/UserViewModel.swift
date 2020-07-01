@@ -41,6 +41,14 @@ class UserViewModel: ObservableObject, Identifiable {
         }
         return fullName
     }
+    
+    func getLastName(fullName: String) -> String {
+          var components = fullName.components(separatedBy: " ")
+          if components.count > 0 {
+              return components.joined(separator: " ")
+          }
+          return fullName
+      }
 }
 
 

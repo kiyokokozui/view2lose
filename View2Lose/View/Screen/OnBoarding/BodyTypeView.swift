@@ -24,7 +24,7 @@ struct BodyTypeView: View {
               
               Image(systemName: "chevron.left")
                   .foregroundColor(.black)
-          }
+          }.frame(width: 40, height: 40)
       }
     
 
@@ -36,20 +36,22 @@ struct BodyTypeView: View {
                 
                 Circle()
                     .frame(width: 15, height: 15)
-                    .foregroundColor(Color("secondary"))
+                    .foregroundColor(Color("tertiary"))
                 Circle()
                     .frame(width: 15, height: 15)
-                    .foregroundColor(Color("secondary"))
-                Circle()
-                    .frame(width: 15, height: 15)
-                    .foregroundColor(Color("secondary"))
+                    .foregroundColor(Color("tertiary"))
+        
                 Circle()
                     .frame(width: 15, height: 15)
                     .foregroundColor(Color("primary"))
+                Circle()
+                .frame(width: 15, height: 15)
+                .foregroundColor(Color("tertiary"))
                 
-            }
+            } .background(Color("bg-color"))
             .frame(minWidth: 0, maxWidth: .infinity)
             .padding(.top, -30)
+
             
             Text("Select your \nbody type")
 //                .font(.largeTitle)
@@ -58,10 +60,11 @@ struct BodyTypeView: View {
                 .padding(.leading, 20)
             .modifier(CustomHeaderFontModifier(size: 35))
 
-            VStack {
+            VStack(alignment: .center)  {
                 HStack {
+                    Spacer()
                   BodyTypeButton()
-
+                    Spacer()
                 }
 //                GeometryReader { reader in
 //                    self.scrollView(reader: reader)
@@ -71,29 +74,20 @@ struct BodyTypeView: View {
                 
             }
                 //.frame(width: UIScreen.main.bounds.width, height: 350)
-                .padding(.top, 10)
             Spacer()
             HStack(alignment: .center) {
-                Button(action: {
-                    self.facebookManager.isUserAuthenticated = .cameraOnboard
-                    //DashboardView()
-                    print("Hello")
-                }, label: {
-                    Spacer()
-                        Text("I am ready!")
-                            .padding()
-                            .foregroundColor(.white)
+                Spacer()
+                NavigationLink(destination: UserGoalView()) {
+                    Text("Continue")
+                        .padding()
+                        .foregroundColor(.white)
+                        .modifier(CustomBoldBodyFontModifier(size: 20))
 
                         .frame(maxWidth: .infinity, alignment: .center)
-
-
-                })
-                .background(Color("primary"))
+                }.background(Color("primary"))
                     .cornerRadius(30)
                     .padding(.bottom, 10)
-                    .padding(.horizontal, 20)
-
-            }.frame(minWidth: 0, maxWidth: .infinity)
+            }.frame(minWidth: 0, maxWidth: .infinity).padding(.horizontal, 20)
 //            HStack(alignment: .center) {
 //                Spacer()
 //                  NavigationLink(destination: FrontFacingCameraView()) {
@@ -107,11 +101,13 @@ struct BodyTypeView: View {
 //                                      .padding(.bottom, 10)
 //            }.frame(minWidth: 0, maxWidth: .infinity)
         }
-        .padding(.horizontal, 20)
+        
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle("", displayMode: .inline)
-        .navigationBarItems(leading: bckButton.padding(.leading, 5))
+        .navigationBarItems(leading: bckButton.padding(.leading, -5))
         //self.facebookManager.isUserAuthenticated = .signedIn
+        .background(Color("bg-color"))
+
 
     }
     
@@ -155,7 +151,7 @@ struct BodyTypeButton: View {
         ForEach(0..<bodyTypes.count) { i in
             VStack {
             Group {
-                VStack (alignment: .leading) {
+                VStack (alignment: .center) {
                 ForEach(bodyTypes[i], id: \.self) { image in
                     //Text(image)
                     self.createView(image: image, originalIndex: i).padding(.bottom, 10)
@@ -177,7 +173,7 @@ struct BodyTypeButton: View {
                 Image("\(image)").renderingMode(.original).resizable().aspectRatio(contentMode: .fit)
            
             }.padding()
-                .frame(width: 170, height: 160)
+                .frame(width: 155, height: 160)
                 .background(Color.white)
                 .cornerRadius(10)
                 //.padding(.bottom,10)
@@ -185,14 +181,15 @@ struct BodyTypeButton: View {
 
       
 
-            .shadow(color: self.selected == image ?  Color("primary") : Color("secondary"), radius: 5, x: 1, y: 5)
-            .shadow(color: self.selected == image ?  Color("primary") : Color("secondary"), radius: 2, x: 1, y: -1)
+            .shadow(color: self.selected == image ?  Color("primary") : Color("tertiary"), radius: 5, x: 1, y: 5)
+            .shadow(color: self.selected == image ?  Color("primary") : Color("tertiary"), radius: 2, x: 1, y: -1)
             
             Text("\(bodyTypeText[image]!)").lineLimit(5)
 
                 .modifier(CustomBodyFontModifier(size: 14))
                 .frame(maxHeight: 350)
                 .multilineTextAlignment(.center)
+                .foregroundColor(self.selected == image ? Color("primary") : Color("secondary"))
                 
             
             //.frame(maxWidth: .infinity, alignment: .center)

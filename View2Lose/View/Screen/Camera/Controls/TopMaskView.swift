@@ -31,7 +31,7 @@ class TopMaskView: UIView {
         self.isUserInteractionEnabled = false
         
         // Draw Red Seperator Line
-        lineLayer.strokeColor = UIColor(red: 175/255.0, green: 0.0, blue: 17/255.0, alpha: 1.0).withAlphaComponent(0.8).cgColor;
+        lineLayer.strokeColor = UIColor(red: 255/255.0, green: 255/255.0, blue: 255/255.0, alpha: 1.0).withAlphaComponent(0.8).cgColor;
         lineLayer.lineWidth = 1.0;
         self.layer.addSublayer(lineLayer)
         

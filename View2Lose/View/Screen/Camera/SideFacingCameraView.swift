@@ -11,7 +11,7 @@ import Combine
 import AVFoundation
 
 
-struct SideFacingCameraView: View {
+struct SideFacingCameraView1: View {
     
     @State private var image: Image?
     @State private var showingCustomCamera = false
@@ -27,9 +27,9 @@ struct SideFacingCameraView: View {
         VStack {
             
             if cameraViewModel.changeToFrontCamera {
-                CustomSideFacingCameraView(viewModel: cameraViewModel, image: self.$inputImage, currentCamera: self.$currentCamera)
+                CustomSideFacingCameraView1(viewModel: cameraViewModel, image: self.$inputImage, currentCamera: self.$currentCamera)
             } else {
-                CustomSideFacingCameraView(viewModel: cameraViewModel, image: self.$inputImage, currentCamera: self.$currentCamera)
+                CustomSideFacingCameraView1(viewModel: cameraViewModel, image: self.$inputImage, currentCamera: self.$currentCamera)
             }
             
             
@@ -65,7 +65,7 @@ struct SideFacingCameraView: View {
 
 
 
-struct CustomSideFacingCameraView: View {
+struct CustomSideFacingCameraView1: View {
     
     @State var viewModel: CameraViewModel?
     @Binding var image: UIImage?
@@ -242,15 +242,13 @@ struct CustomSideFacingCameraView: View {
                                     Spacer()
                                     
                                     if self.image != nil {
-                                        
-                                            
-                                            
-                                                UsePictureButton().padding(.bottom, 30) .onTapGesture {
-                                                    self.saveImage()
-                                                    print("Image Saved!")
-                                                    self.facebookManager.isUserAuthenticated = .frontBodyMeasurement
+                                          
+                                        UsePictureButton().padding(.bottom, 30) .onTapGesture {
+                                            self.saveImage()
+                                            print("Image Saved!")
+                                            self.facebookManager.isUserAuthenticated = .imagePreview
 
-                                                }
+                                        }
                                   
                                         
                                     } else {

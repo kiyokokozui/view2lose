@@ -26,7 +26,7 @@ func changeMetrics(metricType: MetricType, unit: unitType, value: Double) -> Dou
         if unit == .height {
             //Change t
                             let changedMeasurement = Measurement(value:value, unit: UnitLength.centimeters)
-                            let changedValue = changedMeasurement.converted(to: UnitLength.inches)
+                            let changedValue = changedMeasurement.converted(to: UnitLength.feet)
             print("Value is \(value) : Changed Value is \(changedValue)")
             return Double(changedValue.value)
 
@@ -40,7 +40,7 @@ func changeMetrics(metricType: MetricType, unit: unitType, value: Double) -> Dou
         
     } else {
         if unit == .height {
-              let changedMeasurement = Measurement(value: value, unit: UnitLength.inches)
+              let changedMeasurement = Measurement(value: value, unit: UnitLength.feet)
                             let changedValue = changedMeasurement.converted(to: UnitLength.centimeters)
             print("Value is \(value) : Changed Value is \(changedValue)")
 

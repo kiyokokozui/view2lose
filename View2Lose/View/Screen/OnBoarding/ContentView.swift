@@ -8,24 +8,33 @@
 
 import SwiftUI
 import Combine
+import KeychainSwift
 
-class Order: ObservableObject, Identifiable {
+class UserBasicInfo: ObservableObject, Identifiable {
     @Published var age: Double = 0
     @Published var percentage: Double = 40
     @Published var height: Double = 180
-    @Published var heightRange : (Double, Double) = (150,200)
+    @Published var heightRange : (Double, Double) = (140,200)
+      var  heightTickRange: [Float] = [140, 150, 160, 170, 180, 190, 200]
+     var  heightTickMetricRange:[Float] = [4,4.5, 5, 5.5, 6, 6.5, 7]
     let WillChange = PassthroughSubject<Void, Never>()
 
-    
-    var switchMetric = true {
+    @Published var changeMetric = true
+    var switchMetric = 0 {
         didSet {
-            if switchMetric {
-                self.heightRange = (150, 200)
+            if switchMetric == 0 {
+                self.heightRange = (140, 200)
+                self.changeMetric = true
                 self.height = changeMetrics(metricType: .metric, unit: .height, value: height)
-            } else {
-                self.heightRange = (59.05, 78.74)
-                self.height = changeMetrics(metricType: .imperial, unit: .height, value: height)
+                UserDefaults.standard.set(true, forKey: "Metrics")
+                self.heightTickRange = [140, 150, 160, 170, 180, 190, 200]
 
+            } else if switchMetric == 1 {
+                self.heightRange = (4, 7)
+                self.changeMetric = false
+                self.height = changeMetrics(metricType: .imperial, unit: .height, value: height)
+                UserDefaults.standard.set(false, forKey: "Metrics")
+                self.heightTickRange = [4,4.5, 5, 5.5, 6, 6.5, 7]
             }
             WillChange.send()
         }
@@ -41,17 +50,35 @@ class Order: ObservableObject, Identifiable {
 
 struct ContentView: View {
     
-    @ObservedObject var order = Order()
+    @ObservedObject var userbasicInfo = UserBasicInfo()
     @ObservedObject var userViewModel: UserViewModel
-    let ageTickRange :[Int] = [10,20,30,40,50,60]
-     let heightTickRange: [Int] = [150, 160, 170, 180, 190, 200]
+    @State var ageTickRange :[Float] = [10,20,30,40,50,60,70]
+    @State var  heightTickRange: [Float] = [140, 150, 160, 170, 180, 190, 200]
+      @State var  heightTickMetricRange:[Float] = [4,4.5, 5, 5.5, 6, 6.5, 7]
+    
+    @EnvironmentObject var userInfo : UserBasicInfo
+    
+    let keychain = KeychainSwift()
+    var metricsName = ["Metric", "U.S"]
+   // @State private var switchMetric1 = 1
 
     init(viewModel: UserViewModel)
     {
         self.userViewModel = viewModel
         UISwitch.appearance().onTintColor = #colorLiteral(red: 0.589797318, green: 0.4313705266, blue: 0.9223902822, alpha: 1)
+        UserDefaults.standard.set(true, forKey: "Metrics")
+        BBIModelEndpoint.sharedService.createNewUsername(username: "sagar1", email: "sagar1@gmail.com", fullName: "Sagar Chhetri", gender: "M", height: 157, weight: 65, waistSize: 33, bodyTypeId: 1, activityLevelId: 2, firstName: "Sagar", lastName: "Chhetri", BMR: "test", GoalWeightChange: 1, GoalWeight: 2, GoalType: 123, Password: "")
         
-        BBIModelEndpoint.sharedService.createNewUsername(username: "sagar1212", email: "test@gmail.com", fullName: "Sagar Chhetri", gender: "M", height: 157, weight: 65, waistSize: 33, bodyTypeId: 1, activityLevelId: 12, firstName: "Sagar", lastName: "Chhetri", BMR: "test", GoalWeightChange: 1, GoalWeight: 2, GoalType: 123, Password: "Password")
+        UISegmentedControl.appearance().selectedSegmentTintColor = .white
+               UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"primary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .selected)
+               UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"secondary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .normal)
+        
+        let keychain = KeychainSwift()
+        //keychain.set(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") , forKey: "BBIFirstNameKey")
+        //keychain.set(self.userViewModel.getLastName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") , forKey: "BBILastNameKey")
+        //keychain.set(self.userViewModel.userObect?.email ?? keychain.get("emailFromApple") ?? "", forKey: "BBIEmailKey")
+        //keychain.set(self.userViewModel.userObect?.name ??  keychain.get("nameFromApple") ?? "", forKey: "BBIFirstNameKey")
+
     }
     
     
@@ -101,35 +128,39 @@ struct ContentView: View {
                             .foregroundColor(Color("primary"))
                         Circle()
                             .frame(width: 15, height: 15)
-                            .foregroundColor(Color("secondary"))
+                            .foregroundColor(Color("tertiary"))
                         Circle()
                             .frame(width: 15, height: 15)
-                            .foregroundColor(Color("secondary"))
+                            .foregroundColor(Color("tertiary"))
                         Circle()
                         .frame(width: 15, height: 15)
-                        .foregroundColor(Color("secondary"))
+                        .foregroundColor(Color("tertiary"))
                         
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding(.top, -30)
+                    .padding(.top, -30).background(Color("bg-color"))
+
                     
-                }
-                Text("Lets get to \nknow you \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? UserDefaults.standard.string(forKey: "nameFromApple")) ?? "") )!")
+                }        .background(Color("bg-color"))
+
+                Text("Lets get to \nknow you \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") )!")
 //                    .font(.largeTitle)
 //                    .fontWeight(.bold)
+                    
                     .lineLimit(2)
                     .modifier(CustomHeaderFontModifier(size: 35))
 
                 
                 Text("My gender is")
                     .foregroundColor(Color("secondary"))
+                    .fontWeight(.bold)
                 .modifier(CustomBodyFontModifier(size: 16))
 
                 
                 
-                HStack (alignment: .center, spacing: 20) {
+                HStack (alignment: .center, spacing: 25) {
                     
-                    GenderButton(isSelected: $order.isFemale, type: "👩🏻")
+                    GenderButton(isSelected: $userbasicInfo.isFemale, type: "👩🏻")
                     
                 }
                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -137,7 +168,7 @@ struct ContentView: View {
                 
                 VStack {
                     HStack {
-                        Text("Age")
+                        Text("My age is")
                             .foregroundColor(Color("secondary"))
                             .fontWeight(.bold)
                         .modifier(CustomBoldBodyFontModifier(size: 16))
@@ -145,13 +176,13 @@ struct ContentView: View {
                         
                         Spacer()
                         
-                        Text("\(Int(order.percentage)) years")
+                        Text("\(Int(userbasicInfo.percentage)) years")
                             .foregroundColor(Color("secondary"))
                         .modifier(CustomBodyFontModifier(size: 16))
 
                         
                     }
-                    SliderView(percentage: $order.percentage, hideTicker: false, range: (10, 60),rangleLabel: ageTickRange).frame( height: 20)
+                    SliderView(percentage: $userbasicInfo.percentage, hideTicker: false, range: (10, 70),rangleLabel: $ageTickRange).frame( height: 20)
                         .padding(.bottom, 20)
     
                     
@@ -160,7 +191,7 @@ struct ContentView: View {
                 
                 VStack {
                     HStack {
-                        Text("Height")
+                        Text("My height is")
                             .foregroundColor(Color("secondary"))
                         .fontWeight(.bold)
                         .modifier(CustomBoldBodyFontModifier(size: 16))
@@ -169,15 +200,35 @@ struct ContentView: View {
                         Spacer()
                         
                        // Text("\(switchMetric ? changeMetrics(metricType: .metric, unit: .height, value: height) : changeMetrics(metricType: .imperial, unit: .height, value: height)) \(switchMetric ? "cm" : "inches")"))
-                        Text(" \(Int(order.height)) \(order.switchMetric ? "cm" : "inches")").foregroundColor(Color("secondary"))
+                        Text(" \(userbasicInfo.height, specifier: "%.1f") \(userbasicInfo.changeMetric ? "cm" : "feet")").foregroundColor(Color("secondary"))
                     }
-                    SliderViewBinding(percentage:  $order.height, hideTicker: false, range: $order.heightRange, rangleLabel: self.heightTickRange).frame( height: 15).frame( height: 20)
-                    .padding(.bottom, 20)
+                    SliderViewBinding(percentage:  $userbasicInfo.height, hideTicker: false, range:  $userbasicInfo.heightRange , rangleLabel: userbasicInfo.changeMetric ? self.$heightTickRange : self.$heightTickMetricRange, isUSMetric: $userbasicInfo.changeMetric).environmentObject(self.userbasicInfo).frame( height: 15).frame( height: 20).padding(.bottom, 20)
+                   // print(self.userbasicInfo.switchMetric)
+//                    if order.switchMetric {
+//                       SliderViewBinding(percentage:  $order.height, hideTicker: false, range:  $order.heightRange , rangleLabel:   self.heightTickRange ).frame( height: 15).frame( height: 20)
+//                                                  .padding(.bottom, 20)
+//                    } else {
+//    SliderViewBinding(percentage:  $order.height, hideTicker: false, range:  $order.heightRange , rangleLabel:   self.heightTickMetricRange ).frame( height: 15).frame( height: 20)
+//    .padding(.bottom, 20)                    }
+                    
                     //SliderTick()
                 }
-                MetricsConversionView(switchMetric: $order.switchMetric)
-                
-                    
+                HStack {
+                    Spacer()
+                   // MetricsConversionView()
+                    Picker("", selection: self.$userbasicInfo.switchMetric) {
+                        ForEach(0..<metricsName.count) { index in
+                            Text(self.metricsName[index]).tag(index)                     .modifier(CustomBodyFontModifier(size: 17))
+
+                        }
+                        
+                        
+                        }.pickerStyle(SegmentedPickerStyle()).background(Color(#colorLiteral(red: 0.9475272298, green: 0.9246528745, blue: 1, alpha: 1)))
+                    .frame(width: 175)
+                    Spacer()
+
+                }.padding(.vertical, 20)
+            
                 
                 
                 Spacer()
@@ -189,12 +240,14 @@ struct ContentView: View {
                             Text("Continue")
                                 .padding()
                                 .foregroundColor(.white)
-                                .modifier(CustomBodyFontModifier(size: 16))
+                                .modifier(CustomBoldBodyFontModifier(size: 20))
 
                                 .frame(maxWidth: .infinity, alignment: .center)
-                        }.background(Color("primary"))
+                        } .background(Color("primary"))
+
                             .cornerRadius(30)
-                        .padding(.bottom, 10)
+                        .padding(.bottom, 20)
+                    .shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 1, y: 2)
                         
                 
                         
@@ -203,6 +256,7 @@ struct ContentView: View {
             }.padding(.horizontal, 20)
             .navigationBarBackButtonHidden(true)
                 .navigationBarTitle("", displayMode: .inline)
+            .background(Color("bg-color"))
                // .navigationBarItems(leading: bckButton.padding(.leading, 5))
             
         }
@@ -231,7 +285,7 @@ struct GenderButton: View {
                     Text(i)
                         .font(.system(size: 49))
                 }
-                .frame(width: 120, height: 120)
+                .frame(width: 153, height: 124)
                 .background(Color.white)
                 .cornerRadius(10)
                     

@@ -8,6 +8,7 @@
 
 import UIKit
 import AuthenticationServices
+import KeychainSwift
 
 class SignInWithAppleDelegates: NSObject {
     private let signInSucceeded: (Result<UserStore?, Error>) -> ()
@@ -21,19 +22,26 @@ class SignInWithAppleDelegates: NSObject {
 
 extension SignInWithAppleDelegates: ASAuthorizationControllerDelegate {
     public func registerNewAccount(credential: ASAuthorizationAppleIDCredential) {
-        print("Registering new account with user: \(credential.fullName?.givenName)")
         let appleUserObject = UserStore(appleCredentials: credential)
         UserDefaults.standard.set(credential.fullName?.givenName, forKey: "nameFromApple")
+        let keychain = KeychainSwift()
+
+        keychain.set(credential.fullName?.givenName ?? "", forKey: "nameFromApple")
+        keychain.set(credential.email ?? "", forKey: "emailFromApple")
+
 
         self.signInSucceeded(.success(appleUserObject))
     }
     
     public func signInWithExistingAccount(credential: ASAuthorizationAppleIDCredential) {
-        print("Signing in with existing account with user: \(credential.fullName)")
         let appleUserObject = UserStore(appleCredentials: credential)
         //UserDefaults.standard.set(credential.fullName?.givenName, forKey: "nameFromApple")
        // print("new account with user: \(UserDefaults.standard.data(forKey: "nameFromApple"))")
-        
+       // let keychain = KeychainSwift()
+       // keychain.set(credential.fullName?.givenName ?? "", forKey: "nameFromApple")
+      //  keychain.set(credential.email ?? "", forKey: "emailFromApple")
+
+
 
         self.signInSucceeded(.success(appleUserObject))
     }

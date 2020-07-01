@@ -18,9 +18,9 @@ struct SliderView: View {
  
     @State  var range: (Double, Double) = (40, 120)
     @State private var knobWidth: CGFloat?
-    @State var rangleLabel : [Int]
-
+    @Binding var rangleLabel : [Float]
     
+    @State var isUSMetric: Bool = true
     
     var body: some View {
         
@@ -65,7 +65,7 @@ struct SliderView: View {
                 
             }.padding(.bottom, 5)
             
-            TickerView(isHidden: self.hideTicker, rangleLabel: self.rangleLabel)
+            TickerView(isHidden: self.hideTicker, rangleLabel: self.$rangleLabel, isUSMetric: self.$isUSMetric)
                 .frame(width: geometry.size.width - 10)
                 .padding(.horizontal, 5)
 
@@ -102,10 +102,9 @@ struct SliderViewBinding: View {
  
     @Binding  var range: (Double, Double)
     @State private var knobWidth: CGFloat?
-    @State var rangleLabel : [Int]
+    @Binding var rangleLabel : [Float]
+    @Binding var isUSMetric : Bool
 
-    
-    
     var body: some View {
         
         GeometryReader  { geometry in
@@ -149,7 +148,7 @@ struct SliderViewBinding: View {
                 
             }.padding(.bottom, 5)
             
-            TickerView(isHidden: self.hideTicker, rangleLabel: self.rangleLabel)
+            TickerView(isHidden: self.hideTicker, rangleLabel: self.$rangleLabel, isUSMetric: self.$isUSMetric)
                 .frame(width: geometry.size.width - 10)
                 .padding(.horizontal, 5)
 
@@ -186,8 +185,9 @@ struct SliderViewWithBinding: View {
     @State private var newPosition: CGSize = .zero
     @State var hideTicker: Bool
     //@Binding var position: Double
- 
-    @State var rangleLabel : [Int] 
+ @Binding var isUSMetric : Bool
+
+    @Binding var rangleLabel : [Float]
 
     @State private var knobWidth: CGFloat?
     
@@ -199,7 +199,7 @@ struct SliderViewWithBinding: View {
 //
 //
 //    }
-    
+   
     
     var body: some View {
         
@@ -244,7 +244,7 @@ struct SliderViewWithBinding: View {
                 
             }.padding(.bottom, 5)
             
-            TickerView(isHidden: self.hideTicker, rangleLabel: self.rangleLabel)                .frame(width: geometry.size.width - 10)
+            TickerView(isHidden: self.hideTicker, rangleLabel: self.$rangleLabel, isUSMetric: self.$isUSMetric)                .frame(width: geometry.size.width - 10)
                 .padding(.horizontal, 5)
 
 
@@ -273,31 +273,73 @@ struct SliderViewWithBinding: View {
 }
 
 struct TickerView: View {
-    let ticks: Int = 11
+    var ticks: Int = 13
     @State var isHidden : Bool
-    @State var rangleLabel : [Int]
+    @Binding var rangleLabel : [Float]
+    @Binding var isUSMetric : Bool
+    @EnvironmentObject var userInfo : UserBasicInfo
+
     var body: some View {
         HStack {
-            if !isHidden {
-                createTicker()
-            }
-        }
-    }
-    
-     func createTicker() -> some View {
+         //   if !isHidden {
+                //createTicker()
+            HStack (alignment: .center) {
+//               ForEach(0 ..< ticks){ i in
+//
+//                //self.createLargeTicks(postion: i)
+//                //print(i)
+//                TickandLabel(position: i, rangeLabel: self.$rangleLabel[(i+1)/2], isUSMetric: self.$isUSMetric)
+//                //Text("\(self.rangleLabel[1], specifier: "%.1f")")
+//                if i != (self.ticks-1) {
+//                    Spacer()
+//
+//                }
+                Group {
+                    Group {
+                        TickandLabel(position: 0, rangeLabel: self.$rangleLabel[(0+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 1, rangeLabel: self.$rangleLabel[(1+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 2, rangeLabel: self.$rangleLabel[(2+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 3, rangeLabel: self.$rangleLabel[(3+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
 
-        return HStack (alignment: .center) {
-           ForEach(0..<ticks){ i in
-            //self.createLargeTicks(postion: i)
-            
-            TickandLabel(position: i, rangeLabel: self.rangleLabel[(i+1)/2])
-            if i != (self.ticks-1) {
-                Spacer()
-                
+                    }
+                    
+                    Group {
+                        TickandLabel(position: 4, rangeLabel: self.$rangleLabel[(4+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 5, rangeLabel: self.$rangleLabel[(5+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 6, rangeLabel: self.$rangleLabel[(6+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 7, rangeLabel: self.$rangleLabel[(7+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 8, rangeLabel: self.$rangleLabel[(8+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+//                        TickandLabel(position: 9, rangeLabel: self.$rangleLabel[(9+1)/2], isUSMetric: self.$isUSMetric)
+//                        Spacer()
+                    }
+                    
+                    Group {
+                        TickandLabel(position: 9, rangeLabel: self.$rangleLabel[(9+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 10, rangeLabel: self.$rangleLabel[(10+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 11, rangeLabel: self.$rangleLabel[(11+1)/2], isUSMetric: self.$isUSMetric)
+                        Spacer()
+                        TickandLabel(position: 12, rangeLabel: self.$rangleLabel[(12+1)/2], isUSMetric: self.$isUSMetric)
+                    }
+                }
+               }
             }
-           }
+          //  }
         }
-    }
+    
+    
+    
+
     
      func createLargeTicks(postion: Int) -> some View {
       
@@ -324,12 +366,19 @@ struct TickerView: View {
 
 struct TickandLabel: View {
     @State var position: Int
-    @State  var rangeLabel: Int
+    @Binding  var rangeLabel: Float
+    @Binding var isUSMetric: Bool
     var body: some View {
         VStack {
             Rectangle().frame(width: 1, height: self.position % 2 == 0 ? 9 : 4).offset(y: 20).foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1)))
                 .padding(.bottom, 10)
-            createTickLabel(position: self.position, positionlabel: rangeLabel)
+            if isUSMetric {
+                createTickLabel(position: self.position, positionlabel: rangeLabel)
+
+            } else {
+                createUSTickLabel(position: self.position, positionlabel: rangeLabel)
+
+            }
             
             
 
@@ -337,15 +386,21 @@ struct TickandLabel: View {
         
     }
     
-    func createTickLabel(position: Int, positionlabel: Int) -> some View {
-        Text(position % 2 == 0 ? "\(positionlabel)" : "").foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1))).font(.system(size: 11)).padding(.top, 5)
+    func createTickLabel(position: Int, positionlabel: Float) -> some View {
+        Text(position % 2 == 0 ? "\(positionlabel, specifier: "%.0f")" : "").foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1))).font(.system(size: 11)).padding(.top, 5)
+
+    }
+    
+    func createUSTickLabel(position: Int, positionlabel: Float) -> some View {
+        Text(position % 2 == 0 ? "\(positionlabel, specifier: "%.1f")" : "").foregroundColor(Color(#colorLiteral(red: 0.7304339409, green: 0.7245418429, blue: 0.7541612387, alpha: 1))).font(.system(size: 11)).padding(.top, 5)
+
     }
 }
 
 
 
 struct TickerView2: View {
-    let ticks: Int = 11
+    let ticks: Int = 13
     @State var isHidden : Bool
     var body: some View {
         HStack {
@@ -381,18 +436,6 @@ struct TickerView2: View {
 }
 
 
-
-extension Double {
-    func convert(fromRange: (Double, Double), toRange: (Double, Double)) -> Double {
-        // Example: if self = 1, fromRange = (0,2), toRange = (10,12) -> solution = 11
-        var value = self
-        value -= fromRange.0
-        value /= Double(fromRange.1 - fromRange.0)
-        value *= toRange.1 - toRange.0
-        value += toRange.0
-        return value
-    }
-}
 
 
 struct SliderViewDashboard: View {

@@ -38,7 +38,7 @@ struct ActivityView: View {
         
         Image(systemName: "chevron.left")
             .foregroundColor(.black)
-        }
+        }.frame(width: 40, height: 40)
     }
     
      var body: some View {
@@ -47,13 +47,12 @@ struct ActivityView: View {
                 Text("What's your \nactivity level? ")
 //                    .font(.largeTitle)
 //                    .fontWeight(.bold)
-                    .modifier(CustomHeaderFontModifier(size: 28))
+                    .modifier(CustomHeaderFontModifier(size: 30))
                     .padding(.bottom, 20)
                     .lineLimit(2)
                 
-                Text("Describe your activity level")
-                    .foregroundColor(Color.init(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
-                VStack{
+              
+                VStack (alignment: .leading){
                     ActivityListView()
 
                     
@@ -61,24 +60,31 @@ struct ActivityView: View {
 
                 Spacer()
                 HStack(alignment: .center) {
-                        NavigationLink(destination: UserGoalView()) {
+                        NavigationLink(destination: BodyTypeView()) {
                             Text("Continue")
                                 .padding()
                                 .foregroundColor(.white)
-                            
+                            .modifier(CustomBoldBodyFontModifier(size: 20))
+
                             .frame(maxWidth: .infinity, alignment: .center)
                         }.background(Color("primary"))
+
                         .cornerRadius(30)
+                            .shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 10, x: 0, y: 6)
                         
                   
                     
-                }.frame(minWidth: 0, maxWidth: .infinity)
-                .padding(.bottom, 10)
+                }
+                //.frame(minWidth: 0, maxWidth: .infinity)
+                .padding(.bottom, 20)
 
             }.padding(.horizontal, 20)
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitle("", displayMode: .inline)
-                .navigationBarItems(leading: bckButton.padding(.leading, 5))
+                .navigationBarItems(leading: bckButton.padding(.leading, -5))
+        .background(Color("bg-color"))
+
+
         
     }
 }
@@ -98,31 +104,37 @@ struct ActivityListView: View {
             Button(action: {
                 self.selected = index
             })  {
-                VStack(alignment: .center,spacing: 10) {
+                VStack(alignment: .leading,spacing: 5) {
                     
                     Text(activityType[index])
-                        .font(.headline)
-                        .fontWeight(.medium)
+                    .modifier(CustomBodyFontModifier(size: 17))
+                       // .font(.headline)
+                      //  .fontWeight(.medium)
                         .foregroundColor(Color("primary"))
 
                     
                     Text(activityData[index])
-                        .font(.subheadline)
-                        .fontWeight(.light)
-                        .foregroundColor(Color.init(#colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)))
+//                        .font(.subheadline)
+//                        .fontWeight(.light)
+                        .modifier(CustomBodyFontModifier(size: 17))
+
+                        .foregroundColor(Color("secondary"))
                         .lineLimit(2)
+                        .multilineTextAlignment(.leading)
                     
                 }
-                .padding(.vertical, 20)
+               .padding(.vertical, 20)
+                .padding(.leading, 20)
+
                 
             }
-            .frame(minWidth: 0,maxWidth: .infinity)
+            .frame(minWidth: 0,maxWidth: .infinity, alignment: .leading)
             .background(Color.white)
                 .cornerRadius(10)
                 .padding(.top, 20)
 
-                .shadow(color: self.selected == index ? Color("primary") : Color("secondary"), radius: 2, x: 1, y: 2)
-                .shadow(color: self.selected == index ? Color("primary") : Color("secondary"), radius: 2, x: 1, y: -1)
+                .shadow(color: self.selected == index ? Color("primary") : Color("tertiary"), radius: 2, x: 1, y: 2)
+                .shadow(color: self.selected == index ? Color("primary") : Color("tertiary"), radius: 2, x: 1, y: -1)
 
         }
         
@@ -137,19 +149,20 @@ struct navView: View {
                 
                 Circle()
                     .frame(width: 15, height: 15)
-                    .foregroundColor(Color("secondary"))
+                    .foregroundColor(Color("tertiary"))
                 Circle()
                     .frame(width: 15, height: 15)
                     .foregroundColor(Color("primary"))
                 Circle()
                     .frame(width: 15, height: 15)
-                    .foregroundColor(Color("secondary"))
+                    .foregroundColor(Color("tertiary"))
                 Circle()
                 .frame(width: 15, height: 15)
-                .foregroundColor(Color("secondary"))
+                .foregroundColor(Color("tertiary"))
                 
             }
             .frame(minWidth: 0, maxWidth: .infinity)
-        }
+        }        .background(Color("bg-color"))
+
     }
 }

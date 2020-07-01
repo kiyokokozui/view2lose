@@ -20,9 +20,9 @@ class IndicatorView: UIImageView
         didSet {
             switch side {
             case .left:
-                self.frame = CGRect(x: touchPoint.x - 90.0, y: touchPoint.y - 93.0, width: 90.0, height: 34.0)
+                self.frame = CGRect(x: touchPoint.x - 90.0, y: touchPoint.y - 93.0, width: 70, height: 26)
             case .right:
-                self.frame = CGRect(x: touchPoint.x, y: touchPoint.y - 93.0, width: 90.0, height: 34.0)
+                self.frame = CGRect(x: touchPoint.x, y: touchPoint.y - 93.0, width: 70, height: 26)
             }
         }
     }
@@ -31,12 +31,13 @@ class IndicatorView: UIImageView
     {
         self.init(frame: CGRect.zero)
         self.side = withSide
-        
+        contentMode = .scaleAspectFill
         switch self.side {
         case .left:
-            self.image = UIImage(named: "marker_left_navel")
+            self.image = UIImage(named: "right")
         case .right:
-            self.image = UIImage(named: "marker_right_navel")
+            self.image = UIImage(named: "right")
+            
         }
     }
     

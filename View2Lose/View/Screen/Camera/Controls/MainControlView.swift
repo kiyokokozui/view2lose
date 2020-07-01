@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Combine
 
-struct Measurements {
+class Measurements : ObservableObject {
     var frontSet: Bool = false
     var sideSet: Bool = false
     
@@ -42,11 +43,12 @@ let cursorTopBottomSize: CGFloat = 60.0
 let cursorLeftRightSize: CGFloat = 70.0
 let cursorMarginSize: CGFloat = 20.0
 
-public class MainControlView: UIView
+public class MainControlView: UIView, ObservableObject, Identifiable
 {
     weak var delegate: ControlViewDelegate?
     //public var imageName: String = "com.smr.front.png"
-    
+    let WillChange = PassthroughSubject<Measurements, Never>()
+
     var imageView: UIImageView?
     {
         didSet {
@@ -77,6 +79,7 @@ public class MainControlView: UIView
     var indicatorViewLeft: IndicatorView = IndicatorView(withSide: .left)
     var indicatorViewRight: IndicatorView = IndicatorView(withSide: .right)
     
+    
     var topMask: TopMaskView = TopMaskView()
     var bottomMask: BottomMaskView = BottomMaskView()
     
@@ -87,6 +90,8 @@ public class MainControlView: UIView
     
     var initialSubviewLayout: Bool = false
     
+    var currentMeasurments = Measurements()
+
    
     
     
@@ -162,14 +167,15 @@ public class MainControlView: UIView
             topMask.touchPoint = CGPoint(x: 0, y: 20.0 + cursorTopBottomSize/2.0)
             // Bottom Cursor & Mask
             cursorButtonBottom.frame = CGRect(x: 10.0, y: self.frame.size.height - cursorTopBottomSize - 20.0, width: cursorTopBottomSize, height: cursorTopBottomSize)
-            bottomMask.touchPoint = CGPoint(x: 0, y: self.frame.size.height - cursorTopBottomSize/2.0 - 20.0)
-            // Left Cursor & Indicator
+            bottomMask.touchPoint = CGPoint(x: 0, y: self.frame.size.height - cursorTopBottomSize/2.0 - 40.0)
+            // Left Cursor & Indicator )
             cursorButtonLeft.frame = CGRect(x: self.frame.size.width/4.0 - cursorLeftRightSize/2.0, y: self.frame.size.height/2.0 - cursorLeftRightSize/2.0, width: cursorLeftRightSize, height: cursorLeftRightSize)
             cursorButtonLeft.touchPoint = CGPoint(x: cursorButtonLeft.frame.origin.x + cursorLeftRightSize/2.0, y: cursorButtonLeft.frame.origin.y + cursorLeftRightSize/2.0) // This needs set so that first touch of cursor will match other cursors y and not be 0
             indicatorViewLeft.frame = CGRect(x: self.frame.size.width/4.0 - 2, y: self.frame.size.height/2.0 - cursorLeftRightSize - 1.0, width: 4.0, height: 4.0)
             indicatorViewLeft.touchPoint = cursorButtonLeft.touchPoint // This needs set so that first touch of cursor will match other indicators y and not be 0
             // Right Cursor & Indicator
             cursorButtonRight.frame = CGRect(x: self.frame.size.width*(3.0/4.0) - cursorLeftRightSize/2.0, y: self.frame.size.height/2.0 - cursorLeftRightSize/2.0, width: cursorLeftRightSize, height: cursorLeftRightSize)
+            
             cursorButtonRight.touchPoint = CGPoint(x: cursorButtonRight.frame.origin.x + cursorLeftRightSize/2.0, y: cursorButtonRight.frame.origin.y + cursorLeftRightSize/2.0) // This needs set so that first touch of cursor will match other cursors y and not be 0
             indicatorViewRight.frame = CGRect(x: self.frame.size.width*(3.0/4.0) - 2.0, y: self.frame.size.height/2.0 - cursorLeftRightSize - 1.0, width: 4.0, height: 4.0)
             indicatorViewRight.touchPoint = cursorButtonRight.touchPoint // This needs set so that first touch of cursor will match other indicators y and not be 0
@@ -219,7 +225,7 @@ public class MainControlView: UIView
         self.addSubview(cursorButtonBottom)
         
         // Set Up Connecting Line
-        lineLayer.strokeColor = UIColor.red.withAlphaComponent(0.8).cgColor;
+        lineLayer.strokeColor = UIColor.white.withAlphaComponent(0.9).cgColor;
         lineLayer.lineWidth = 1.0;
         self.layer.addSublayer(lineLayer)
         
@@ -400,7 +406,7 @@ public class MainControlView: UIView
             
             // Restrict Bottom Cursor (This is the center pt so offset as needed)
             updatedPt.x = 40.0
-            updatedPt.y = max(min(updatedPt.y, imageBounds.height - 30.0), imageBounds.height/2)
+            updatedPt.y = max(min(updatedPt.y, imageBounds.height - 50.0), imageBounds.height/2)
         } else if gesture.view! === cursorButtonTop { // TOP
             currentMagGlass = magGlassTop
             currentIndicator = nil
@@ -433,7 +439,10 @@ public class MainControlView: UIView
         default: ()
         }
         updateMeasurements()
-        print("Position: (\(cursorButtonTop.center.y),\(indicatorViewLeft.center.x + 45.0),\(indicatorViewLeft.center.y),\(cursorButtonBottom.center.y),\(indicatorViewRight.center.x - 45.0),\(indicatorViewRight.center.y))")
+        //print("Position: (\(cursorButtonTop.center.y),\(indicatorViewLeft.center.x + 45.0),\(indicatorViewLeft.center.y),\(cursorButtonBottom.center.y),\(indicatorViewRight.center.x - 45.0),\(indicatorViewRight.center.y))")
+    
+        
+    
     }
     
     // Draw Connecting Line
@@ -450,15 +459,46 @@ public class MainControlView: UIView
     // Update Measurements
     
     func updateMeasurements() {
-        if let delegate = self.delegate {
-            delegate.newMeasurements(cursorButtonTop.center.y,
+      //  if let delegate = self.delegate {
+        delegate?.newMeasurements(cursorButtonTop.center.y,
                                      leftX: indicatorViewLeft.center.x + 45.0,
                                      leftY:  indicatorViewLeft.center.y,
                                      bottom: cursorButtonBottom.center.y,
                                      rightX: indicatorViewRight.center.x - 45.0,
                                      rightY: indicatorViewRight.center.y)
-        }
+          // print("Delegate \(delegate)")
+//        }
+       // print(cursorButtonTop.center.y)
+//        currentMeasurments.frontSet = true
+//               currentMeasurments.frontTop = cursorButtonTop.center.y
+//               currentMeasurments.frontLeftX = indicatorViewLeft.center.x + 45.0
+//               currentMeasurments.frontLeftY = indicatorViewLeft.center.y
+//               currentMeasurments.frontBottom = cursorButtonBottom.center.y
+//               currentMeasurments.frontRightX = indicatorViewRight.center.x - 45.0
+//               currentMeasurments.frontRightY = indicatorViewRight.center.y
+//               self.WillChange.send(currentMeasurments)
+        
+        
     }
+    
+    // MARK: Convert Point To Picture Pt
+    // Used For Screen Pts To Picture Pts Translation
+     var imageSize: CGSize = CGSize.zero
+     var imageTopOffset: CGFloat = 0.0
+     var cameraAspectRatio: CGFloat = 0.0
+     var imageHeightRelativeToScreen: CGFloat = 0.0
+    
+    func convertPointToPicturePt(_ pt: CGPoint, imageView: UIImageView) -> CGPoint {
+        let translatedImagePtX = (pt.x / imageView.bounds.size.width) * imageSize.width
+        
+        // Need To Account For Top And Bottom Padding In ImageView When Taking Pt Percentages For Y
+        let adjustedYForTopOffset = pt.y - imageTopOffset
+        let translatedImagePtY = (adjustedYForTopOffset / (imageView.bounds.size.height - (imageTopOffset * 2))) * imageSize.height
+        
+        return CGPoint(x: translatedImagePtX, y: translatedImagePtY)
+    }
+    
+    
     
     // MARK: Setup Supported Hardware Set
     
@@ -512,4 +552,7 @@ public class MainControlView: UIView
 //        }
 //        return false
 //    }
+    
+    
+    
 }

@@ -8,6 +8,38 @@
 
 import UIKit
 
+/*
+ 
+ TickandLabel(position: 0, rangeLabel: self.$rangleLabel[(0+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 1, rangeLabel: self.$rangleLabel[(1+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 2, rangeLabel: self.$rangleLabel[(2+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 3, rangeLabel: self.$rangleLabel[(3+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 4, rangeLabel: self.$rangleLabel[(4+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 5, rangeLabel: self.$rangleLabel[(5+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 6, rangeLabel: self.$rangleLabel[(6+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 7, rangeLabel: self.$rangleLabel[(7+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 8, rangeLabel: self.$rangleLabel[(8+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 9, rangeLabel: self.$rangleLabel[(9+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 10, rangeLabel: self.$rangleLabel[(10+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 11, rangeLabel: self.$rangleLabel[(11+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 12, rangeLabel: self.$rangleLabel[(12+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+           TickandLabel(position: 13, rangeLabel: self.$rangleLabel[(13+1)/2], isUSMetric: self.$isUSMetric)
+           Spacer()
+ */
+
 enum CursorType {
     case free, vertical
 }
@@ -19,6 +51,7 @@ class CursorButton: UIButton {
             switch cursorType {
             case .free:
                 self.frame = CGRect(x: touchPoint.x - 35.0, y: touchPoint.y - 35.0, width: 70.0, height: 70.0)
+                self.alpha = 0.4
                 break
             case .vertical:
                 self.frame = CGRect(x: touchPoint.x - 30.0, y: touchPoint.y - 30.0, width: 60.0, height: 60.0)
@@ -49,8 +82,8 @@ class CursorButton: UIButton {
             break
         case .vertical:
             self.layer.cornerRadius = 30.0
-            self.setImage(UIImage(named: "vertical_swipe"), for: UIControl.State())
-            self.setImage(UIImage(named: "vertical_swipe"), for: .highlighted)
+            self.setImage(UIImage(named: "right"), for: UIControl.State())
+            self.setImage(UIImage(named: "right"), for: .highlighted)
             break
         }
     }

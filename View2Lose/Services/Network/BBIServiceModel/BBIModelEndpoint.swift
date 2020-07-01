@@ -151,6 +151,45 @@ class BBIModelEndpoint {
         
     }
     
+    public func makePostRequest(requestId: BBIRequestId, data: [String: Any],requestType: BBIRequestType, completion: @escaping (Result<String, Error>) -> ()) {
+        let url = NSURL(string: BBIModelEndpoint.urlWithRequestId(requestId: requestId))
+
+       // let url = NSURL(string: "http://104.211.63.244/BBIDataService/service.svc/CreateNewUser")
+        var request = URLRequest(url: url! as URL)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        guard let httpbody = try? JSONSerialization.data(withJSONObject: data, options: .prettyPrinted) else {return}
+        request.httpBody = httpbody
+        
+        let session = URLSession.shared
+        session.dataTask(with: request) { (data, response, error) in
+            if error != nil {
+                print(error)
+            }
+            if let response = response {
+                print(response)
+            }
+            
+            if let data = data {
+                do {
+                    print(data)
+                    let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                    print(json)
+                    completion(.success(json as! String))
+                    
+                } catch {
+                    print(error)
+                    completion(.failure(error))
+                }
+            }
+        }.resume()
+
+        
+    }
+
+    
     public func makeGetRequest(requestId: BBIRequestId, delegate: Any) {
         
     }
@@ -175,8 +214,9 @@ class BBIModelEndpoint {
            // self.makePostRequest(requestId: requestId, data: data, delegate: delegate, requestType: POST)
         }
     }
+    typealias resultClosureBlock = (Result<String, Error>) -> ()
     
-    public func createNewUsername(username:String, email: String, fullName: String, gender: String, height: Int, weight: Int, waistSize: Int, bodyTypeId: Int, activityLevelId: Int, firstName: String, lastName: String, BMR: String, GoalWeightChange: Int?, GoalWeight: Int, GoalType: Int, Password: String) {
+    public func createNewUsername(username:String, email: String, fullName: String, gender: String, height: Int, weight: Int, waistSize: Int, bodyTypeId: Int, activityLevelId: Int, firstName: String, lastName: String, BMR: String, GoalWeightChange: Int?, GoalWeight: Int, GoalType: Int, Password: String ) {
         let dalegate = ""
         let param = ["Username": username,
                      "Email": email,
@@ -198,14 +238,98 @@ class BBIModelEndpoint {
             ] as [String : Any]
         do {
           //  let data = try? JSONSerialization.data(withJSONObject: param as [String: Any], options: [.])
-            self.makePostRequest(requestId: BBIRequestCreateNewUser, data: param, delegate: delegate, requestType: POST)
-
+           self.makePostRequest(requestId: BBIRequestCreateNewUser, data: param, delegate: delegate, requestType: POST)
+           // self.makePostRequest(requestId: <#T##BBIRequestId#>, data: <#T##Dictionary<String, Any>#>, completion: <#T##(Result<String, Error>) -> ()#>)
         } catch {
             print(error)
         }
         
         
     }
+    
+    
+    public func warpImageWithImageData1(_ imageData: Data, leftWaist: [Int: Int], rightWaist: [Int: Int], yKneeCoord: [Int: Int], leftNaval: [String: Int], rightNaval: [String: Int], leftHips: [Int: Int], rightHips: [Int: Int], midChest: [Int: Int], leftBi: [Int: Int], rightBi: [Int: Int], bodyTypeId: Int, waistInInches: Float, userId: String, blurface: Int) {
+        let dalegate = ""
+        let params = ["leftWaist": leftWaist,
+                        "rightWaist": rightWaist,
+                        "YKneeCoord": yKneeCoord,
+                        "leftNavel": leftNaval,
+                        "rightNavel": rightNaval,
+                        "leftHips": leftHips,
+                        "rightHips": rightHips,
+                        "midChest": midChest,
+                        "leftBi": leftBi,
+                        "rightBi": rightBi,
+                        "BodyTypeID": bodyTypeId,
+                        "WaistInInches": waistInInches,
+                        "Base64EncodedImageData": imageData,
+                        "UserId": userId,
+                        "BlurFace": blurface ]  as [String : Any]
+        
+        do {
+            self.makePostRequest(requestId: BBIRequestWarpImage, data: params, delegate: delegate, requestType: POST)
+        } catch {
+            print(error)
+        }
+    }
+    
+    public func warpImageWithImageData(_ imageData: Data, leftNavel: [String: Int],  rightNavel: [String: Int], bodyTypeId: Int, topOfHead: Int, bottomOfFeet: Int, heightInInches: Int, userName: String, waistInInches: Float, userId: String, blurface: Int, completion: @escaping (Result<WarpImageResponse, Error>) -> ()  ) {
+          let dalegate = ""
+        let imageDataString = imageData.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
+          let params = [
+                        
+                          "leftNavel": leftNavel,
+                          "rightNavel": rightNavel,
+                          "TopOfHead" : topOfHead,
+                          "BottomOfFeet" : bottomOfFeet,
+                          "BodyTypeID": bodyTypeId,
+                          "WaistInInches": waistInInches,
+                          "LargestNavelInInches" : waistInInches,
+                          "Base64EncodedImageData": imageDataString,
+                          "UserId": userId,
+                          "UserName": userName]  as [String : Any]
+                        //  "BlurFace": blurface ]  as [String : Any]
+          
+          do {
+             // self.makePostRequest(requestId: BBIRequestWarpImage, data: params, delegate: delegate, requestType: POST)
+          //  self.makePostRequest(requestId: BBIRequestWarpImage, data: params, completion: completion)
+            let url = NSURL(string: BBIModelEndpoint.urlWithRequestId(requestId: BBIRequestWarpImage))
+
+           var request = URLRequest(url: url! as URL)
+           request.httpMethod = "POST"
+           request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+           request.setValue("application/json", forHTTPHeaderField: "Accept")
+           
+           guard let httpbody = try? JSONSerialization.data(withJSONObject: params, options: .prettyPrinted) else {return}
+           request.httpBody = httpbody
+           
+           let session = URLSession.shared
+           session.dataTask(with: request) { (data, response, error) in
+               if error != nil {
+                   print(error)
+               }
+               if let response = response {
+                   print(response)
+               }
+               
+               if let data = data {
+                   do {
+                    let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                    print(json)
+                    let warpImage = try JSONDecoder().decode(WarpImageResponse.self, from: data)
+                    print(warpImage.ResponseObject)
+                    completion(.success(warpImage))
+                       
+                   } catch {
+                       print(error)
+                       completion(.failure(error))
+                   }
+               }
+           }.resume()
+          } catch {
+              print(error)
+          }
+      }
 
     
     
