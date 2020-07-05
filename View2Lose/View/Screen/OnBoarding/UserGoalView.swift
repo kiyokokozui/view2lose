@@ -52,10 +52,12 @@ struct UserGoalView: View {
     @State var lostTickRange: [Float] = [0, 1, 2, 3, 4, 5, 6]
     @State var lostMetricTickRange: [Float] = [0, 2, 4, 6, 8, 10, 12]
     @State private var desiredWeightRange: (Double, Double) = (1, 6)
-    @State private var currentWeightRange: (Double, Double) = (40, 120)
+    @State private var currentWeightRange: (Double, Double) = (0, 120)
     @State private var currentpoundWeightRange: (Double, Double) = (0, 300)
 
     @State private var showingAlert = false
+    @State private var showingConfirmation = false
+
     @State private var currentWeight: Double = 70
     @State private var currentPoundWeight: Double = 140
 
@@ -162,8 +164,11 @@ struct UserGoalView: View {
             
             HStack(alignment: .center) {
                 Button(action: {
-                    self.facebookManager.isUserAuthenticated = .cameraOnboard
+                   // self.facebookManager.isUserAuthenticated = .cameraOnboard
                     //DashboardView()
+                    self.showingConfirmation = true
+                    
+                    
                 }, label: {
                     Spacer()
                         Text("I am ready!")
@@ -172,14 +177,23 @@ struct UserGoalView: View {
                             .modifier(CustomBoldBodyFontModifier(size: 20))
 
                         .frame(maxWidth: .infinity, alignment: .center)
-
-
                 })
                 .background(Color("primary"))
                     .cornerRadius(30)
                     .padding(.bottom, 20)
                     .padding(.horizontal, 20)
                 .shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 0, y: 6)
+                    .alert(isPresented: $showingConfirmation) {
+                        Alert(title: Text("Confirmation "), message: Text("Please confirm your details before continuing to the next step."), primaryButton: .default(Text("Confirm")) {
+                            //Save The value
+                            UserDefaults.standard.set(self.userGoal.currentWeight, forKey: "BBIWeightKey")
+                            UserDefaults.standard.set(self.userGoal.desiredWeight, forKey: "BBIUserGoalKey")
+                            
+                            
+                            self.saveDataToServer()
+                                self.facebookManager.isUserAuthenticated = .cameratutorial
+                        }, secondaryButton: .cancel())
+                }
 
             }.frame(minWidth: 0, maxWidth: .infinity)
         }
@@ -189,6 +203,25 @@ struct UserGoalView: View {
         .navigationBarItems(leading: bckButton.padding(.leading, -5))
         .background(Color("bg-color"))
 
+    }
+    
+    func saveDataToServer() {
+        let keychain = KeychainSwift()
+        let firstName = keychain.get("BBIFirstNameKey")
+        let lastName = keychain.get("BBILastNameKey")
+        let emailFromApple = keychain.get("BBIEmailKey")
+        let emailFromFacebook = keychain.get("emailFromApple")
+        let fullName = keychain.get("BBIFullNameKey")
+        
+        let gender = UserDefaults.standard.string(forKey: "BBIGenderKey")
+        let age = UserDefaults.standard.integer(forKey: "BBIAgeKey")
+        let height = UserDefaults.standard.double(forKey: "BBIHeightKey")
+        let activityType = UserDefaults.standard.integer(forKey: "BBIActivityKey")
+        let bodyType = UserDefaults.standard.integer(forKey: "BBIBodyTypeKey")
+        let weight = UserDefaults.standard.double(forKey: "BBIWeightKey")
+        let userGoal = UserDefaults.standard.double(forKey: "BBIUserGoalKey")
+        
+        BBIModelEndpoint.sharedService.createNewUsername(username: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName" , email: (emailFromApple ?? emailFromFacebook) ?? "test@BBI.com", fullName: fullName ?? "", gender: gender ?? "", height: height , weight: weight , waistSize: 0, bodyTypeId: bodyType , activityLevelId: activityType , firstName: firstName ?? "N/A", lastName: lastName ?? "N/A", BMR: "test", GoalWeightChange: 1, GoalWeight: userGoal, GoalType: 123, Password: "")
     }
 }
 

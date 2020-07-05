@@ -30,6 +30,8 @@ var activityData = [
 struct ActivityView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @State var selection: Int? = nil
+    @State var selectedActivity: Int = 0
 
     var bckButton: some View {
         Button(action: {
@@ -53,20 +55,26 @@ struct ActivityView: View {
                 
               
                 VStack (alignment: .leading){
-                    ActivityListView()
+                    ActivityListView(selected: self.$selectedActivity)
 
                     
                 }
 
                 Spacer()
                 HStack(alignment: .center) {
-                        NavigationLink(destination: BodyTypeView()) {
+                        NavigationLink(destination: BodyTypeView(), tag: 1, selection: $selection) {
+                            Button(action: {
+                               self.selection = 1
+                                //We have added +1 because we are saving value starting from 1, in array we have value from index 0
+                                UserDefaults.standard.set((self.selectedActivity+1), forKey: "BBIActivityKey")
+                            }) {
                             Text("Continue")
                                 .padding()
                                 .foregroundColor(.white)
                             .modifier(CustomBoldBodyFontModifier(size: 20))
 
                             .frame(maxWidth: .infinity, alignment: .center)
+                            }
                         }.background(Color("primary"))
 
                         .cornerRadius(30)
@@ -96,7 +104,7 @@ struct ActivityView_Previews: PreviewProvider {
 }
 
 struct ActivityListView: View {
-    @State var selected = 0
+    @Binding var selected :Int
     
     var body: some View {
        

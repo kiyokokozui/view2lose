@@ -24,8 +24,6 @@ extension ImageDirection {
         case .side:
             return "Side"
             
-        default:
-            return "Front"
         }
     }
 }
@@ -54,9 +52,8 @@ struct ImagePreview: View {
                 Button(action: {
                     if self.selectedImageDirection == .front {
                         self.facebookManager.isUserAuthenticated = .cameraOnboard
-                    } else {
-                        self.facebookManager.isUserAuthenticated = .cameraOnBoard2
-
+                    } else if self.selectedImageDirection == .side {
+                       self.facebookManager.isUserAuthenticated = .cameraOnBoard2
                     }
                 }, label: {
                     Text("Retake").foregroundColor(Color("primary")).modifier(CustomBodyFontModifier(size: 16))

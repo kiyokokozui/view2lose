@@ -16,6 +16,9 @@ struct BodyTypeView: View {
     @State private var x: CGFloat = 0
     @State private var count : CGFloat = 0
     @State private var screen = UIScreen.main.bounds.width - 40
+    @State var selection: Int? = nil
+    @State var selectedImage: String = "Potato"
+
 
     var bckButton: some View {
           Button(action: {
@@ -63,7 +66,7 @@ struct BodyTypeView: View {
             VStack(alignment: .center)  {
                 HStack {
                     Spacer()
-                  BodyTypeButton()
+                    BodyTypeButton(selected: $selectedImage)
                     Spacer()
                 }
 //                GeometryReader { reader in
@@ -77,13 +80,31 @@ struct BodyTypeView: View {
             Spacer()
             HStack(alignment: .center) {
                 Spacer()
-                NavigationLink(destination: UserGoalView()) {
-                    Text("Continue")
+                NavigationLink(destination: UserGoalView(), tag: 1, selection: $selection) {
+                    Button(action: {
+                        self.selection = 1
+                        if self.selectedImage == "Potato" {
+                            UserDefaults.standard.set(4, forKey: "BBIBodyTypeKey")
+                            
+                        } else if self.selectedImage == "Banana" {
+                            UserDefaults.standard.set(1, forKey: "BBIBodyTypeKey")
+
+                        } else if self.selectedImage == "Apple" {
+                            UserDefaults.standard.set(2, forKey: "BBIBodyTypeKey")
+
+                        } else if self.selectedImage == "Pear" {
+                            UserDefaults.standard.set(3, forKey: "BBIBodyTypeKey")
+
+                        }
+                    }) {
+                       Text("Continue")
                         .padding()
                         .foregroundColor(.white)
                         .modifier(CustomBoldBodyFontModifier(size: 20))
 
                         .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    
                 }.background(Color("primary"))
                     .cornerRadius(30)
                     .padding(.bottom, 10)
@@ -145,7 +166,7 @@ var bodyTypeText = [
 
 struct BodyTypeButton: View {
 
-    @State var selected = ""
+    @Binding var selected:String
     @State var show = false
     var body: some View {
         ForEach(0..<bodyTypes.count) { i in

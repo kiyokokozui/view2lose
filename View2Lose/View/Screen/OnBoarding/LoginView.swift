@@ -86,6 +86,8 @@ struct LoginView: View {
 
                             case .postOnBoardLoading:
                                 PostOnBoardingLoadingView()
+                            case .cameratutorial:
+                                CameraTutorialFirstView()
                             }
                         }
                     }, label: {
@@ -153,7 +155,7 @@ struct LoginView: View {
                         
                         .sheet(isPresented: self.$presentAuth , onDismiss: {
 //                            ContentView(viewModel: UserViewModel())
-                            self.facebookManager.isUserAuthenticated = .userOnBoard
+                          //  self.facebookManager.isUserAuthenticated = .userOnBoard
                             print("Dismissed ")
                         }) {
                             WebView(presentAuth: self.$presentAuth, testUserData:     self.$testUserData, instagramApi: self.$instagramApi)
@@ -203,6 +205,8 @@ struct LoginView: View {
                             case .postOnBoardLoading:
                                 print("Auth State: .postLoading")
 
+                            case .cameratutorial:
+                                print("Auth State: .cameraTutorial")
                             }
                         }
                        }

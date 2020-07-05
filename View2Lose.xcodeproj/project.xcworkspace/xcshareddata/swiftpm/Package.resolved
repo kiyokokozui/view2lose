@@ -9,6 +9,24 @@
           "revision": "5033e483f9b4c2e97344ac6a4044106de7f90585",
           "version": "6.3.0"
         }
+      },
+      {
+        "package": "KeychainSwift",
+        "repositoryURL": "https://github.com/evgenyneu/keychain-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
+          "version": "19.0.0"
+        }
+      },
+      {
+        "package": "SwiftyGif",
+        "repositoryURL": "https://github.com/kirualex/SwiftyGif.git",
+        "state": {
+          "branch": null,
+          "revision": "420d12cba8338b03993f73a72c1f6b70d5273cf2",
+          "version": "5.3.0"
+        }
       }
     ]
   },

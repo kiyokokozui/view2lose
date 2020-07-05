@@ -564,7 +564,7 @@ class FrontCameraOverlay: UIView  {
     var cameraViewModel: Camera1ViewModel?
     
 
-    lazy var imageView: UIImageView = {
+    var imageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named:"Front-silhouette")
         iv.translatesAutoresizingMaskIntoConstraints = false
@@ -620,7 +620,7 @@ class SideCameraOverlay: UIView  {
     var cameraViewModel: Camera1ViewModel?
     
 
-    lazy var imageView: UIImageView = {
+    var imageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named:"Side-Silhouette")
         iv.translatesAutoresizingMaskIntoConstraints = false

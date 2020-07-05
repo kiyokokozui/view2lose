@@ -84,6 +84,10 @@ struct DashboardView: View {
                 } else if facebookManager.isUserAuthenticated == .postOnBoardLoading {
                     PostOnBoardingLoadingView()
                 }
+                else if facebookManager.isUserAuthenticated == .cameratutorial {
+                    CameraTutorialFirstView()
+                }
+
             }
         }.onAppear(perform: getUser)
     }
@@ -123,7 +127,11 @@ struct DashboardSectionView: View {
           UISegmentedControl.appearance().selectedSegmentTintColor = .white
                         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"primary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .selected)
                         UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"secondary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .normal)
-      }
+        UITabBar.appearance().tintColor = UIColor(named: "primary")
+        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().barTintColor = .white
+        UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "primary")], for:.selected)
+    }
     
     func loadWarpImages() -> [UIImage] {
         var tempFillArray: [UIImage] = []
@@ -158,177 +166,97 @@ struct DashboardSectionView: View {
     
     var body: some View {
         
-        VStack(alignment: .leading) {
-            
-            
-               // Image("bg_pattern").resizable().frame(width: screen.width, height: 400).aspectRatio(contentMode: .fit)
-                Text("MyView").modifier(CustomBodyFontModifier(size: 35))
-                    .padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20)
-            
-            
-        
-        
-            VStack (alignment: .leading, spacing: 10) {
-//                HStack {
-//                    Text("Your better \nbody image")
-//                        .font(.system(size: 40))
-//                        .fontWeight(.bold)
-//                        .lineLimit(2)
-//                        .multilineTextAlignment(.leading)
-//
-//                }
-                Picker("",selection:$selectedWeek) {
-                                                             ForEach(0 ..< weeks.count ) { index in
-                                                                 //Text(week.weekLength).tag(week).foregroundColor(Color("primary"))
-                                                                 Text(self.weeks[index]).tag(index)
-                                                             }
-                }.pickerStyle(SegmentedPickerStyle()).background(Color(#colorLiteral(red: 0.9490196078, green: 0.9254901961, blue: 1, alpha: 1))).cornerRadius(1).padding(.top, 20)
-                VStack {
-                    ZStack (alignment: .topLeading) {
-                        
-                        VStack {
-                           
-                            if image == nil {
-                                
-                                Image(uiImage: loadWarpImages()[selectedWeek])
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .padding(20)
-                                
-                                //)Image("woman-placeholder")
-//                                ScrollView {
-//                                    Image(uiImage: loadWarpImages()[1])
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    //.opacity(0.4)
-//                                    .padding(20)
-//
-//                                    Image(uiImage: loadWarpImages()[2])
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    //.opacity(0.4)
-//                                    .padding(20)
-//
-//                                    Image(uiImage: loadWarpImages()[3])
-//                                    .resizable()
-//                                    .aspectRatio(contentMode: .fill)
-//                                    //.opacity(0.4)
-//                                    .padding(20)
-//
-//
-//                                }
-                                
-
-                            } else {
-                                image?.resizable()
-                                .aspectRatio(contentMode: .fill)
-                            }
-                                                        
-                        } .frame(width: screen.width - 30,height: 450, alignment: .center)
-
-                            .background(Color(#colorLiteral(red: 0.9198947021, green: 0.9198947021, blue: 0.9198947021, alpha: 1)))
-                        
-                       
-                      
-//
-//                        VStack {
-//                            Button(action: {
-//                                self.showActionSheet.toggle()
-//                            }) {
-//                                HStack(alignment: .center, spacing: 7) {
-//                                    Image(systemName: "camera").resizable()
-//                                        .renderingMode(.template)
-//                                        .foregroundColor(Color(.white))
-//                                        .frame(width: 12, height: 12)
-//                                        .aspectRatio(contentMode: .fill)
-//                                    Text( image == nil ? "Take Picture" : "Retake")
-//                                        .font(.system(size: 12))
-//                                        .foregroundColor(Color(.white))
-//                                }
-//                                .padding(.vertical, 8)
-//                                .padding(.horizontal, 10)
-//                            }
-//                            .background(Color("primary"))
-//                            .cornerRadius(20)
-//                            .actionSheet(isPresented: $showActionSheet, content: {
-//                                                      self.actionSheet })
-//                                .sheet(isPresented: $showingImagePicker, onDismiss: {
-//                                    //TestView()
-//                                    print("Image Picker Dismissed")
-//                                }, content: {
-//                                ImagePicker.shared.view
-//                            }).onReceive(ImagePicker.shared.$image) { (image) in
-//                                self.image = image
-//                            }
-//                        }.padding(15)
+        TabView {
+            VStack(alignment: .leading) {
                         
                         
+                           // Image("bg_pattern").resizable().frame(width: screen.width, height: 400).aspectRatio(contentMode: .fit)
+                            Text("MyView").modifier(CustomBodyFontModifier(size: 35))
+                                .padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20).padding(.top, 20)
                         
-                    }.padding(.vertical, 10)
+                        
                     
                     
-                
-                    
-                }
-                Spacer()
-              
-//                VStack {
-//                    //SliderViewDashboard(percentage: $desiredWeight, hideTicker: false, range: (40, 120))
-//
-//                    Divider()
-//                    HStack {
-//                        Button(action: {
-//                            self.index = 0
-//                        }) {
-//                            Image(systemName: "hexagon")
-//                                .resizable().frame(width: 25, height: 25)
-//                        }.foregroundColor(Color("primary"))
-//                        Spacer(minLength: 0)
-//
-//                        Button(action: {
-//                            self.index = 1
-//                        }) {
-//                            Image(systemName: "heart")
-//                            .resizable().frame(width: 25, height: 25)
-//
-//
-//                        }.foregroundColor(Color("primary"))
-//                        Spacer(minLength: 0)
-//
-//                        Button(action: {
-//                            self.index = 2
-//                        }) {
-//                            Image(systemName: "hexagon")
-//                        .resizable().frame(width: 25, height: 25)
-//
-//                        }.foregroundColor(Color("primary"))
-//                        Spacer(minLength: 0)
-//
-//                        Button(action: {
-//                            self.index = 3
-//                        }) {
-//                            Image(systemName: "person")
-//                        .resizable().frame(width: 25, height: 25)
-//
-//                        }.foregroundColor(Color("primary"))
-//
-//                        }
-//                    .background(Color("red"))
-//                        .padding(.horizontal, 35).frame(width: UIScreen.main.bounds.width - 40, height: 40)
-//
-//                }.frame(minWidth: 0, maxHeight: .infinity)
-//                    .padding(.horizontal, 20)
-//
-                
-                
-                }.padding().background(Color(.white)).clipShape(Rounded())
-            
-        }.frame(minWidth: 0, maxWidth: .infinity).background(Color("primary")).edgesIgnoringSafeArea(.top)
+                        VStack (alignment: .leading, spacing: 10) {
+            //                HStack {
+            //                    Text("Your better \nbody image")
+            //                        .font(.system(size: 40))
+            //                        .fontWeight(.bold)
+            //                        .lineLimit(2)
+            //                        .multilineTextAlignment(.leading)
+            //
+            //                }
+                            Picker("",selection:$selectedWeek) {
+                                                                         ForEach(0 ..< weeks.count ) { index in
+                                                                             //Text(week.weekLength).tag(week).foregroundColor(Color("primary"))
+                                                                             Text(self.weeks[index]).tag(index)
+                                                                         }
+                            }.pickerStyle(SegmentedPickerStyle()).background(Color(#colorLiteral(red: 0.9490196078, green: 0.9254901961, blue: 1, alpha: 1))).cornerRadius(1).padding(.top, 20).padding(.bottom, 20).padding(.horizontal, 20)
+                            VStack {
+                               // ZStack (alignment: .center) {
+                                    
+                                    VStack {
+                                       
+                                        if image == nil {
+                                            
+                                            Image(uiImage: loadWarpImages()[selectedWeek])
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .padding(20)
+                                            
+                                            
 
-                
+                                        } else {
+                                            image?.resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                        }
+                                                                    
+                                    } .frame(width: screen.width - 20,height: 450, alignment: .center)
+
+                                        //.background(Color(#colorLiteral(red: 0.9198947021, green: 0.9198947021, blue: 0.9198947021, alpha: 1)))
+                                    
+                                   
+                                  
+
+                                    
+                                    
+                                }.padding(.vertical, 10)
+                                
+                                
+                            
+                                
+                            
+                            Spacer()
+                            
+                            }.padding().background(Color(.white)).clipShape(Rounded())
+                        
+                    }.frame(minWidth: 0, maxWidth: .infinity).background(Color("primary")).edgesIgnoringSafeArea(.top)
+            .tabItem({
+                Image("rsz_ic_myview")
+                Text("My View")
+                }).tag(0)
             
-        
-    
+            HealthView().tabItem({
+                Image(systemName: "chart.bar.fill")
+                Text("My Health")
+            }).tag(1)
+            Update().tabItem({
+                //Image("ruler").resizable().renderingMode(.template).foregroundColor(Color("secondary")).frame(width: 32, height: 32)
+                Image(systemName: "plus.square.fill")
+
+                           Text("Update")
+            }).tag(2)
+            ChatBot().tabItem({
+                Image(systemName: "bubble.right.fill")
+                           Text("Chat Bot")
+            }).tag(3)
+            SettingsView().tabItem({
+                           Image(systemName: "gear")
+                           Text("Settings")
+            }).tag(4)
+            
+        }
+
     }
 }
 

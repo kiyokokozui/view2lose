@@ -61,23 +61,25 @@ struct ContentView: View {
     let keychain = KeychainSwift()
     var metricsName = ["Metric", "U.S"]
    // @State private var switchMetric1 = 1
+    @State var selection: Int? = nil
+
 
     init(viewModel: UserViewModel)
     {
         self.userViewModel = viewModel
         UISwitch.appearance().onTintColor = #colorLiteral(red: 0.589797318, green: 0.4313705266, blue: 0.9223902822, alpha: 1)
         UserDefaults.standard.set(true, forKey: "Metrics")
-        BBIModelEndpoint.sharedService.createNewUsername(username: "sagar1", email: "sagar1@gmail.com", fullName: "Sagar Chhetri", gender: "M", height: 157, weight: 65, waistSize: 33, bodyTypeId: 1, activityLevelId: 2, firstName: "Sagar", lastName: "Chhetri", BMR: "test", GoalWeightChange: 1, GoalWeight: 2, GoalType: 123, Password: "")
+        
         
         UISegmentedControl.appearance().selectedSegmentTintColor = .white
                UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"primary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .selected)
                UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"secondary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .normal)
         
         let keychain = KeychainSwift()
-        //keychain.set(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") , forKey: "BBIFirstNameKey")
-        //keychain.set(self.userViewModel.getLastName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") , forKey: "BBILastNameKey")
-        //keychain.set(self.userViewModel.userObect?.email ?? keychain.get("emailFromApple") ?? "", forKey: "BBIEmailKey")
-        //keychain.set(self.userViewModel.userObect?.name ??  keychain.get("nameFromApple") ?? "", forKey: "BBIFirstNameKey")
+        keychain.set(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") , forKey: "BBIFirstNameKey")
+        keychain.set(self.userViewModel.getLastName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") , forKey: "BBILastNameKey")
+        keychain.set(self.userViewModel.userObect?.email ?? keychain.get("emailFromApple") ?? "", forKey: "BBIEmailKey")
+        keychain.set(self.userViewModel.userObect?.name ??  keychain.get("nameFromApple") ?? "", forKey: "BBIFullNameKey")
 
     }
     
@@ -236,13 +238,36 @@ struct ContentView: View {
                 HStack(alignment: .center) {
                     
                         Spacer()
-                        NavigationLink(destination: ActivityView()) {
-                            Text("Continue")
+                        NavigationLink(destination: ActivityView(), tag: 1, selection: $selection) {
+                            Button(action: {
+                                self.selection = 1
+                                print("Pressed")
+                               // let keychain = KeychainSwift()
+                                if self.userbasicInfo.isMale {
+                                    //keychain.set("M", forKey: "BBIGenderKey")
+                                    UserDefaults.standard.set("M", forKey: "BBIGenderKey")
+
+                                } else if self.userbasicInfo.isFemale {
+                                  // keychain.set("F", forKey: "BBIGenderKey")
+                                    UserDefaults.standard.set("F", forKey: "BBIGenderKey")
+
+                                }
+                                
+                                //keychain.set("\(self.userInfo.percentage)", forKey: "BBIAgeKey")
+                                UserDefaults.standard.set(self.userbasicInfo.percentage, forKey: "BBIAgeKey")
+                                UserDefaults.standard.set(self.userbasicInfo.height, forKey: "BBIHeightKey")
+
+                                //keychain.set(self.userInfo.percentage, forKey: "BBIHeightKey")
+
+                            }) {
+                                Text("Continue")
                                 .padding()
                                 .foregroundColor(.white)
                                 .modifier(CustomBoldBodyFontModifier(size: 20))
 
                                 .frame(maxWidth: .infinity, alignment: .center)
+                            }
+                            
                         } .background(Color("primary"))
 
                             .cornerRadius(30)

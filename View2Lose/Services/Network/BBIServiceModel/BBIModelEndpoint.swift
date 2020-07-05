@@ -216,7 +216,7 @@ class BBIModelEndpoint {
     }
     typealias resultClosureBlock = (Result<String, Error>) -> ()
     
-    public func createNewUsername(username:String, email: String, fullName: String, gender: String, height: Int, weight: Int, waistSize: Int, bodyTypeId: Int, activityLevelId: Int, firstName: String, lastName: String, BMR: String, GoalWeightChange: Int?, GoalWeight: Int, GoalType: Int, Password: String ) {
+    public func createNewUsername(username:String, email: String, fullName: String, gender: String, height: Double, weight: Double, waistSize: Int, bodyTypeId: Int, activityLevelId: Int, firstName: String, lastName: String, BMR: String, GoalWeightChange: Int?, GoalWeight: Double, GoalType: Int, Password: String ) {
         let dalegate = ""
         let param = ["Username": username,
                      "Email": email,
