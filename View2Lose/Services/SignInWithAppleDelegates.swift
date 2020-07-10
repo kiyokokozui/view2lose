@@ -26,7 +26,11 @@ extension SignInWithAppleDelegates: ASAuthorizationControllerDelegate {
         UserDefaults.standard.set(credential.fullName?.givenName, forKey: "nameFromApple")
         let keychain = KeychainSwift()
 
-        keychain.set(credential.fullName?.givenName ?? "", forKey: "nameFromApple")
+        keychain.set((credential.fullName?.givenName)!, forKey: "nameFromApple")
+        keychain.set((credential.fullName?.givenName)!, forKey: "firstNameFromApple")
+        keychain.set((credential.fullName?.familyName)!, forKey: "lastNameFromApple")
+
+       // keychain.set(credential.fullName?.gi)
         keychain.set(credential.email ?? "", forKey: "emailFromApple")
 
 

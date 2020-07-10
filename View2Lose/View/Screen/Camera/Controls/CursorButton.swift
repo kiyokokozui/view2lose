@@ -46,12 +46,13 @@ enum CursorType {
 
 class CursorButton: UIButton {
     var cursorType: CursorType = .free
+    var isTop: Bool = false
     var touchPoint: CGPoint = CGPoint.zero {
         didSet {
             switch cursorType {
             case .free:
                 self.frame = CGRect(x: touchPoint.x - 35.0, y: touchPoint.y - 35.0, width: 70.0, height: 70.0)
-                self.alpha = 0.4
+                self.alpha = 0.9
                 break
             case .vertical:
                 self.frame = CGRect(x: touchPoint.x - 30.0, y: touchPoint.y - 30.0, width: 60.0, height: 60.0)
@@ -64,7 +65,7 @@ class CursorButton: UIButton {
         super.init(coder: aDecoder)
     }
     
-    required init(frame: CGRect, type: CursorType) {
+    required init(frame: CGRect, type: CursorType, isTop: Bool) {
         super.init(frame: frame)
         self.cursorType = type
         self.showsTouchWhenHighlighted = false
@@ -82,8 +83,14 @@ class CursorButton: UIButton {
             break
         case .vertical:
             self.layer.cornerRadius = 30.0
-            self.setImage(UIImage(named: "right"), for: UIControl.State())
-            self.setImage(UIImage(named: "right"), for: .highlighted)
+            if isTop{
+                self.setImage(UIImage(named: "down"), for: UIControl.State())
+                self.setImage(UIImage(named: "down"), for: .highlighted)
+            } else {
+                self.setImage(UIImage(named: "right"), for: UIControl.State())
+                self.setImage(UIImage(named: "right"), for: .highlighted)
+            }
+            
             break
         }
     }

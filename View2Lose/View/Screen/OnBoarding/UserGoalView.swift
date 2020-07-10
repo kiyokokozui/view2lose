@@ -95,19 +95,22 @@ struct UserGoalView: View {
                 
             }
             .frame(minWidth: 0, maxWidth: .infinity)
-            .padding(.top, -30).background(Color("bg-color"))
+            .padding(.top, -30)//.background(Color("bg-color"))
 
             
-            Text("Whats your \ngoal \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? ""))?")
+            Text("Whats your goal in \n 6 weeks,  \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? ""))?")
 //                .font(.largeTitle)
 //                .fontWeight(.bold)
                 .lineLimit(2)
                 .padding(.bottom, 20)
-                .modifier(CustomHeaderFontModifier(size: 35))
+                .modifier(CustomHeaderFontModifier(size: 30))
+            .minimumScaleFactor(0.6)
+
+                
             
             VStack {
                 HStack {
-                    Text("My weight is")
+                    Text("My current weight is")
                     .modifier(CustomBoldBodyFontModifier(size: 20))
                     .foregroundColor(Color("secondary"))
 
@@ -142,7 +145,7 @@ struct UserGoalView: View {
                     }) {
                         Image(systemName:"info.circle").foregroundColor(Color("secondary"))
                     }        .alert(isPresented: $showingAlert) {
-                        Alert(title: Text("Health Information"), message: Text("Based on suggested research, \(self.userGoal.switchMetric ? "6Kg" : "12 lb" ) weightloss in 6 weeks is most healthy."), dismissButton: .default(Text("Ok")))
+                        Alert(title: Text("Health Information"), message: Text("Based on research, a healthy weight loss goal in 6 weeks is 12lbs or 6kg."), dismissButton: .default(Text("Ok")))
                     }
                     
                     Spacer()
@@ -181,7 +184,7 @@ struct UserGoalView: View {
                 .background(Color("primary"))
                     .cornerRadius(30)
                     .padding(.bottom, 20)
-                    .padding(.horizontal, 20)
+                //    .padding(.horizontal, 20)
                 .shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 0, y: 6)
                     .alert(isPresented: $showingConfirmation) {
                         Alert(title: Text("Confirmation "), message: Text("Please confirm your details before continuing to the next step."), primaryButton: .default(Text("Confirm")) {
@@ -201,7 +204,7 @@ struct UserGoalView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(leading: bckButton.padding(.leading, -5))
-        .background(Color("bg-color"))
+        //.background(Color("bg-color"))
 
     }
     

@@ -59,10 +59,10 @@ public class MainControlView: UIView, ObservableObject, Identifiable
         }
     }
 
-    var cursorButtonLeft: CursorButton = CursorButton(frame: CGRect.zero, type: .free)
-    var cursorButtonRight: CursorButton = CursorButton(frame: CGRect.zero, type: .free)
-    var cursorButtonTop: CursorButton = CursorButton(frame: CGRect.zero, type: .vertical)
-    var cursorButtonBottom: CursorButton = CursorButton(frame: CGRect.zero, type: .vertical)
+    var cursorButtonLeft: CursorButton = CursorButton(frame: CGRect.zero, type: .free, isTop: false)
+    var cursorButtonRight: CursorButton = CursorButton(frame: CGRect.zero, type: .free, isTop: false)
+    var cursorButtonTop: CursorButton = CursorButton(frame: CGRect.zero, type: .vertical, isTop: true)
+    var cursorButtonBottom: CursorButton = CursorButton(frame: CGRect.zero, type: .vertical, isTop: false)
     
     var cursorPanLeft: UIPanGestureRecognizer?
     var cursorPanRight: UIPanGestureRecognizer?
@@ -152,7 +152,8 @@ public class MainControlView: UIView, ObservableObject, Identifiable
            self.initialSubviewLayout = true
 
           
-          
+          cursorButtonTop.imageView?.image = UIImage(named: "down")
+
 
           
           setupViewAndControls()
@@ -167,7 +168,8 @@ public class MainControlView: UIView, ObservableObject, Identifiable
             topMask.touchPoint = CGPoint(x: 0, y: 20.0 + cursorTopBottomSize/2.0)
             // Bottom Cursor & Mask
             cursorButtonBottom.frame = CGRect(x: 10.0, y: self.frame.size.height - cursorTopBottomSize - 20.0, width: cursorTopBottomSize, height: cursorTopBottomSize)
-            bottomMask.touchPoint = CGPoint(x: 0, y: self.frame.size.height - cursorTopBottomSize/2.0 - 40.0)
+            
+            bottomMask.touchPoint = CGPoint(x: 0, y: self.frame.size.height - cursorTopBottomSize/2.0 - 20.0 + 5.0)
             // Left Cursor & Indicator )
             cursorButtonLeft.frame = CGRect(x: self.frame.size.width/4.0 - cursorLeftRightSize/2.0, y: self.frame.size.height/2.0 - cursorLeftRightSize/2.0, width: cursorLeftRightSize, height: cursorLeftRightSize)
             cursorButtonLeft.touchPoint = CGPoint(x: cursorButtonLeft.frame.origin.x + cursorLeftRightSize/2.0, y: cursorButtonLeft.frame.origin.y + cursorLeftRightSize/2.0) // This needs set so that first touch of cursor will match other cursors y and not be 0
@@ -449,8 +451,8 @@ public class MainControlView: UIView, ObservableObject, Identifiable
     
     func drawLine() {
         let path = UIBezierPath()
-        path.move(to: CGPoint(x: indicatorViewLeft.center.x + 45.0, y: indicatorViewLeft.center.y))
-        path.addLine(to: CGPoint(x: indicatorViewRight.center.x - 45.0, y: indicatorViewRight.center.y))
+        path.move(to: CGPoint(x: indicatorViewLeft.center.x + 15, y: indicatorViewLeft.center.y))
+        path.addLine(to: CGPoint(x: indicatorViewRight.center.x - 15, y: indicatorViewRight.center.y))
         path.close()
         
         lineLayer.path = path.cgPath
@@ -461,10 +463,10 @@ public class MainControlView: UIView, ObservableObject, Identifiable
     func updateMeasurements() {
       //  if let delegate = self.delegate {
         delegate?.newMeasurements(cursorButtonTop.center.y,
-                                     leftX: indicatorViewLeft.center.x + 45.0,
+                                     leftX: indicatorViewLeft.center.x + 15,
                                      leftY:  indicatorViewLeft.center.y,
                                      bottom: cursorButtonBottom.center.y,
-                                     rightX: indicatorViewRight.center.x - 45.0,
+                                     rightX: indicatorViewRight.center.x - 15,
                                      rightY: indicatorViewRight.center.y)
           // print("Delegate \(delegate)")
 //        }
