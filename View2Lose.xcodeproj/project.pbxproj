@@ -97,6 +97,7 @@
 		1BDB9CAB245E4C7600921821 /* CameraViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB9CAA245E4C7600921821 /* CameraViewDelegate.swift */; };
 		1BDB9CAD245E4CC400921821 /* UserCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB9CAC245E4CC400921821 /* UserCameraView.swift */; };
 		1BFE4BE224584866001BA44B /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE4BE124584866001BA44B /* TestView.swift */; };
+		965B470E24B7F70800769092 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 965B470D24B7F70800769092 /* Charts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -221,6 +222,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B3371A42443161A00116EE2 /* FacebookLogin in Frameworks */,
+				965B470E24B7F70800769092 /* Charts in Frameworks */,
 				1B3371A22443161A00116EE2 /* FacebookCore in Frameworks */,
 				1B7E650C2498528F00455BD5 /* KeychainSwift in Frameworks */,
 				1B3371A62443161A00116EE2 /* FacebookShare in Frameworks */,
@@ -545,6 +547,7 @@
 				1B3371A52443161A00116EE2 /* FacebookShare */,
 				1B7E650B2498528F00455BD5 /* KeychainSwift */,
 				1B76F91A24AC7952000FC1AA /* SwiftyGif */,
+				965B470D24B7F70800769092 /* Charts */,
 			);
 			productName = View2Lose;
 			productReference = 1B33715F24430B2600116EE2 /* View2Lose.app */;
@@ -623,6 +626,7 @@
 				1B3371A02443161A00116EE2 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 				1B7E650A2498528F00455BD5 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				1B76F91924AC7952000FC1AA /* XCRemoteSwiftPackageReference "SwiftyGif" */,
+				965B470C24B7F70800769092 /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = 1B33716024430B2600116EE2 /* Products */;
 			projectDirPath = "";
@@ -1112,6 +1116,14 @@
 				minimumVersion = 19.0.0;
 			};
 		};
+		965B470C24B7F70800769092 /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1139,6 +1151,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1B7E650A2498528F00455BD5 /* XCRemoteSwiftPackageReference "keychain-swift" */;
 			productName = KeychainSwift;
+		};
+		965B470D24B7F70800769092 /* Charts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 965B470C24B7F70800769092 /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = Charts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
