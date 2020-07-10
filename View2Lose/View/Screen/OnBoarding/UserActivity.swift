@@ -50,8 +50,9 @@ struct ActivityView: View {
 //                    .font(.largeTitle)
 //                    .fontWeight(.bold)
                     .modifier(CustomHeaderFontModifier(size: 30))
-                    .padding(.bottom, 20)
+                   // .padding(.bottom, 10)
                     .lineLimit(2)
+                .minimumScaleFactor(0.6)
                 
               
                 VStack (alignment: .leading){
@@ -74,7 +75,7 @@ struct ActivityView: View {
                             .modifier(CustomBoldBodyFontModifier(size: 20))
 
                             .frame(maxWidth: .infinity, alignment: .center)
-                            }
+                            }.buttonStyle(PlainButtonStyle())
                         }.background(Color("primary"))
 
                         .cornerRadius(30)
@@ -90,7 +91,7 @@ struct ActivityView: View {
                 .navigationBarBackButtonHidden(true)
                 .navigationBarTitle("", displayMode: .inline)
                 .navigationBarItems(leading: bckButton.padding(.leading, -5))
-        .background(Color("bg-color"))
+        //.background(Color("bg-color"))
 
 
         
@@ -124,25 +125,29 @@ struct ActivityListView: View {
                     Text(activityData[index])
 //                        .font(.subheadline)
 //                        .fontWeight(.light)
-                        .modifier(CustomBodyFontModifier(size: 17))
+                        .modifier(CustomBodyFontModifier(size: 16))
 
                         .foregroundColor(Color("secondary"))
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
+                    .minimumScaleFactor(0.9)
+                        //.padding(.horizontal, 20)
                     
                 }
                .padding(.vertical, 20)
-                .padding(.leading, 20)
+                .padding(.horizontal, 20)
 
                 
             }
             .frame(minWidth: 0,maxWidth: .infinity, alignment: .leading)
+        .buttonStyle(PlainButtonStyle())
             .background(Color.white)
                 .cornerRadius(10)
                 .padding(.top, 20)
 
                 .shadow(color: self.selected == index ? Color("primary") : Color("tertiary"), radius: 2, x: 1, y: 2)
                 .shadow(color: self.selected == index ? Color("primary") : Color("tertiary"), radius: 2, x: 1, y: -1)
+            
 
         }
         
@@ -170,7 +175,7 @@ struct navView: View {
                 
             }
             .frame(minWidth: 0, maxWidth: .infinity)
-        }        .background(Color("bg-color"))
+        }        //.background(Color("bg-color"))
 
     }
 }

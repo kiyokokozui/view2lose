@@ -38,7 +38,7 @@ struct LoginView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 260, height: 260)
-                .padding(.top, 50)
+                .padding(.top, 64)
             
             VStack {
                 VStack {
@@ -103,6 +103,8 @@ struct LoginView: View {
                                 .foregroundColor(.white)
 //                                .font(.system(size: 21))
                             .modifier(CustomBodyFontModifier(size: 21))
+                            .minimumScaleFactor(0.85)
+
 
                             
                         }
@@ -139,12 +141,15 @@ struct LoginView: View {
                                 .foregroundColor(.white)
 //                                .font(.system(size: 21))
                             .modifier(CustomBodyFontModifier(size: 21))
+                                .minimumScaleFactor(0.85)
+
 
                         
                         }
                         
                         
-                    }).padding()
+                    })
+                        .padding()
                         
                         .padding(.horizontal, 20)
 
@@ -166,10 +171,14 @@ struct LoginView: View {
                     
                    SignInWithAppleButton().cornerRadius(33)
 
-                                      .padding(.horizontal, 30)
+                                      //.padding(.horizontal, 30)
                                       .padding(.bottom, 15)
-                                          .frame(height: 74)
-                    .padding(.bottom, 20)
+                    .frame(height: 74, alignment: .center)
+                    .padding(.bottom, 50)
+                    //.modifier(CustomBodyFontModifier(size: 21))
+
+                    //.minimumScaleFactor(0.9)
+
                     .onTapGesture {
                         self.facebookManager.checkAppleUserAuth { (authState) in
                             switch authState {
@@ -215,16 +224,20 @@ struct LoginView: View {
                     
 
                 }
+                //.frame(maxWidth: 300)
                .padding(.bottom, 20)
+                    .padding(.horizontal, 30)
                
 
                 
             }
          
 
-            }.background(Color("primary")).edgesIgnoringSafeArea(.all)
+            }.background(Color("primary"))
+            .edgesIgnoringSafeArea(.all)
             
-        }.edgesIgnoringSafeArea(.all)
+        }
+        .edgesIgnoringSafeArea(.all)
         
         
 }

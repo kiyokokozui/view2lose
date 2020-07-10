@@ -11,11 +11,11 @@ import UIKit
 class BottomMaskView: UIView
 {
     let screenSize = UIScreen.main.bounds
-    let stringLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 100.0, height: 20.0))
+    let stringLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 5, width: 100.0, height: 20.0))
     
     var touchPoint: CGPoint = CGPoint.zero {
         didSet {
-            self.frame = CGRect(x: 0, y: touchPoint.y, width: screenSize.width, height: touchPoint.y)
+            self.frame = CGRect(x: 0, y: touchPoint.y, width: screenSize.width, height:  screenSize.height -  touchPoint.y)
         }
     }
     

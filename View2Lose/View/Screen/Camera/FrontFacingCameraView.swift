@@ -15,26 +15,19 @@ import CoreMotion
 
 struct FrontFacingCameraView: View {
     
-    @State private var image: Image?
-       @State private var showingCustomCamera = false
-       @State private var inputImage: UIImage?
-       @State var didTapCapture: Bool = false
-       
-       @State private var currentCamera: AVCaptureDevice?
-       
-      @ObservedObject var cameraViewModel = CameraViewModel()
-       
+   @State private var image: Image?
+   @State private var showingCustomCamera = false
+   @State private var inputImage: UIImage?
+   @State var didTapCapture: Bool = false
+   @State private var currentCamera: AVCaptureDevice?
+   @ObservedObject var cameraViewModel = CameraViewModel()
+ 
        var body: some View {
                VStack {
                    
                 CustomFrontFacingCameraView(viewModel: cameraViewModel, image: self.$inputImage, currentCamera: self.$currentCamera, overlayView: FrontCameraOverlay(), sideImage: false)
                    }
-                   
         }
-           
-           
-       
-
 }
 
 struct SideFacingCameraView: View {
@@ -92,11 +85,15 @@ struct CustomFrontFacingCameraView: View {
                 }.onReceive(CameraPicker.shared.$image) { (image) in
                    
                         if let image = image {
-                            print("Image Size: \(image)")
+                            print("Side Image: \(self.sideImage)")
                             if !self.sideImage {
+                                //CameraPicker.shared.image = nil
                                 self.facebookManager.isUserAuthenticated = .cameraOnBoard2
-                                CameraPicker.shared.image = nil
+                                 CameraPicker.shared.image = nil
+                               self.sideImage = true
                             }
+                         self.sideImage = true
+                           
 
                         }
                     
@@ -149,7 +146,11 @@ struct CustomSideFacingCameraView: View {
                     
                     if let image = image {
                         print("Image Size: \(image)")
-                        self.facebookManager.isUserAuthenticated = .imagePreview
+                        CameraPicker.shared.image = nil
+                        if self.sideImage {
+                            self.facebookManager.isUserAuthenticated = .imagePreview
+                        }
+                        
 
                     }
                     
@@ -504,6 +505,7 @@ class ImagePickerViewController: UIImagePickerController {
     func adjustVerticalLevel(value: Float) {
          let updatedVerticalValue = max(1.0, min((80.0 * value) + 40.0, 79.0))
          isVerticallyLevel = updatedVerticalValue >= 30.0 && updatedVerticalValue <= 50.0
+       // print(updatedVerticalValue)
          updateBoxColor()
          //print(isVerticallyLevel)
          //self.squareBox.layer.borderColor = UIColor.green.cgColor
@@ -517,6 +519,7 @@ class ImagePickerViewController: UIImagePickerController {
      func adjustHorizontalLevel(value: Float) {
          let updatedHorizontalValue = max(1.0, min((80.0 * value) + 40.0, 79.0))
          isHorizontallyLevel = updatedHorizontalValue >= 36.0 && updatedHorizontalValue <= 42.0
+       // print(updatedHorizontalValue)
          updateBoxColor()
          //print(isHorizontallyLevel)
          //self.layoutIfNeeded()

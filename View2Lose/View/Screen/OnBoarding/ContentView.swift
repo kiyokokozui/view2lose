@@ -30,7 +30,7 @@ class UserBasicInfo: ObservableObject, Identifiable {
                 self.heightTickRange = [140, 150, 160, 170, 180, 190, 200]
 
             } else if switchMetric == 1 {
-                self.heightRange = (4, 7)
+                self.heightRange = (4.0, 6.6)
                 self.changeMetric = false
                 self.height = changeMetrics(metricType: .imperial, unit: .height, value: height)
                 UserDefaults.standard.set(false, forKey: "Metrics")
@@ -54,7 +54,7 @@ struct ContentView: View {
     @ObservedObject var userViewModel: UserViewModel
     @State var ageTickRange :[Float] = [10,20,30,40,50,60,70]
     @State var  heightTickRange: [Float] = [140, 150, 160, 170, 180, 190, 200]
-      @State var  heightTickMetricRange:[Float] = [4,4.5, 5, 5.5, 6, 6.5, 7]
+    @State var  heightTickMetricRange:[Float] = [4.0,4.5, 4.9, 5.3, 5.7, 6.1, 6.6]
     
     @EnvironmentObject var userInfo : UserBasicInfo
     
@@ -76,8 +76,8 @@ struct ContentView: View {
                UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"secondary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .normal)
         
         let keychain = KeychainSwift()
-        keychain.set(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") , forKey: "BBIFirstNameKey")
-        keychain.set(self.userViewModel.getLastName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") , forKey: "BBILastNameKey")
+        keychain.set(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("firstNameFromApple")) ?? "") , forKey: "BBIFirstNameKey")
+        keychain.set(self.userViewModel.getLastName(fullName: (userViewModel.userObect?.name ?? keychain.get("lastNameFromApple")) ?? "") , forKey: "BBILastNameKey")
         keychain.set(self.userViewModel.userObect?.email ?? keychain.get("emailFromApple") ?? "", forKey: "BBIEmailKey")
         keychain.set(self.userViewModel.userObect?.name ??  keychain.get("nameFromApple") ?? "", forKey: "BBIFullNameKey")
 
@@ -140,12 +140,13 @@ struct ContentView: View {
                         
                     }
                     .frame(minWidth: 0, maxWidth: .infinity)
-                    .padding(.top, -30).background(Color("bg-color"))
+                    .padding(.top, -30)
+                    //.background(Color("bg-color"))
 
                     
-                }        .background(Color("bg-color"))
+                }     //   .background(Color("bg-color"))
 
-                Text("Lets get to \nknow you \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") )!")
+                Text("Lets get to \nknow you \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") )!").minimumScaleFactor(0.6)
 //                    .font(.largeTitle)
 //                    .fontWeight(.bold)
                     
@@ -157,6 +158,7 @@ struct ContentView: View {
                     .foregroundColor(Color("secondary"))
                     .fontWeight(.bold)
                 .modifier(CustomBodyFontModifier(size: 16))
+                .padding(.top, 10)
 
                 
                 
@@ -281,7 +283,7 @@ struct ContentView: View {
             }.padding(.horizontal, 20)
             .navigationBarBackButtonHidden(true)
                 .navigationBarTitle("", displayMode: .inline)
-            .background(Color("bg-color"))
+            //.background(Color("bg-color"))
                // .navigationBarItems(leading: bckButton.padding(.leading, 5))
             
         }
@@ -311,6 +313,7 @@ struct GenderButton: View {
                         .font(.system(size: 49))
                 }
                 .frame(width: 153, height: 124)
+                .frame(minWidth: 140, minHeight: 100)
                 .background(Color.white)
                 .cornerRadius(10)
                     
@@ -319,7 +322,7 @@ struct GenderButton: View {
                 
                 
                 
-            })
+            }).buttonStyle(PlainButtonStyle())
         }
         
         

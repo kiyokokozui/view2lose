@@ -59,8 +59,12 @@ struct DashboardView: View {
                 //DashboardSectionView()
                 //LoginView()
                 ContentView(viewModel: UserViewModel())
+//DashboardSectionView().transition(.slide)
+
             } else {
                 if facebookManager.isUserAuthenticated == .undefined {
+                    //DashboardSectionView().transition(.slide)
+
                     LoginView()
                 } else if facebookManager.isUserAuthenticated == .userOnBoard {
                     
@@ -171,8 +175,8 @@ struct DashboardSectionView: View {
                         
                         
                            // Image("bg_pattern").resizable().frame(width: screen.width, height: 400).aspectRatio(contentMode: .fit)
-                            Text("MyView").modifier(CustomBodyFontModifier(size: 35))
-                                .padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20).padding(.top, 20)
+                            Text("My View").modifier(CustomBodyFontModifier(size: 35))
+                                .padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20).padding(.top, 40)
                         
                         
                     
@@ -198,14 +202,18 @@ struct DashboardSectionView: View {
                                     VStack {
                                        
                                         if image == nil {
-                                            
-                                            Image(uiImage: loadWarpImages()[selectedWeek])
+                                            ZStack(alignment: .bottomTrailing) {
+                                                Image(uiImage: loadWarpImages()[selectedWeek])
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fill)
                                                 .padding(20)
-                                            
-                                            
-
+                                                
+                                                Button(action: {
+                                                    
+                                                }, label: {
+                                                    Image(systemName: "square.and.arrow.up").resizable().renderingMode(.template).foregroundColor(Color("primary")).aspectRatio(contentMode: .fit).padding(15)
+                                                }).background(Color(.white)).clipShape(Circle()).frame(width: 55, height: 55).padding(.trailing, 40).padding(.bottom, 40).shadow(color: Color("secondary"), radius: 5, x: 1, y: 2)
+                                            }
                                         } else {
                                             image?.resizable()
                                             .aspectRatio(contentMode: .fit)

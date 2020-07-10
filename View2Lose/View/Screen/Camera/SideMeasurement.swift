@@ -44,7 +44,7 @@ struct SideMeasurement: View {
                 Button(action: {
                     self.facebookManager.isUserAuthenticated = .postOnBoardLoading
                     self.sideMainViewController.calculateSize {
-                        self.facebookManager.isUserAuthenticated = .signedIn
+                      //  self.facebookManager.isUserAuthenticated = .signedIn
                     print("Completed")
                     }
                 }, label: {
@@ -213,7 +213,7 @@ struct SideMainViewController: UIViewControllerRepresentable {
             let imageData = normalizedImage.jpegData(compressionQuality: 0) {
 //BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftWaist: [0:0], rightWaist: [:], yKneeCoord: [:], leftNaval: leftNavalDic, rightNaval: rightNavalDic, leftHips: [:], rightHips: [:], midChest: [:], leftBi: [:], rightBi: [:], bodyTypeId: 3, waistInInches: 31, userId: "15572", blurface: 0)
             
-            BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftNavel: leftNavalDic, rightNavel: rightNavalDic, bodyTypeId: 3, topOfHead: Int(convertPtTop.y), bottomOfFeet: Int(convertPtBottom.y), heightInInches: Int(5.9), userName: "sagar1", waistInInches: 31, userId: "15812", blurface: 1) { result in
+            BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftNavel: leftNavalDic, rightNavel: rightNavalDic, bodyTypeId: 3, topOfHead: Int(convertPtTop.y), bottomOfFeet: Int(convertPtBottom.y), heightInInches: Int(5.9), userName: "sagartech03@gmail.com", waistInInches: 31, userId: "15815", blurface: 1) { result in
                 
                 
                 switch result {

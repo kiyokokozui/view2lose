@@ -38,7 +38,7 @@ class FacebookManager: ObservableObject {
             case .success(granted: let granted, declined: let declined, token: let token):
                 print("Credential state: .authorized")
                 fbLoginProvider.getFBUserData { user in
-                    UserDefaults.standard.set(true, forKey: "userLoggedIn")
+                   // UserDefaults.standard.set(true, forKey: "userLoggedIn")
                    //UserDefaults.standard.set(user, forKey: "userSignedIn")
                     let userViewModel = UserViewModel()
                     userViewModel.userObect = user

@@ -51,7 +51,7 @@ struct BodyTypeView: View {
                 .frame(width: 15, height: 15)
                 .foregroundColor(Color("tertiary"))
                 
-            } .background(Color("bg-color"))
+            } //.background(Color("bg-color"))
             .frame(minWidth: 0, maxWidth: .infinity)
             .padding(.top, -30)
 
@@ -61,7 +61,9 @@ struct BodyTypeView: View {
 //                .fontWeight(.bold)
                 .lineLimit(2)
                 .padding(.leading, 20)
-            .modifier(CustomHeaderFontModifier(size: 35))
+
+            .modifier(CustomHeaderFontModifier(size: 30))
+            .minimumScaleFactor(0.7)
 
             VStack(alignment: .center)  {
                 HStack {
@@ -79,7 +81,7 @@ struct BodyTypeView: View {
                 //.frame(width: UIScreen.main.bounds.width, height: 350)
             Spacer()
             HStack(alignment: .center) {
-                Spacer()
+                //Spacer()
                 NavigationLink(destination: UserGoalView(), tag: 1, selection: $selection) {
                     Button(action: {
                         self.selection = 1
@@ -107,7 +109,7 @@ struct BodyTypeView: View {
                     
                 }.background(Color("primary"))
                     .cornerRadius(30)
-                    .padding(.bottom, 10)
+                    .padding(.bottom, 20)
             }.frame(minWidth: 0, maxWidth: .infinity).padding(.horizontal, 20)
 //            HStack(alignment: .center) {
 //                Spacer()
@@ -127,7 +129,7 @@ struct BodyTypeView: View {
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarItems(leading: bckButton.padding(.leading, -5))
         //self.facebookManager.isUserAuthenticated = .signedIn
-        .background(Color("bg-color"))
+       // .background(Color("bg-color"))
 
 
     }
@@ -158,10 +160,10 @@ struct BodyType {
 var bodyTypes = [["Potato", "Apple"], [ "Banana", "Pear"]]
 
 var bodyTypeText = [
-    "Potato" : "Chest and belly is where weight is found",
-    "Banana" : " Weight is distributed throughout the entire body",
-    "Apple" : "Shoulders and hip about the same width",
-    "Pear" : "Bottom heavy with weight mainly in buttocks"
+    "Potato" : "Extra weight stored around the belly",
+    "Banana" : "Extra weight distributed throughout the body",
+    "Apple" : "Extra weight stored in the lower body",
+    "Pear" : "Does not tent to store extra weight"
 ]
 
 struct BodyTypeButton: View {
@@ -175,10 +177,11 @@ struct BodyTypeButton: View {
                 VStack (alignment: .center) {
                 ForEach(bodyTypes[i], id: \.self) { image in
                     //Text(image)
-                    self.createView(image: image, originalIndex: i).padding(.bottom, 10)
+                    self.createView(image: image, originalIndex: i).padding(.bottom, 5)
                 }
 
-                }.padding()
+                }
+                .padding()
 
 
             }
@@ -194,29 +197,38 @@ struct BodyTypeButton: View {
                 Image("\(image)").renderingMode(.original).resizable().aspectRatio(contentMode: .fit)
            
             }.padding()
-                .frame(width: 155, height: 160)
+                .frame(maxWidth: 154, maxHeight: 184)
+                .frame(minWidth: 120, minHeight: 144)
                 .background(Color.white)
                 .cornerRadius(10)
                 //.padding(.bottom,10)
-
 
       
 
             .shadow(color: self.selected == image ?  Color("primary") : Color("tertiary"), radius: 5, x: 1, y: 5)
             .shadow(color: self.selected == image ?  Color("primary") : Color("tertiary"), radius: 2, x: 1, y: -1)
             
-            Text("\(bodyTypeText[image]!)").lineLimit(5)
+            Text("\(bodyTypeText[image]!)")
 
                 .modifier(CustomBodyFontModifier(size: 14))
-                .frame(maxHeight: 350)
+                .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .foregroundColor(self.selected == image ? Color("primary") : Color("secondary"))
-                
+                //.padding(.bottom, 25)
+                //.padding(.horizontal, 5)
+               .frame(maxHeight: 400)
+            .minimumScaleFactor(0.9)
+
+                //.frame(minHeight: 400)
+            //.minimumScaleFactor(0.8)
+            .fixedSize(horizontal: false, vertical: true)
+
             
             //.frame(maxWidth: .infinity, alignment: .center)
 
 
         }
+        //.padding(.bottom, 10)
 
             .onTapGesture {
                 print("\(image)Button is tapped")
