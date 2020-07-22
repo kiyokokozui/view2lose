@@ -37,6 +37,15 @@ struct LineChartSwiftUI: UIViewRepresentable {
 //        lineChart.xAxis.drawGridLinesEnabled = true
     }
     
+    /// This function return the ammendment of data set to the chart points  for `LineChartSwiftUI`.
+    ///
+    /// ```
+    /// -
+    /// ```
+    ///
+    /// - Warning: -
+    /// - Parameter subject: The subject to be welcomed.
+    /// - Returns: View for `HealthView`.
     func getChartDataPoints(sessions: [Double], accuracy: [Double])  -> [ChartDataEntry] {
         var dataPoints: [ChartDataEntry] = []
         for count in (0..<sessions.count) {
@@ -45,15 +54,11 @@ struct LineChartSwiftUI: UIViewRepresentable {
         return dataPoints
     }
     
-    /// This function returns a welcoming string for a given `subject`.
+    /// This function returns set of data for the line chart.
     ///
-    /// ```
-    /// print(hello("World")) // Hello, World!
-    /// ```
-    ///
-    /// - Warning: The returned string is not localized.
-    /// - Parameter subject: The subject to be welcomed.
-    /// - Returns: A hello string to the `subject`.
+    /// - Warning: -
+    /// - Parameter: -
+    /// - Returns: Set of data, along side with line width, circle radius, circle hold radius and colors
     func getLineChartDataSet() -> LineChartDataSet {
         let dataPoints = getChartDataPoints(sessions: [1.0 , 2.0 , 3.0 , 4.0], accuracy: [58.0 , 57.0 , 55.0 , 54.0])
         let set = LineChartDataSet(entries: dataPoints)
@@ -67,6 +72,15 @@ struct LineChartSwiftUI: UIViewRepresentable {
     }
 }
 
+/// This structure returns the whole view for `HealthView`.
+///
+/// ```
+/// print(hello("World")) // Hello, World!
+/// ```
+///
+/// - Warning: -
+/// - Parameter -: -
+/// - Returns: View for `HealthView`.
 struct HealthView: View {
     @State private var expandWeight = false
     @State private var expandBMI = false

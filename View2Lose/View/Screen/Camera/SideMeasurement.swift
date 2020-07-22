@@ -8,8 +8,6 @@
 
 import SwiftUI
 
-
-
 struct SideMeasurement: View {
     
     //    @State private var image : UIImage?
@@ -44,8 +42,9 @@ struct SideMeasurement: View {
                 Button(action: {
                     self.facebookManager.isUserAuthenticated = .postOnBoardLoading
                     self.sideMainViewController.calculateSize {
-                      //  self.facebookManager.isUserAuthenticated = .signedIn
-                    print("Completed")
+                        //HAVE TO FIX THIS
+                        self.facebookManager.isUserAuthenticated = .signedIn
+                        print("Completed")
                     }
                 }, label: {
                     Text("Create").modifier(CustomBoldBodyFontModifier(size: 20))

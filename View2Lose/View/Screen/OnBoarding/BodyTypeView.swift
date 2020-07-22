@@ -163,7 +163,7 @@ var bodyTypeText = [
     "Potato" : "Extra weight stored around the belly",
     "Banana" : "Extra weight distributed throughout the body",
     "Apple" : "Extra weight stored in the lower body",
-    "Pear" : "Does not tent to store extra weight"
+    "Pear" : "Does not tend to store extra weight"
 ]
 
 struct BodyTypeButton: View {

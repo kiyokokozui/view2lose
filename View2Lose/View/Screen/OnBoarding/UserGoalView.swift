@@ -194,7 +194,7 @@ struct UserGoalView: View {
                             
                             
                             self.saveDataToServer()
-                                self.facebookManager.isUserAuthenticated = .cameratutorial
+                            self.facebookManager.isUserAuthenticated = .cameratutorial
                         }, secondaryButton: .cancel())
                 }
 

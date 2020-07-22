@@ -146,7 +146,7 @@ struct ContentView: View {
                     
                 }     //   .background(Color("bg-color"))
 
-                Text("Lets get to \nknow you \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") )!").minimumScaleFactor(0.6)
+                Text("Let's get to \nknow you \(self.userViewModel.getFirstName(fullName: (userViewModel.userObect?.name ?? keychain.get("nameFromApple")) ?? "") )!").minimumScaleFactor(0.6)
 //                    .font(.largeTitle)
 //                    .fontWeight(.bold)
                     
