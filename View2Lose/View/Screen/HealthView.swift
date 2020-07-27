@@ -87,7 +87,7 @@ struct HealthView: View {
     @State private var expandWaist = false
     
     var body: some View {
-        TabView {
+        ZStack {
             VStack(alignment: .leading) {
                 Text("My Health").modifier(CustomBodyFontModifier(size: 35))
                     .padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20).padding(.top, 20)
@@ -294,29 +294,29 @@ struct HealthView: View {
                 .clipShape(Rounded())
                 
             }.frame(minWidth: 0, maxWidth: .infinity).background(Color("primary")).edgesIgnoringSafeArea(.top)
-            .tabItem({
-                Image("rsz_ic_myview")
-                Text("My View")
-                }).tag(0)
-            
-            HealthView().tabItem({
-                Image(systemName: "chart.bar.fill")
-                Text("My Health")
-            }).tag(1)
-            Update().tabItem({
-                //Image("ruler").resizable().renderingMode(.template).foregroundColor(Color("secondary")).frame(width: 32, height: 32)
-                Image(systemName: "plus.square.fill")
-
-                           Text("Update")
-            }).tag(2)
-            ChatBot().tabItem({
-                Image(systemName: "bubble.right.fill")
-                           Text("Chat Bot")
-            }).tag(3)
-            SettingsView().tabItem({
-                           Image(systemName: "gear")
-                           Text("Settings")
-            }).tag(4)
+//            .tabItem({
+//                Image("rsz_ic_myview")
+//                Text("My View")
+//                }).tag(0)
+//
+//            HealthView().tabItem({
+//                Image(systemName: "chart.bar.fill")
+//                Text("My Health")
+//            }).tag(1)
+//            Update().tabItem({
+//                //Image("ruler").resizable().renderingMode(.template).foregroundColor(Color("secondary")).frame(width: 32, height: 32)
+//                Image(systemName: "plus.square.fill")
+//
+//                           Text("Update")
+//            }).tag(2)
+//            ChatBot().tabItem({
+//                Image(systemName: "bubble.right.fill")
+//                           Text("Chat Bot")
+//            }).tag(3)
+//            SettingsView().tabItem({
+//                           Image(systemName: "gear")
+//                           Text("Settings")
+//            }).tag(4)
         }
     }
 }

@@ -399,11 +399,11 @@
 				1B3371A92443207100116EE2 /* OnBoarding */,
 				1BFE4BE124584866001BA44B /* TestView.swift */,
 				1B3371A724431FE300116EE2 /* DashboardView.swift */,
+				1B76F92924AC8B3D000FC1AA /* HealthView.swift */,
+				1B76F92B24AC8B47000FC1AA /* Update.swift */,
 				1BDB9CAC245E4CC400921821 /* UserCameraView.swift */,
 				1B861324246A335900BA1CD3 /* TakeMeasurement.swift */,
 				1B76F92724AC881A000FC1AA /* DashboardTabBar.swift */,
-				1B76F92924AC8B3D000FC1AA /* HealthView.swift */,
-				1B76F92B24AC8B47000FC1AA /* Update.swift */,
 				1B76F92F24AC8B6C000FC1AA /* ChatBot.swift */,
 				1B76F93124AC8B7A000FC1AA /* SettingsView.swift */,
 			);
