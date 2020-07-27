@@ -36,7 +36,6 @@ struct SideMeasurement: View {
     var body: some View {
         VStack(alignment:.leading) {
             
-            
             sideMainViewController
             VStack {
                 Button(action: {
@@ -55,8 +54,6 @@ struct SideMeasurement: View {
                     .cornerRadius(30)
                     .padding().shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 0, y: 6)
             }.background(Color(.white)).frame(minWidth: 0, maxWidth: .infinity)
-            
-            
             
         }.background(Color(.white)).edgesIgnoringSafeArea(.all)
         //                .navigationBarItems(trailing:
