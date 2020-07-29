@@ -66,10 +66,39 @@ struct Update: View {
                     
                     Spacer()
                     
-                    Text("Paragraph is here")
+                    VStack (alignment: .leading) {
+                        Text("Taking regular body measurements helps keep track of your health and measure body change progress through time!")
+                            .font(.body)
+                            .foregroundColor(Color(.lightGray))
+                            .padding(15)
+                            .lineLimit(nil)
+                        
+                        Text("The steps are:")
                         .font(.body)
-                    
-                    Spacer()
+                        .foregroundColor(Color(.lightGray))
+                        .padding()
+
+                        HStack {
+                            Image(systemName: "chevron.down")
+                            
+                            Text("Updating Current Weight")
+                            .font(.body)
+                        }.padding(.leading)
+                        
+                        HStack {
+                            Image(systemName: "chevron.down")
+                            
+                            Text("Taking New Photos")
+                            .font(.body)
+                        }.padding()
+                        
+                        HStack {
+                            Image(systemName: "chevron.down")
+                            
+                            Text("Updating Waist Measurement")
+                            .font(.body)
+                        }.padding(.leading)
+                    }
                     
                     Button(action: {
                         self.showOverlay = false
@@ -82,7 +111,7 @@ struct Update: View {
                         .padding().shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 0, y: 6)
                 }
             }.background(Color(.white))
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100, maxHeight: 300)
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100, maxHeight: 500)
             .cornerRadius(25)
         }
     }
