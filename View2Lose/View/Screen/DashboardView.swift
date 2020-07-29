@@ -40,6 +40,7 @@ extension Weeks {
     }
 }
 
+var downloadedImages: [UIImage] = []
 struct DashboardView: View {
     @EnvironmentObject var session: SessionStore
     @EnvironmentObject var facebookManager: FacebookManager
@@ -160,6 +161,7 @@ struct DashboardSectionView: View {
                     }
                 }
             }
+            downloadedImages = tempFillArray
             return tempFillArray
             
         }
@@ -209,7 +211,7 @@ struct DashboardSectionView: View {
                                                 .padding(20)
                                                 
                                                 Button(action: {
-                                                    
+                                                    self.shareImage()
                                                 }, label: {
                                                     Image(systemName: "square.and.arrow.up").resizable().renderingMode(.template).foregroundColor(Color("primary")).aspectRatio(contentMode: .fit).padding(15)
                                                 }).background(Color(.white)).clipShape(Circle()).frame(width: 55, height: 55).padding(.trailing, 40).padding(.bottom, 40).shadow(color: Color("secondary"), radius: 5, x: 1, y: 2)
@@ -265,6 +267,11 @@ struct DashboardSectionView: View {
             
         }
 
+    }
+    func shareImage(){
+        let shareSheet = UIActivityViewController(activityItems: [downloadedImages[0],downloadedImages[3]], applicationActivities: nil)
+        shareSheet.excludedActivityTypes = [.message,.addToReadingList,.markupAsPDF,.openInIBooks,.print]
+        UIApplication.shared.windows.first?.rootViewController?.present(shareSheet, animated: true, completion: nil)
     }
 }
 
