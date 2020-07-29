@@ -360,96 +360,7 @@ class ImagePickerViewController: UIImagePickerController {
     override func viewDidLoad() {
 //cameraOverlay = CameraOverlay()
         super.viewDidLoad()
-        cameraOverlay = overlayView
-        self.cameraOverlayView = overlayView
-        let cameraControlsCenter = capturePictureBtn?.center ?? .zero
-
-        
-        let screenSize = UIScreen.main.bounds.size
-                      let cameraAspectRatio = CGFloat(4.0/3.0)
-                      let imageHeight = screenSize.width * cameraAspectRatio
-        squareLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 44, width: self.view.bounds.width, height: imageHeight), cornerRadius: 4.0).cgPath
-        squareLayer.strokeColor = UIColor.yellow.cgColor
-        
-        squareLayer.fillColor = UIColor.clear.cgColor
-        squareLayer.lineWidth = 2
-        self.view.layer.addSublayer(squareLayer)
-        
-        self.view.addSubview(topLabel)
-        topLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        topLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 15).isActive = true
-        
-        
-        
-        
-        self.view.addSubview(sideLabel)
-       sideLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-       sideLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 15).isActive = true
-        
-        if self.sidePhoto! {
-            sideLabel.isHidden = false
-            topLabel.isHidden = true
-        } else {
-            sideLabel.isHidden = true
-            topLabel.isHidden = false
-        }
-        
-        // Move Camera Preview Down Below Controls If Needed
-        let screenSize1 = UIScreen.main.bounds.size
-        self.cameraViewTransform = CGAffineTransform(translationX: 0.0, y: 44.0);
-        
-
-        
-        // Add Camera Capture Btn
-        let cameraViewFrame = cameraOverlay?.frame ?? .zero
-        let imageViewYBottom = cameraViewFrame.size.height + cameraViewFrame.origin.y
-        let buttonY = ((screenSize1.height - imageViewYBottom) / 2.0) - 35.0 + imageViewYBottom
-        capturePictureBtn = UIButton(frame: CGRect(x: (screenSize1.width / 2.0) - 35.0,
-            y: buttonY,
-            width: 70.0,
-            height: 70.0))
-        
-        // Set Button States
-        capturePictureBtn!.setImage(UIImage(named: "CaptureBtnUp"), for: UIControl.State())
-        capturePictureBtn!.setImage(UIImage(named: "CaptureBtnDown"), for: UIControl.State.highlighted)
-        capturePictureBtn!.addTarget(self, action: #selector(capturePicture), for: .touchDown)
-       // capturePictureBtn!.layer.opacity = 0
-        self.view.addSubview(capturePictureBtn!)
-        self.view.addSubview(frontBackToggleBtn)
-        
-        self.view.addSubview(photoLabel)
-        photoLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        photoLabel.bottomAnchor.constraint(equalTo: capturePictureBtn!.topAnchor, constant: -10).isActive = true
-
-        frontBackToggleBtn.backgroundColor = UIColor.clear
-        frontBackToggleBtn.setImage(UIImage(named: "camera_toggle"), for: .normal)
-        frontBackToggleBtn.addTarget(self, action: #selector(toggleCamera), for: .touchDown)
-        // Add Font/Back Camera Btn
-        //frontBackToggleBtn = UIButton(frame: CGRect(x: screenSize1.width - 54.0,
-//                                                    y: cameraControlsCenter.y + imageViewYBottom,
-//                                                    width: 44.0,
-//                                                    height: 44.0))
-        frontBackToggleBtn.translatesAutoresizingMaskIntoConstraints = false
-        frontBackToggleBtn.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
-        frontBackToggleBtn.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -41).isActive = true
-        frontBackToggleBtn.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
-        frontBackToggleBtn.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
-        
-
-
-        
-        // Add Selfie Countdown Label Under Capture Btn
-        countdownLabel = UILabel(frame: CGRect(x: 0,
-                                               y: 0,
-                                               width: 70.0,
-                                               height: 70.0))
-        countdownLabel?.center = cameraControlsCenter
-        countdownLabel?.backgroundColor = UIColor.clear
-        countdownLabel?.font = UIFont.boldSystemFont(ofSize: 55)
-        countdownLabel?.textColor = UIColor.white
-        countdownLabel?.textAlignment = .center
-        countdownLabel?.isHidden = true
-        self.view.addSubview(countdownLabel!)
+     
         
         
     }
@@ -465,6 +376,97 @@ class ImagePickerViewController: UIImagePickerController {
         
     }
     
+    func uiInit(){
+           cameraOverlay = overlayView
+                self.cameraOverlayView = overlayView
+                let cameraControlsCenter = capturePictureBtn?.center ?? .zero
+
+                
+                let screenSize = UIScreen.main.bounds.size
+                              let cameraAspectRatio = CGFloat(4.0/3.0)
+                              let imageHeight = screenSize.width * cameraAspectRatio
+                squareLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 44, width: self.view.bounds.width, height: imageHeight), cornerRadius: 4.0).cgPath
+                squareLayer.strokeColor = UIColor.yellow.cgColor
+                
+                squareLayer.fillColor = UIColor.clear.cgColor
+                squareLayer.lineWidth = 2
+                self.view.layer.addSublayer(squareLayer)
+                
+                self.view.addSubview(topLabel)
+                topLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+                topLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 15).isActive = true
+                
+                
+                
+                
+                self.view.addSubview(sideLabel)
+               sideLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+               sideLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 15).isActive = true
+                
+                if self.sidePhoto! {
+                    sideLabel.isHidden = false
+                    topLabel.isHidden = true
+                } else {
+                    sideLabel.isHidden = true
+                    topLabel.isHidden = false
+                }
+                
+                // Move Camera Preview Down Below Controls If Needed
+                let screenSize1 = UIScreen.main.bounds.size
+                self.cameraViewTransform = CGAffineTransform(translationX: 0.0, y: 44.0);
+                
+
+                
+                // Add Camera Capture Btn
+                let cameraViewFrame = cameraOverlay?.frame ?? .zero
+                let imageViewYBottom = cameraViewFrame.size.height + cameraViewFrame.origin.y
+                let buttonY = ((screenSize1.height - imageViewYBottom) / 2.0) - 35.0 + imageViewYBottom
+                capturePictureBtn = UIButton(frame: CGRect(x: (screenSize1.width / 2.0) - 35.0,
+                    y: buttonY,
+                    width: 70.0,
+                    height: 70.0))
+                
+                // Set Button States
+                capturePictureBtn!.setImage(UIImage(named: "CaptureBtnUp"), for: UIControl.State())
+                capturePictureBtn!.setImage(UIImage(named: "CaptureBtnDown"), for: UIControl.State.highlighted)
+                capturePictureBtn!.addTarget(self, action: #selector(capturePicture), for: .touchDown)
+               // capturePictureBtn!.layer.opacity = 0
+                self.view.addSubview(capturePictureBtn!)
+                self.view.addSubview(frontBackToggleBtn)
+                
+                self.view.addSubview(photoLabel)
+                photoLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+                photoLabel.bottomAnchor.constraint(equalTo: capturePictureBtn!.topAnchor, constant: -10).isActive = true
+
+                frontBackToggleBtn.backgroundColor = UIColor.clear
+                frontBackToggleBtn.setImage(UIImage(named: "camera_toggle"), for: .normal)
+                frontBackToggleBtn.addTarget(self, action: #selector(toggleCamera), for: .touchDown)
+                // Add Font/Back Camera Btn
+                //frontBackToggleBtn = UIButton(frame: CGRect(x: screenSize1.width - 54.0,
+        //                                                    y: cameraControlsCenter.y + imageViewYBottom,
+        //                                                    width: 44.0,
+        //                                                    height: 44.0))
+                frontBackToggleBtn.translatesAutoresizingMaskIntoConstraints = false
+                frontBackToggleBtn.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -10).isActive = true
+                frontBackToggleBtn.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -41).isActive = true
+                frontBackToggleBtn.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
+                frontBackToggleBtn.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
+                
+                
+                // Add Selfie Countdown Label Under Capture Btn
+                countdownLabel = UILabel(frame: CGRect(x: 0,
+                                                       y: 0,
+                                                       width: 70.0,
+                                                       height: 70.0))
+                countdownLabel?.center = cameraControlsCenter
+                countdownLabel?.backgroundColor = UIColor.clear
+                countdownLabel?.font = UIFont.boldSystemFont(ofSize: 55)
+                countdownLabel?.textColor = UIColor.white
+                countdownLabel?.textAlignment = .center
+                countdownLabel?.isHidden = true
+                self.view.addSubview(countdownLabel!)
+        
+    }
     
     func startLevelMotionDetection()  {
            //cameraOverlay!.layer.opacity = 1.0
