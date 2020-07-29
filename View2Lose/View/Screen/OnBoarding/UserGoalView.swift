@@ -184,7 +184,8 @@ struct UserGoalView: View {
                     .alert(isPresented: $showingConfirmation) {
                         Alert(title: Text("Confirmation "), message: Text("Please confirm your details before continuing to the next step."), primaryButton: .default(Text("Confirm")) {
                             //Save The value
-                            UserDefaults.standard.set(self.userGoal.currentWeight, forKey: "BBIWeightKey")
+                            print("User Goal Current Weight ======= ", self.currentWeight)
+                            UserDefaults.standard.set(self.currentWeight, forKey: "BBIWeightKey")
                             UserDefaults.standard.set(self.userGoal.desiredWeight, forKey: "BBIUserGoalKey")
                             
                             
