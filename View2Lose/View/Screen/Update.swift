@@ -38,6 +38,7 @@ struct AlertMessage: View {
 
 struct Update: View {
     @State var showOverlay = true
+    @EnvironmentObject var facebookManager: FacebookManager
     
     var body: some View {
 
@@ -64,55 +65,50 @@ struct Update: View {
                         .bold()
                         .font(.title)
                     
-                    Spacer()
-                    
                     VStack (alignment: .leading) {
-                        Text("Taking regular body measurements helps keep track of your health and measure body change progress through time!")
+                        Text("You can measure and update the waist and weight measurements manually or")
                             .font(.body)
                             .foregroundColor(Color(.lightGray))
                             .padding(15)
                             .lineLimit(nil)
                         
-                        Text("The steps are:")
+                        Text("You can automatically update your waist measurement by taking photos")
                         .font(.body)
                         .foregroundColor(Color(.lightGray))
                         .padding()
 
-                        HStack {
-                            Image(systemName: "chevron.down")
-                            
-                            Text("Updating Current Weight")
-                            .font(.body)
-                        }.padding(.leading)
-                        
-                        HStack {
-                            Image(systemName: "chevron.down")
-                            
-                            Text("Taking New Photos")
-                            .font(.body)
-                        }.padding()
-                        
-                        HStack {
-                            Image(systemName: "chevron.down")
-                            
-                            Text("Updating Waist Measurement")
-                            .font(.body)
-                        }.padding(.leading)
-                    }
+                    }.padding()
                     
-                    Button(action: {
-                        self.showOverlay = false
-                    }, label: {
-                        Text("Start").modifier(CustomBoldBodyFontModifier(size: 20))
-                    }).padding(.top, 20).padding(.bottom, 20).foregroundColor(.white)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .background(Color("primary"))
-                        .cornerRadius(30)
-                        .padding().shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 0, y: 6)
+                    VStack (alignment: .center) {
+                        Button(action: {
+                            self.facebookManager.isUserAuthenticated = .updateMeasurement
+                        }, label: {
+                            Text("Update manually").modifier(CustomBoldBodyFontModifier(size: 20))
+                        }).padding(.top, 20).padding(.bottom, 20).foregroundColor(.white)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .background(Color("primary"))
+                            .cornerRadius(30)
+                            .padding().shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 0, y: 6)
+                        
+                        Button(action: {
+                            self.showOverlay = false
+                        }, label: {
+                            Text("Update with taking photo").modifier(CustomBoldBodyFontModifier(size: 20))
+                            .foregroundColor(Color("primary"))
+                        }).padding(.top, 20).padding(.bottom, 20).foregroundColor(.white)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .background(Color(.white))
+                            .overlay(RoundedRectangle(cornerRadius: 30).stroke(Color("primary"), lineWidth: 2))
+                            .cornerRadius(30)
+                            .padding().shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 0, y: 6)
+                    }.padding()
+                    
+                    Spacer()
                 }
             }.background(Color(.white))
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100, maxHeight: 500)
-            .cornerRadius(25)
+            .cornerRadius(30)
+            .offset(x: 0, y: 40)
         }
     }
 }

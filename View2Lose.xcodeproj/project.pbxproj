@@ -97,7 +97,7 @@
 		1BDB9CAB245E4C7600921821 /* CameraViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB9CAA245E4C7600921821 /* CameraViewDelegate.swift */; };
 		1BDB9CAD245E4CC400921821 /* UserCameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDB9CAC245E4CC400921821 /* UserCameraView.swift */; };
 		1BFE4BE224584866001BA44B /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE4BE124584866001BA44B /* TestView.swift */; };
-		965AF4EA24CFC302000B4F1B /* UpdateWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965AF4E924CFC302000B4F1B /* UpdateWeight.swift */; };
+		965AF4EA24CFC302000B4F1B /* UpdateMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965AF4E924CFC302000B4F1B /* UpdateMeasurement.swift */; };
 		965B470E24B7F70800769092 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 965B470D24B7F70800769092 /* Charts */; };
 /* End PBXBuildFile section */
 
@@ -215,7 +215,7 @@
 		1BDB9CAA245E4C7600921821 /* CameraViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewDelegate.swift; sourceTree = "<group>"; };
 		1BDB9CAC245E4CC400921821 /* UserCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCameraView.swift; sourceTree = "<group>"; };
 		1BFE4BE124584866001BA44B /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
-		965AF4E924CFC302000B4F1B /* UpdateWeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWeight.swift; sourceTree = "<group>"; };
+		965AF4E924CFC302000B4F1B /* UpdateMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateMeasurement.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -403,7 +403,7 @@
 				1B3371A724431FE300116EE2 /* DashboardView.swift */,
 				1B76F92924AC8B3D000FC1AA /* HealthView.swift */,
 				1B76F92B24AC8B47000FC1AA /* Update.swift */,
-				965AF4E924CFC302000B4F1B /* UpdateWeight.swift */,
+				965AF4E924CFC302000B4F1B /* UpdateMeasurement.swift */,
 				1BDB9CAC245E4CC400921821 /* UserCameraView.swift */,
 				1B861324246A335900BA1CD3 /* TakeMeasurement.swift */,
 				1B76F92724AC881A000FC1AA /* DashboardTabBar.swift */,
@@ -709,7 +709,7 @@
 				1B33716324430B2600116EE2 /* AppDelegate.swift in Sources */,
 				1B758809247BAD7A00B1D644 /* SideMeasurement.swift in Sources */,
 				1BCAF36424510C0D009E2A59 /* InstagramApi.swift in Sources */,
-				965AF4EA24CFC302000B4F1B /* UpdateWeight.swift in Sources */,
+				965AF4EA24CFC302000B4F1B /* UpdateMeasurement.swift in Sources */,
 				1B76F93224AC8B7A000FC1AA /* SettingsView.swift in Sources */,
 				1BDB9CA9245E4C5D00921821 /* CameraState.swift in Sources */,
 				1B301E272477610000BF0882 /* UIImageExtension.swift in Sources */,

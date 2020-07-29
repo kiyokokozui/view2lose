@@ -34,10 +34,6 @@ class UserGoal: ObservableObject, Identifiable {
             WillChange.send()
         }
     }
-    
-   // var switchMetric =
-
-
 }
 
 
@@ -173,7 +169,6 @@ struct UserGoalView: View {
                     
                     
                 }, label: {
-                    Spacer()
                         Text("I am ready!")
                             .padding()
                             .foregroundColor(.white)

@@ -88,6 +88,9 @@ struct LoginView: View {
                                 PostOnBoardingLoadingView()
                             case .cameratutorial:
                                 CameraTutorialFirstView()
+                                
+                            case .updateMeasurement:
+                                UpdateMeasurement()
                             }
                         }
                     }, label: {
@@ -216,6 +219,8 @@ struct LoginView: View {
 
                             case .cameratutorial:
                                 print("Auth State: .cameraTutorial")
+                            case .updateMeasurement:
+                                print("Auth State: .updateMeasurement")
                             }
                         }
                        }
