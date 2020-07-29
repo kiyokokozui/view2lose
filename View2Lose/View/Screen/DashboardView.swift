@@ -202,8 +202,6 @@ struct DashboardSectionView: View {
                                                                          }
                             }.pickerStyle(SegmentedPickerStyle()).background(Color(#colorLiteral(red: 0.9490196078, green: 0.9254901961, blue: 1, alpha: 1))).cornerRadius(1).padding(.top, 20).padding(.bottom, 20).padding(.horizontal, 20)
                             VStack {
-                               // ZStack (alignment: .center) {
-                                    
                                     VStack {
                                        
                                         if image == nil {
@@ -225,10 +223,6 @@ struct DashboardSectionView: View {
                                         }
                                                                     
                                     } .frame(width: screen.width - 20,height: 450, alignment: .center)
-
-                                        //.background(Color(#colorLiteral(red: 0.9198947021, green: 0.9198947021, blue: 0.9198947021, alpha: 1)))
-                                    
-                                   
                                   
 
                                     
