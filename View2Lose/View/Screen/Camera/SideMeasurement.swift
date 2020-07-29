@@ -40,12 +40,12 @@ struct SideMeasurement: View {
             VStack {
                 Button(action: {
                     self.facebookManager.isUserAuthenticated = .postOnBoardLoading
-                    self.sideMainViewController.calculateSize {
-                        //HAVE TO FIX THIS
-                        self.facebookManager.isUserAuthenticated = .signedIn
-                        print("Completed")
-                    }
-//                    self.facebookManager.isUserAuthenticated = .signedIn
+//                    self.sideMainViewController.calculateSize {
+//                        //HAVE TO FIX THIS
+//                        self.facebookManager.isUserAuthenticated = .signedIn
+//                        print("Completed")
+//                    }
+                    self.facebookManager.isUserAuthenticated = .signedIn
                 }, label: {
                     Text("Create").modifier(CustomBoldBodyFontModifier(size: 20))
                 }).padding(.top, 20).padding(.bottom, 20).foregroundColor(.white)

@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 
 struct UpdateMeasurement: View {
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var userGoal = UserGoal()
     
     @State var weightTickRange: [Float] = [0,20,40,60,80,100, 120]
@@ -18,8 +19,8 @@ struct UpdateMeasurement: View {
     @State private var currentWeightRange: (Double, Double) = (0, 120)
     @State private var currentpoundWeightRange: (Double, Double) = (0, 300)
     
-    @State private var currentWeight: Double = 70
-    @State private var currentPoundWeight: Double = 140
+    @State private var currentWeight: Double = UserDefaults.standard.double(forKey: "BBIWeightKey")
+    @State private var currentPoundWeight: Double = UserDefaults.standard.double(forKey: "BBIWeightKey")
     
     @State var waistTickRange: [Float] = [0,20,40,60,80,100, 120]
     @State var poundWaistTickRange: [Float] = [0, 50, 100, 150, 200, 250,300]
@@ -29,16 +30,26 @@ struct UpdateMeasurement: View {
     
     @State private var currentWaist: Double = 70
     @State private var currentPoundWaist: Double = 140
+
     
     var body: some View {
         VStack (alignment: .leading, spacing: 25) {
             
             VStack (alignment: .leading, spacing: 10) {
-                Image(systemName: "chevron.left")
-                    .resizable()
+                
+                Button(action: {
+                       self.presentationMode.wrappedValue.dismiss()
+                }) {
+                
+                    Image(systemName: "chevron.left")
                     .foregroundColor(Color("primary"))
-                    .padding()
-                    .frame(width: 45, height: 50)
+                }.frame(width: 40, height: 40)
+                
+//                Image(systemName: "chevron.left")
+//                    .resizable()
+//                    .foregroundColor(Color("primary"))
+//                    .padding()
+//                    .frame(width: 45, height: 50)
                     
                             
                 Text("Manual measurement update")
@@ -61,7 +72,7 @@ struct UpdateMeasurement: View {
                 }
                 
                 HStack (spacing: 5) {
-                    Text("My last weight is")
+                    Text("My current weight is")
                         .foregroundColor(Color(.gray))
                         .font(.body)
                     
@@ -76,7 +87,7 @@ struct UpdateMeasurement: View {
                         
             VStack {
                 HStack (spacing: 5) {
-                    Text("My last weight is")
+                    Text("My last waist is")
                         .foregroundColor(Color("primary"))
                         .font(.body)
                     
@@ -88,7 +99,7 @@ struct UpdateMeasurement: View {
                 }
                 
                 HStack (spacing: 5) {
-                    Text("My last weight is")
+                    Text("My current waist is")
                         .foregroundColor(Color(.gray))
                         .font(.body)
                     
@@ -106,6 +117,7 @@ struct UpdateMeasurement: View {
             Button(action: {
                // self.facebookManager.isUserAuthenticated = .cameraOnboard
                 //DashboardView()
+                print("Userdefaults ======== ", UserDefaults.standard.double(forKey: "BBIWeightKey"))
             }, label: {
                     Text("I am ready!")
                         .padding()
