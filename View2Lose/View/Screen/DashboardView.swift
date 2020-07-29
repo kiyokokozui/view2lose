@@ -92,6 +92,9 @@ struct DashboardView: View {
                 else if facebookManager.isUserAuthenticated == .cameratutorial {
                     CameraTutorialFirstView()
                 }
+                else if facebookManager.isUserAuthenticated == .updateMeasurement {
+                    UpdateMeasurement()
+                }
 
             }
         }.onAppear(perform: getUser)
