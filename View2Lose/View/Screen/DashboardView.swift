@@ -50,6 +50,9 @@ struct DashboardView: View {
         session.listen()
     }
     
+  
+    
+    
     var body: some View {
         Group {
             if isLoggedIn {
@@ -88,10 +91,6 @@ struct DashboardView: View {
                 else if facebookManager.isUserAuthenticated == .cameratutorial {
                     CameraTutorialFirstView()
                 }
-                
-                else if facebookManager.isUserAuthenticated == .updateMeasurement {
-                    UpdateMeasurement()
-                }
 
             }
         }.onAppear(perform: getUser)
@@ -113,10 +112,9 @@ struct DashboardSectionView: View {
     
     @State var index = 0
     @State private var selectedWeek = 1
-    
-    @State var showOverlay = false
-    
     var weeks = ["Week 0", "Week 6", "Week 12", "Week 18"]
+
+
 
     var actionSheet: ActionSheet {
         ActionSheet(title: Text("Photo Picker"), message: Text("Choose option"), buttons: [
@@ -169,7 +167,9 @@ struct DashboardSectionView: View {
     }
 
     
+    
     var body: some View {
+        
         TabView {
             VStack(alignment: .leading) {
                         
@@ -196,30 +196,30 @@ struct DashboardSectionView: View {
                                                                              Text(self.weeks[index]).tag(index)
                                                                          }
                             }.pickerStyle(SegmentedPickerStyle()).background(Color(#colorLiteral(red: 0.9490196078, green: 0.9254901961, blue: 1, alpha: 1))).cornerRadius(1).padding(.top, 20).padding(.bottom, 20).padding(.horizontal, 20)
-//                            VStack {
+                            VStack {
                                // ZStack (alignment: .center) {
                                     
-//                                    VStack {
-//
-//                                        if image == nil {
-//                                            ZStack(alignment: .bottomTrailing) {
-//                                                Image(uiImage: loadWarpImages()[selectedWeek])
-//                                                .resizable()
-//                                                .aspectRatio(contentMode: .fill)
-//                                                .padding(20)
-//
-//                                                Button(action: {
-//
-//                                                }, label: {
-//                                                    Image(systemName: "square.and.arrow.up").resizable().renderingMode(.template).foregroundColor(Color("primary")).aspectRatio(contentMode: .fit).padding(15)
-//                                                }).background(Color(.white)).clipShape(Circle()).frame(width: 55, height: 55).padding(.trailing, 40).padding(.bottom, 40).shadow(color: Color("secondary"), radius: 5, x: 1, y: 2)
-//                                            }
-//                                        } else {
-//                                            image?.resizable()
-//                                            .aspectRatio(contentMode: .fit)
-//                                        }
-//
-//                                    } .frame(width: screen.width - 20,height: 450, alignment: .center)
+                                    VStack {
+                                       
+                                        if image == nil {
+                                            ZStack(alignment: .bottomTrailing) {
+                                                Image(uiImage: loadWarpImages()[selectedWeek])
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .padding(20)
+                                                
+                                                Button(action: {
+                                                    
+                                                }, label: {
+                                                    Image(systemName: "square.and.arrow.up").resizable().renderingMode(.template).foregroundColor(Color("primary")).aspectRatio(contentMode: .fit).padding(15)
+                                                }).background(Color(.white)).clipShape(Circle()).frame(width: 55, height: 55).padding(.trailing, 40).padding(.bottom, 40).shadow(color: Color("secondary"), radius: 5, x: 1, y: 2)
+                                            }
+                                        } else {
+                                            image?.resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                        }
+                                                                    
+                                    } .frame(width: screen.width - 20,height: 450, alignment: .center)
 
                                         //.background(Color(#colorLiteral(red: 0.9198947021, green: 0.9198947021, blue: 0.9198947021, alpha: 1)))
                                     
@@ -228,46 +228,13 @@ struct DashboardSectionView: View {
 
                                     
                                     
-//                                }.padding(.vertical, 10)
+                                }.padding(.vertical, 10)
                                 
                                 
                             
                                 
                             
                             Spacer()
-                            
-                            if self.showOverlay {
-                                ZStack (alignment: .bottom) {
-                                    Rectangle()
-                                        .fill(Color(.gray))
-                                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                                    
-                                    VStack {
-                                        Text("Update Measurement")
-                                            .bold()
-                                            .font(.title)
-                                        
-                                        Spacer()
-                                        
-                                        Text("Paragraph is here")
-                                            .font(.body)
-                                        
-                                        Spacer()
-                                        
-                                        Button(action: {
-                                            self.showOverlay = false
-                                        }, label: {
-                                            Text("Start").modifier(CustomBoldBodyFontModifier(size: 20))
-                                        }).padding(.top, 20).padding(.bottom, 20).foregroundColor(.white)
-                                            .frame(maxWidth: .infinity, alignment: .center)
-                                            .background(Color("primary"))
-                                            .cornerRadius(30)
-                                            .padding().shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 0, y: 6)
-                                    }.background(Color(.white))
-                                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 100, maxHeight: 300)
-                                    .padding(10)
-                                }
-                            }
                             
                             }.padding().background(Color(.white)).clipShape(Rounded())
                         
@@ -281,23 +248,19 @@ struct DashboardSectionView: View {
                 Image(systemName: "chart.bar.fill")
                 Text("My Health")
             }).tag(1)
-            Update()
-                .onTapGesture {
-                    self.showOverlay = true
-                    print("Tap Update")
-                }
-                .tabItem({
+            Update().tabItem({
                 //Image("ruler").resizable().renderingMode(.template).foregroundColor(Color("secondary")).frame(width: 32, height: 32)
                 Image(systemName: "plus.square.fill")
-                Text("Update")
+
+                           Text("Update")
             }).tag(2)
             ChatBot().tabItem({
                 Image(systemName: "bubble.right.fill")
-                Text("Chat Bot")
+                           Text("Chat Bot")
             }).tag(3)
             SettingsView().tabItem({
-               Image(systemName: "gear")
-               Text("Settings")
+                           Image(systemName: "gear")
+                           Text("Settings")
             }).tag(4)
             
         }
@@ -311,6 +274,5 @@ struct Rounded: Shape {
         return Path(path.cgPath)
     }
 }
-
 
 

@@ -107,79 +107,79 @@ class SideViewController: UIViewController {
 //        if !currentMeasurments.frontSet || !currentMeasurments.sideSet || totalInches == 0  {
 //            return
 //        }
-//        
+//
 //        // Get Actual Height In Pixels
 //        let frontHeightPixels = currentMeasurments.frontBottom - currentMeasurments.frontTop
 //        let sideHeightPixels = currentMeasurments.sideBottom - currentMeasurments.sideTop
-//        
+//
 //        // Calculate The Pixels Per Inch For Front & Back
 //        // These Might Be Different As The Height Might Be Different In Each Picture
 //        // We Will Use This To Calculate How To Scale The Side Picture To Match The Front
 //        let frontPixelsPerInch = frontHeightPixels / CGFloat(totalInches)
 //        let sidePixelsPerInch = sideHeightPixels / CGFloat(totalInches)
-//        
+//
 //        // Get Major Radius In Inches (Front Pic) & Minor Radius In Inches (Side Pic)
 //        let major_rad = ((abs(currentMeasurments.frontLeftX - currentMeasurments.frontRightX)) / frontPixelsPerInch)
 //        let minor_rad = ((abs(currentMeasurments.sideLeft - currentMeasurments.sideRight)) / sidePixelsPerInch)
-//        
+//
 //        // Approximation Formula
 //        let a_minus_b_squared = (major_rad - minor_rad) * (major_rad - minor_rad)
 //        let a_plus_b_squared = (major_rad + minor_rad) * (major_rad + minor_rad)
 //        let h = a_minus_b_squared / a_plus_b_squared
-//        
+//
 //        let pi_times_a_plus_b = .pi * (major_rad + minor_rad)
 //        let main_math = (1.0 + ((3.0 * h) / (10.0 + sqrt(4.0 - (3.0 * h)))))
 //        currentApproximation = (pi_times_a_plus_b * main_math) / 2.0
-//        
+//
 //       // let approx_inch = String(Int(currentApproximation))
 //      //  let approx_fraction = getDisplayFraction(currentApproximation)
-//        
-//        
+//
+//
 //        let convertPtLeft = self.convertPointToPicturePt(CGPoint(x: currentMeasurments.frontLeftX, y: currentMeasurments.frontLeftY), imageView: self.sideControlView.imageView!)
 //        let convertPtRight = self.convertPointToPicturePt(CGPoint(x: currentMeasurments.frontRightX, y: currentMeasurments.frontRightY), imageView: self.sideControlView.imageView!)
 //           let convertPtTop = self.convertPointToPicturePt(CGPoint(x: 0.0, y: currentMeasurments.frontTop) , imageView: self.sideControlView.imageView!)
 //        let convertPtBottom = self.convertPointToPicturePt(CGPoint(x: 0.0, y: currentMeasurments.frontBottom) , imageView: self.sideControlView.imageView!)
-//        
-//        
-//        
+//
+//
+//
 //        let leftNavalDic = [ "X" : Int(convertPtLeft.x), "Y" : Int(convertPtLeft.y) ]
-//        
+//
 //        let rightNavalDic = [ "X" : Int(convertPtRight.x), "Y" : Int(convertPtRight.y) ]
 //        let encoder = JSONEncoder()
-//        
+//
 //        if let leftNavalDicData = try? encoder.encode(leftNavalDic) {
 //            globalValues.set(leftNavalDicData, forKey: "LeftNavalPointDictKey")
 //        }
-//        
+//
 //        if let rightNavalDicData = try? encoder.encode(rightNavalDic) {
 //            globalValues.set(rightNavalDicData, forKey: "RightNavalPointDictKey")
 //        }
-//        
-//        
+//
+//
 //        if let convertPtTopData = try? encoder.encode(convertPtTop.y) {
 //            globalValues.set(convertPtTopData, forKey: "TopOfHeadKey")
 //        }
-//        
+//
 //        if let convertPtBottomData = try? encoder.encode(convertPtBottom.y) {
 //            globalValues.set(convertPtBottomData, forKey: "BottomOfFeetKey")
 //        }
-//                
+//
 //        if let currentApproximationData = try? encoder.encode(currentApproximation) {
 //            globalValues.set(currentApproximationData, forKey: "currentApproximationKey")
 //        }
-//        
-//        
-//        
-//        
-//        
+//
+//
+//
+//
+//
 ////        globalValues.set(rightNavalDic, forKey: "RightNavalPointDictKey")
 ////        globalValues.set(convertPtTop.y, forKey: "TopOfHeadKey")
 ////        globalValues.set(convertPtBottom.y, forKey: "BottomOfFeetKey")
-//        
-//        
-//        
-//           
-//           
+//
+//
+//
+//
+//
 //       // setSizeApproximation(approx_inch + " " + approx_fraction)
 //        self.sideDelegate.sideNewMeasurement(convertPtTop, left: convertPtLeft, bottom: convertPtBottom, right: convertPtRight, approximation: currentApproximation)
 //        print("CurrentApprox: \(convertPtTop)")

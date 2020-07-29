@@ -324,7 +324,7 @@ class BBIModelEndpoint {
                        print(error)
                        completion(.failure(error))
                    }
-            }
+               }
            }.resume()
           } catch {
               print(error)
