@@ -216,7 +216,7 @@ class BBIModelEndpoint {
     }
     typealias resultClosureBlock = (Result<String, Error>) -> ()
     
-    public func createNewUsername(username:String, email: String, fullName: String, gender: String, height: Double, weight: Double, waistSize: Int, bodyTypeId: Int, activityLevelId: Int, firstName: String, lastName: String, BMR: String, GoalWeightChange: Int?, GoalWeight: Double, GoalType: Int, Password: String ) {
+    public func createNewUsername(username:String, email: String, fullName: String, gender: String, height: Double, weight: Double, waistSize: Int, bodyTypeId: Int, activityLevelId: Int, firstName: String, lastName: String, BMR: String, GoalWeightChange: Int?, GoalWeight: Double, GoalType: Int, Password: String, completion: @escaping (Result<NewUserResponse, Error>) -> ()) {
         let dalegate = ""
         let param = ["Username": username,
                      "Email": email,
@@ -236,15 +236,215 @@ class BBIModelEndpoint {
                      "Password": ""
                      
             ] as [String : Any]
+//        do {
+//          //  let data = try? JSONSerialization.data(withJSONObject: param as [String: Any], options: [.])
+//           self.makePostRequest(requestId: BBIRequestCreateNewUser, data: param, delegate: delegate, requestType: POST)
+//           // self.makePostRequest(requestId: <#T##BBIRequestId#>, data: <#T##Dictionary<String, Any>#>, completion: <#T##(Result<String, Error>) -> ()#>)
+//        } catch {
+//            print(error)
+//        }
+        
         do {
-          //  let data = try? JSONSerialization.data(withJSONObject: param as [String: Any], options: [.])
-           self.makePostRequest(requestId: BBIRequestCreateNewUser, data: param, delegate: delegate, requestType: POST)
-           // self.makePostRequest(requestId: <#T##BBIRequestId#>, data: <#T##Dictionary<String, Any>#>, completion: <#T##(Result<String, Error>) -> ()#>)
-        } catch {
-            print(error)
+            let url = NSURL(string: BBIModelEndpoint.urlWithRequestId(requestId: BBIRequestCreateNewUser))
+
+            var request = URLRequest(url: url! as URL)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            guard let httpbody = try? JSONSerialization.data(withJSONObject: param, options: .prettyPrinted) else {return}
+            request.httpBody = httpbody
+            
+            let session = URLSession.shared
+            session.dataTask(with: request) { (data, response, error) in
+                if error != nil {
+                    print(error)
+                }
+                if let response = response {
+                    print("!!!!!", response)
+                }
+                 
+                if let data = data {
+                    print(data)
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                        print("?????", json)
+                        
+                        let newUser = try JSONDecoder().decode(NewUserResponse.self, from: data)
+                        
+                        if newUser.ResponseObject != nil {
+                            print("Create User Response ===== ", newUser)
+                        } else {
+                            print("Data is null")
+                        }
+                        
+                        completion(.success(newUser))
+                         
+                    } catch {
+                        print(error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                }
+            }.resume()
         }
         
+    }
+    
+    public func login(email: String, completion: @escaping (Result<LoginUserResponse, Error>) -> ()) {
+        let dalegate = ""
+        let param = ["CredentialUsername": email
+                     
+            ] as [String : Any]
         
+        do {
+            let url = NSURL(string: BBIModelEndpoint.urlWithRequestId(requestId: BBIRequestLogin))
+
+            var request = URLRequest(url: url! as URL)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            guard let httpbody = try? JSONSerialization.data(withJSONObject: param, options: .prettyPrinted) else {return}
+            request.httpBody = httpbody
+            
+            let session = URLSession.shared
+            session.dataTask(with: request) { (data, response, error) in
+                if error != nil {
+                    print(error)
+                }
+                if let response = response {
+                    print("!!!!!", response)
+                }
+                 
+                if let data = data {
+                    print(data)
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                        print("?????", json)
+                        
+                        let loginUser = try JSONDecoder().decode(LoginUserResponse.self, from: data)
+                        
+                        if loginUser.ResponseObject != nil {
+                            print("login ", loginUser)
+                        } else {
+                            print("Data is null")
+                        }
+                        
+                        completion(.success(loginUser))
+                         
+                    } catch {
+                        print(error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                }
+            }.resume()
+        }
+    }
+    
+    public func updateUserWeight(userId: Int, weight: String, measureType: String, completion: @escaping (Result<UpdateWWRes, Error>) -> ()) {
+        let dalegate = ""
+        let param = ["UserId": userId,
+                     "Weight": weight,
+                     "MeasurementType": measureType
+                     
+            ] as [String : Any]
+        
+        do {
+            let url = NSURL(string: BBIModelEndpoint.urlWithRequestId(requestId: BBIRequestUpdateWeight))
+
+            var request = URLRequest(url: url! as URL)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            guard let httpbody = try? JSONSerialization.data(withJSONObject: param, options: .prettyPrinted) else {return}
+            request.httpBody = httpbody
+            
+            let session = URLSession.shared
+            session.dataTask(with: request) { (data, response, error) in
+                if error != nil {
+                    print(error)
+                }
+                if let response = response {
+                    print("!!!!!", response)
+                }
+                 
+                if let data = data {
+                    print(data)
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                        print("?????", json)
+                        
+                        let updateWeight = try JSONDecoder().decode(UpdateWWRes.self, from: data)
+                        
+                        if updateWeight.ResponseMessage != nil {
+                            print("login ", updateWeight)
+                        } else {
+                            print("Data is null")
+                        }
+                        
+                        completion(.success(updateWeight))
+                         
+                    } catch {
+                        print(error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                }
+            }.resume()
+        }
+    }
+    
+    public func updateUserWaist(userId: Int, waist: String, measureType: String, completion: @escaping (Result<UpdateWWRes, Error>) -> ()) {
+        let dalegate = ""
+        let param = ["UserId": userId,
+                     "WaistSize": waist,
+                     "MeasurementType": measureType
+                     
+            ] as [String : Any]
+        
+        do {
+            let url = NSURL(string: BBIModelEndpoint.urlWithRequestId(requestId: BBIRequestUpdateWaistSize))
+
+            var request = URLRequest(url: url! as URL)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            guard let httpbody = try? JSONSerialization.data(withJSONObject: param, options: .prettyPrinted) else {return}
+            request.httpBody = httpbody
+            
+            let session = URLSession.shared
+            session.dataTask(with: request) { (data, response, error) in
+                if error != nil {
+                    print(error)
+                }
+                if let response = response {
+                    print("!!!!!", response)
+                }
+                 
+                if let data = data {
+                    print(data)
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                        print("?????", json)
+                        
+                        let updateWaist = try JSONDecoder().decode(UpdateWWRes.self, from: data)
+                        
+                        if updateWaist.ResponseMessage != nil {
+                            print("login ", updateWaist)
+                        } else {
+                            print("Data is null")
+                        }
+                        
+                        completion(.success(updateWaist))
+                         
+                    } catch {
+                        print(error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                }
+            }.resume()
+        }
     }
     
     
@@ -273,7 +473,7 @@ class BBIModelEndpoint {
         }
     }
     
-    public func warpImageWithImageData(_ imageData: Data, leftNavel: [String: Int],  rightNavel: [String: Int], bodyTypeId: Int, topOfHead: Int, bottomOfFeet: Int, heightInInches: Int, userName: String, waistInInches: Float, userId: String, blurface: Int, completion: @escaping (Result<WarpImageResponse, Error>) -> ()  ) {
+    public func warpImageWithImageData(_ imageData: Data, leftNavel: [String: Int],  rightNavel: [String: Int], bodyTypeId: Int, topOfHead: Int, bottomOfFeet: Int, heightInInches: Int, userName: String, waistInInches: Float, userId: Int, blurface: Int, completion: @escaping (Result<WarpImageResponse, Error>) -> ()  ) {
           let dalegate = ""
         let imageDataString = imageData.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
           let params = [

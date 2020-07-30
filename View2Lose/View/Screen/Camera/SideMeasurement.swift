@@ -210,7 +210,10 @@ struct SideMainViewController: UIViewControllerRepresentable {
             let imageData = normalizedImage.jpegData(compressionQuality: 0) {
 //BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftWaist: [0:0], rightWaist: [:], yKneeCoord: [:], leftNaval: leftNavalDic, rightNaval: rightNavalDic, leftHips: [:], rightHips: [:], midChest: [:], leftBi: [:], rightBi: [:], bodyTypeId: 3, waistInInches: 31, userId: "15572", blurface: 0)
             
-            BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftNavel: leftNavalDic, rightNavel: rightNavalDic, bodyTypeId: 3, topOfHead: Int(convertPtTop.y), bottomOfFeet: Int(convertPtBottom.y), heightInInches: Int(5.9), userName: "sagartech03@gmail.com", waistInInches: 31, userId: "15815", blurface: 1) { result in
+            let userId = UserDefaults.standard.integer(forKey: "userId")
+            let userEmail = UserDefaults.standard.string(forKey: "userEmail") ?? "testing@gmail.com"
+            
+            BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftNavel: leftNavalDic, rightNavel: rightNavalDic, bodyTypeId: 3, topOfHead: Int(convertPtTop.y), bottomOfFeet: Int(convertPtBottom.y), heightInInches: Int(5.9), userName: userEmail, waistInInches: 31, userId: userId, blurface: 1) { result in
                 
                 
                 switch result {

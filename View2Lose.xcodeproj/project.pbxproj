@@ -99,6 +99,9 @@
 		1BFE4BE224584866001BA44B /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFE4BE124584866001BA44B /* TestView.swift */; };
 		965AF4EA24CFC302000B4F1B /* UpdateMeasurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965AF4E924CFC302000B4F1B /* UpdateMeasurement.swift */; };
 		965B470E24B7F70800769092 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 965B470D24B7F70800769092 /* Charts */; };
+		96D5BF7924D2544800E0B466 /* NewUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D5BF7824D2544800E0B466 /* NewUser.swift */; };
+		96D5BF7B24D26DA800E0B466 /* LoginUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D5BF7A24D26DA800E0B466 /* LoginUser.swift */; };
+		96D5BF7D24D27ACC00E0B466 /* UpdateWeightWaist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96D5BF7C24D27ACC00E0B466 /* UpdateWeightWaist.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -216,6 +219,9 @@
 		1BDB9CAC245E4CC400921821 /* UserCameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCameraView.swift; sourceTree = "<group>"; };
 		1BFE4BE124584866001BA44B /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		965AF4E924CFC302000B4F1B /* UpdateMeasurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateMeasurement.swift; sourceTree = "<group>"; };
+		96D5BF7824D2544800E0B466 /* NewUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUser.swift; sourceTree = "<group>"; };
+		96D5BF7A24D26DA800E0B466 /* LoginUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUser.swift; sourceTree = "<group>"; };
+		96D5BF7C24D27ACC00E0B466 /* UpdateWeightWaist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWeightWaist.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -355,6 +361,9 @@
 				1B4D5CED24441B7F00828099 /* SessionStore.swift */,
 				1B4D5CFC244451B900828099 /* AuthState.swift */,
 				1B7B6B2E249C589800766A11 /* WarpImage.swift */,
+				96D5BF7824D2544800E0B466 /* NewUser.swift */,
+				96D5BF7A24D26DA800E0B466 /* LoginUser.swift */,
+				96D5BF7C24D27ACC00E0B466 /* UpdateWeightWaist.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -687,6 +696,7 @@
 			files = (
 				1B128310247F592D006E9906 /* SignInWithAppleManager.swift in Sources */,
 				1BCAF36624510C14009E2A59 /* InstagramResponse.swift in Sources */,
+				96D5BF7D24D27ACC00E0B466 /* UpdateWeightWaist.swift in Sources */,
 				1B86132A246A37EC00BA1CD3 /* SideFacingCameraView.swift in Sources */,
 				1BCAF36A245113B5009E2A59 /* InstagramManager.swift in Sources */,
 				1B301E252477610000BF0882 /* MagnifyingView.swift in Sources */,
@@ -698,6 +708,7 @@
 				1B76F91524AC7896000FC1AA /* PostOnboardingSuccess.swift in Sources */,
 				1B3371A824431FE300116EE2 /* DashboardView.swift in Sources */,
 				1B128312247F5933006E9906 /* SignInWithAppleDelegates.swift in Sources */,
+				96D5BF7924D2544800E0B466 /* NewUser.swift in Sources */,
 				1B76F91724AC7896000FC1AA /* CameraTutorialFirstView.swift in Sources */,
 				1B301E292477610000BF0882 /* CursorButton.swift in Sources */,
 				1B7D967324AB114C00B8767F /* PostOnBoardingLoadingView.swift in Sources */,
@@ -750,6 +761,7 @@
 				1B7AE48D2491F09600FC3E9D /* CameraOverlayView.swift in Sources */,
 				1BDB9CAD245E4CC400921821 /* UserCameraView.swift in Sources */,
 				1B76F92A24AC8B3D000FC1AA /* HealthView.swift in Sources */,
+				96D5BF7B24D26DA800E0B466 /* LoginUser.swift in Sources */,
 				1BCAF360245056F6009E2A59 /* MetricsConversionView.swift in Sources */,
 				1BFE4BE224584866001BA44B /* TestView.swift in Sources */,
 				1B33719524430B7500116EE2 /* UserActivity.swift in Sources */,

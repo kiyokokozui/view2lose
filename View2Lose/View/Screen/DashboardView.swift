@@ -118,7 +118,7 @@ struct DashboardSectionView: View {
     @State private var selectedWeek = 1
     var weeks = ["Week 0", "Week 6", "Week 12", "Week 18"]
 
-
+    @State var isWellDone = UserDefaults.standard.bool(forKey: "showWellDonePop")
 
     var actionSheet: ActionSheet {
         ActionSheet(title: Text("Photo Picker"), message: Text("Choose option"), buttons: [
@@ -175,94 +175,138 @@ struct DashboardSectionView: View {
     
     var body: some View {
         
-        TabView {
-            VStack(alignment: .leading) {
-                        
-                        
-                           // Image("bg_pattern").resizable().frame(width: screen.width, height: 400).aspectRatio(contentMode: .fit)
-                            Text("My View").modifier(CustomBodyFontModifier(size: 35))
-                                .padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20).padding(.top, 40)
-                        
-                        
-                    
-                    
-                        VStack (alignment: .leading, spacing: 10) {
-            //                HStack {
-            //                    Text("Your better \nbody image")
-            //                        .font(.system(size: 40))
-            //                        .fontWeight(.bold)
-            //                        .lineLimit(2)
-            //                        .multilineTextAlignment(.leading)
-            //
-            //                }
-                            Picker("",selection:$selectedWeek) {
-                                                                         ForEach(0 ..< weeks.count ) { index in
-                                                                             //Text(week.weekLength).tag(week).foregroundColor(Color("primary"))
-                                                                             Text(self.weeks[index]).tag(index)
-                                                                         }
-                            }.pickerStyle(SegmentedPickerStyle()).background(Color(#colorLiteral(red: 0.9490196078, green: 0.9254901961, blue: 1, alpha: 1))).cornerRadius(1).padding(.top, 20).padding(.bottom, 20).padding(.horizontal, 20)
-                            VStack {
+        ZStack {
+            TabView {
+                    VStack(alignment: .leading) {
+                                
+                                
+                                   // Image("bg_pattern").resizable().frame(width: screen.width, height: 400).aspectRatio(contentMode: .fit)
+                                    Text("My View").modifier(CustomBodyFontModifier(size: 35))
+                                        .padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20).padding(.top, 40)
+                                
+                                
+                            
+                            
+                                VStack (alignment: .leading, spacing: 10) {
+                    //                HStack {
+                    //                    Text("Your better \nbody image")
+                    //                        .font(.system(size: 40))
+                    //                        .fontWeight(.bold)
+                    //                        .lineLimit(2)
+                    //                        .multilineTextAlignment(.leading)
+                    //
+                    //                }
+                                    Picker("",selection:$selectedWeek) {
+                                                                                 ForEach(0 ..< weeks.count ) { index in
+                                                                                     //Text(week.weekLength).tag(week).foregroundColor(Color("primary"))
+                                                                                     Text(self.weeks[index]).tag(index)
+                                                                                 }
+                                    }.pickerStyle(SegmentedPickerStyle()).background(Color(#colorLiteral(red: 0.9490196078, green: 0.9254901961, blue: 1, alpha: 1))).cornerRadius(1).padding(.top, 20).padding(.bottom, 20).padding(.horizontal, 20)
                                     VStack {
-                                       
-                                        if image == nil {
-                                            ZStack(alignment: .bottomTrailing) {
-                                                Image(uiImage: loadWarpImages()[selectedWeek])
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                                .padding(20)
-                                                
-                                                Button(action: {
-                                                    self.shareImage()
-                                                }, label: {
-                                                    Image(systemName: "square.and.arrow.up").resizable().renderingMode(.template).foregroundColor(Color("primary")).aspectRatio(contentMode: .fit).padding(15)
-                                                }).background(Color(.white)).clipShape(Circle()).frame(width: 55, height: 55).padding(.trailing, 40).padding(.bottom, 40).shadow(color: Color("secondary"), radius: 5, x: 1, y: 2)
-                                            }
-                                        } else {
-                                            image?.resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                        }
-                                                                    
-                                    } .frame(width: screen.width - 20,height: 450, alignment: .center)
-                                  
+                                            VStack {
+                                               
+                                                if image == nil {
+                                                    ZStack(alignment: .bottomTrailing) {
+                                                        Image(uiImage: loadWarpImages()[selectedWeek])
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fill)
+                                                        .padding(20)
+                                                        
+                                                        Button(action: {
+                                                            self.shareImage()
+                                                        }, label: {
+                                                            Image(systemName: "square.and.arrow.up").resizable().renderingMode(.template).foregroundColor(Color("primary")).aspectRatio(contentMode: .fit).padding(15)
+                                                        }).background(Color(.white)).clipShape(Circle()).frame(width: 55, height: 55).padding(.trailing, 40).padding(.bottom, 40).shadow(color: Color("secondary"), radius: 5, x: 1, y: 2)
+                                                    }
+                                                } else {
+                                                    image?.resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                }
+                                                                            
+                                            } .frame(width: screen.width - 20,height: 450, alignment: .center)
+                                          
 
+                                            
+                                            
+                                        }.padding(.vertical, 10)
+                                        
+                                        
                                     
+                                        
                                     
-                                }.padding(.vertical, 10)
+                                    Spacer()
+                                    
+                                    }.padding().background(Color(.white)).clipShape(Rounded())
                                 
-                                
-                            
-                                
-                            
-                            Spacer()
-                            
-                            }.padding().background(Color(.white)).clipShape(Rounded())
+                            }.frame(minWidth: 0, maxWidth: .infinity).background(Color("primary")).edgesIgnoringSafeArea(.top)
+                    .tabItem({
+                        Image("rsz_ic_myview")
+                        Text("My View")
+                        }).tag(0)
+                    
+                    HealthView().tabItem({
+                        Image(systemName: "chart.bar.fill")
+                        Text("My Health")
+                    }).tag(1)
+                    Update().tabItem({
+                        //Image("ruler").resizable().renderingMode(.template).foregroundColor(Color("secondary")).frame(width: 32, height: 32)
+                        Image(systemName: "plus.square.fill")
+
+                                   Text("Update")
+                    }).tag(2)
+                    ChatBot().tabItem({
+                        Image(systemName: "bubble.right.fill")
+                                   Text("Chat Bot")
+                    }).tag(3)
+                    SettingsView().tabItem({
+                                   Image(systemName: "gear")
+                                   Text("Settings")
+                    }).tag(4)
+                    
+                    
+                
+                
+                
+            }
+            
+            if isWellDone {
+                Rectangle()
+                    .fill(Color(.black))
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+                    .opacity(0.7)
+                    .edgesIgnoringSafeArea([.top, .bottom])
+                
+                VStack {
+                    HStack {
+                        Text("Well done!")
+                            .foregroundColor(Color("primary"))
                         
-                    }.frame(minWidth: 0, maxWidth: .infinity).background(Color("primary")).edgesIgnoringSafeArea(.top)
-            .tabItem({
-                Image("rsz_ic_myview")
-                Text("My View")
-                }).tag(0)
-            
-            HealthView().tabItem({
-                Image(systemName: "chart.bar.fill")
-                Text("My Health")
-            }).tag(1)
-            Update().tabItem({
-                //Image("ruler").resizable().renderingMode(.template).foregroundColor(Color("secondary")).frame(width: 32, height: 32)
-                Image(systemName: "plus.square.fill")
-
-                           Text("Update")
-            }).tag(2)
-            ChatBot().tabItem({
-                Image(systemName: "bubble.right.fill")
-                           Text("Chat Bot")
-            }).tag(3)
-            SettingsView().tabItem({
-                           Image(systemName: "gear")
-                           Text("Settings")
-            }).tag(4)
-            
+                        Button(action: {
+                            self.isWellDone = false
+                            UserDefaults.standard.set(false, forKey: "showWellDonePop")
+                        }, label: {
+                            Image(systemName: "xmark")
+                            .foregroundColor(Color("primary"))
+                        })
+                            .frame(alignment: .trailing)
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    VStack (spacing: 10) {
+                        Text("Your new measurements have been updated. You are now one step closer to achieve your body goal. Keep it up!")
+                        
+                        Image(systemName: "hand.thumbsup.fill")
+                    }
+                    
+                }.background(Color(.white))
+                .frame(width: 400, height: 400)
+                .padding(20)
+                .cornerRadius(25)
+                    .opacity(0.8)
+            }
         }
+        
+        
 
     }
     func shareImage(){

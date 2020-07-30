@@ -12,6 +12,7 @@ import Combine
 struct UpdateMeasurement: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var userGoal = UserGoal()
+    @EnvironmentObject var facebookManager: FacebookManager
     
     @State var weightTickRange: [Float] = [0,20,40,60,80,100, 120]
     @State var poundWeightTickRange: [Float] = [0, 50, 100, 150, 200, 250,300]
@@ -25,11 +26,11 @@ struct UpdateMeasurement: View {
     @State var waistTickRange: [Float] = [0,20,40,60,80,100, 120]
     @State var poundWaistTickRange: [Float] = [0, 50, 100, 150, 200, 250,300]
     @State private var desiredWaistRange: (Double, Double) = (1, 6)
-    @State private var currentWaistRange: (Double, Double) = (0, 120)
-    @State private var currentpoundWaistRange: (Double, Double) = (0, 300)
+    @State private var currentWaistRange: (Double, Double) = (50, 120)
+    @State private var currentpoundWaistRange: (Double, Double) = (20, 50)
     
-    @State private var currentWaist: Double = 70
-    @State private var currentPoundWaist: Double = 140
+    @State private var currentWaist: Double = UserDefaults.standard.double(forKey: "BBIWaistKey")
+    @State private var currentPoundWaist: Double = UserDefaults.standard.double(forKey: "BBIWaistKey")
 
     
     var body: some View {
@@ -38,7 +39,7 @@ struct UpdateMeasurement: View {
             VStack (alignment: .leading, spacing: 10) {
                 
                 Button(action: {
-                       self.presentationMode.wrappedValue.dismiss()
+                       self.facebookManager.isUserAuthenticated = .signedIn
                 }) {
                 
                     Image(systemName: "chevron.left")
@@ -93,7 +94,7 @@ struct UpdateMeasurement: View {
                     
                     Spacer()
                     
-                    Text("65kg")
+                    Text("65 cm")
                         .foregroundColor(Color("primary"))
                         .font(.body)
                 }
@@ -115,11 +116,50 @@ struct UpdateMeasurement: View {
             Spacer()
 
             Button(action: {
-               // self.facebookManager.isUserAuthenticated = .cameraOnboard
-                //DashboardView()
-                print("Userdefaults ======== ", UserDefaults.standard.double(forKey: "BBIWeightKey"))
+                let userId = UserDefaults.standard.integer(forKey: "userId")
+                let weight = self.userGoal.switchMetric ? self.currentWeight : self.currentPoundWeight
+                
+                let waist = self.userGoal.switchMetric ? self.currentWaist : self.currentPoundWaist
+                
+                let strWeight = String(format: "%.0f", weight)
+                let strWaist = String(format: "%.0f", waist)
+                
+                print("temp weight ====== ", strWeight)
+                
+                BBIModelEndpoint.sharedService.updateUserWeight(userId: userId, weight: strWeight, measureType: "self") { result in
+                    
+                    switch result {
+                    case .success(let response):
+                        print("Update weight success ====== ", response)
+                        UserDefaults.standard.set(Int(strWeight), forKey: "BBIWeightKey")
+                        
+                        BBIModelEndpoint.sharedService.updateUserWaist(userId: userId, waist: strWaist, measureType: "self") { result in
+                            
+                            switch result {
+                            case .success(let response):
+                                print("Update waist success ======= ", response)
+                                UserDefaults.standard.set(Int(strWaist), forKey: "BBIWaistKey")
+                                
+                                print("Userdefaults weight ======== ", UserDefaults.standard.double(forKey: "BBIWeightKey"))
+                                print("Userdefaults waist ======== ", UserDefaults.standard.double(forKey: "BBIWaistKey"))
+                                
+                                UserDefaults.standard.set(true, forKey: "showWellDonePop")
+                                
+                                self.facebookManager.isUserAuthenticated = .signedIn
+                                
+                            case .failure(let error):
+                                print("Update waist failed ====== ", error)
+                            }
+                            
+                        }
+                    
+                    case .failure(let error):
+                        print("Update weight fail", error)
+                    }
+                }
+                
             }, label: {
-                    Text("I am ready!")
+                    Text("Update")
                         .padding()
                         .foregroundColor(.white)
                         .modifier(CustomBoldBodyFontModifier(size: 20))

@@ -95,7 +95,7 @@ struct Update: View {
 //                            }
                             
                             Button(action: {
-                                self.showOverlay = false
+//                                self.showOverlay = false
                             }, label: {
                                 Text("Update with taking photo").modifier(CustomBoldBodyFontModifier(size: 20))
                                 .foregroundColor(Color("primary"))
