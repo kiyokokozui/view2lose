@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import KeychainSwift
 
 struct ListHeader: View {
 	let headerTitle: String
@@ -20,7 +21,7 @@ struct ListHeader: View {
 				HStack {
 					Text(self.headerTitle)
 						.font(.body)
-						.foregroundColor(Color("SeparationColor"))
+						.foregroundColor(Color("accent-text-green"))
 						.padding(.horizontal)
 					
 					Spacer()
@@ -45,8 +46,27 @@ struct ListHeader: View {
 }
 
 struct SettingsView: View {
-	@State private var saveImageToPhone = true
-	@State private var sendPushNotifications = false
+	@State private var saveImageToPhone = true {
+		didSet {
+			let encoder = JSONEncoder()
+			if let encoded = try? encoder.encode(saveImageToPhone) {
+				UserDefaults.standard.set(encoded, forKey: "BBISaveImageToPhoneKey")
+			}
+		}
+	}
+	@State private var sendPushNotifications = false {
+		didSet {
+			let encoder = JSONEncoder()
+			if let encoded = try? encoder.encode(sendPushNotifications) {
+				UserDefaults.standard.set(encoded, forKey: "BBISendPushNotificationsKey")
+			}
+		}
+	}
+	
+	@State private var name = ""
+	@State private var gender = ""
+	@State private var height = "0.0"
+	@State private var weight = "0.0"
 	
 	init() {
 		UISwitch.appearance().onTintColor = UIColor(named: "primary")
@@ -73,7 +93,7 @@ struct SettingsView: View {
 								.clipShape(Circle())
 								.padding()
 							VStack {
-								Text("Parisa Safarzadeh")
+								Text(self.name)
 									.font(.body)
 									.foregroundColor(Color("primary"))
 									.padding(.top)
@@ -104,19 +124,22 @@ struct SettingsView: View {
 								HStack {
 									Text("Gender")
 									Spacer()
-									Text("Female")
+									// TODO: - replace with picker
+									Text(self.gender)
 								}
 								.foregroundColor(Color("secondary"))
 								HStack {
 									Text("Height")
 									Spacer()
-									Text("5ft 9in")
+									// TODO: - replace with picker
+									Text(self.height) // "5ft 8in"
 								}
 								.foregroundColor(Color("secondary"))
 								HStack {
 									Text("Weight")
 									Spacer()
-									Text("154 lbs")
+									// TODO: - replace with picker
+									Text(self.weight) //"154 lbs"
 								}
 								.foregroundColor(Color("secondary"))
 							}
@@ -131,6 +154,7 @@ struct SettingsView: View {
 								Text("Save image to phone")
 								.foregroundColor(Color("secondary"))
 							}
+							.padding(.top, 8)
 							Toggle(isOn: $sendPushNotifications) {
 								Text("Send push notifications")
 								.foregroundColor(Color("secondary"))
@@ -149,9 +173,10 @@ struct SettingsView: View {
 							
 							HStack {
 								Spacer()
-								Text("Log out")
+								Button("Log out", action: logOutTapped)
 									.font(.body)
-									.foregroundColor(Color("WarningColor"))
+									.foregroundColor(Color("accent-text-red"))
+									.padding(.bottom)
 								Spacer()
 							}
 							.padding(.top)
@@ -164,10 +189,55 @@ struct SettingsView: View {
 			.frame(minWidth: 0, maxWidth: .infinity)
 			.background(Color("primary"))
 			.edgesIgnoringSafeArea(.top)
+			.onAppear(perform: initializeData)
+		}
+	}
+	
+	func initializeData()
+	{
+		let keychain = KeychainSwift()
+		
+		if let fName: String = keychain.get("BBIFirstNameKey") {
+			let lName: String = keychain.get("BBILastNameKey") ?? ""
+			name = "\(fName) \(lName)"
+		} else {
+			name = "Name Unknown"
+		}
+		if let data = UserDefaults.standard.string(forKey: "BBIGenderKey") {
+			gender = data == "M" ? "Male" : "Female"
+			print("Gender: \(data)")
+		} else {
+			gender = "Unknown"
+		}
+		if let data = UserDefaults.standard.string(forKey: "BBIHeightKey") {
+			height = data
+			print("Height: \(data)")
+		} else {
+			height = "Unknown"
+		}
+		if let data = UserDefaults.standard.string(forKey: "BBIWeightKey") {
+			weight = data
+			print("Weight: \(data)")
+		} else {
+			weight = "Unknown"
+		}
+		if let data = UserDefaults.standard.data(forKey: "BBISaveImageToPhoneKey") {
+			let decoder = JSONDecoder()
+			if let decoded = try? decoder.decode(Bool.self, from: data) {
+				saveImageToPhone = decoded
+			}
+		}
+		if let data = UserDefaults.standard.data(forKey: "BBISendPushNotificationsKey") {
+			let decoder = JSONDecoder()
+			if let decoded = try? decoder.decode(Bool.self, from: data) {
+				sendPushNotifications = decoded
+			}
 		}
 	}
 	
 	func setNewWeightGoalTapped() {}
+	
+	func logOutTapped() { print("Logging out") }
 }
 
 struct SettingsView_Previews: PreviewProvider {
