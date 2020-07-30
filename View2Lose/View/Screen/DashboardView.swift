@@ -273,7 +273,7 @@ struct DashboardSectionView: View {
                 Rectangle()
                     .fill(Color(.black))
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-                    .opacity(0.7)
+                    .opacity(0.6)
                     .edgesIgnoringSafeArea([.top, .bottom])
                 
                 VStack {
@@ -292,15 +292,19 @@ struct DashboardSectionView: View {
                     }
                     .frame(maxWidth: .infinity)
                     
+                    Spacer()
+                    
                     VStack (spacing: 10) {
                         Text("Your new measurements have been updated. You are now one step closer to achieve your body goal. Keep it up!")
+                        
+                        Spacer()
                         
                         Image(systemName: "hand.thumbsup.fill")
                     }
                     
                 }.background(Color(.white))
-                .frame(width: 400, height: 400)
-                .padding(20)
+                .frame(width: 250, height: 250)
+                .padding()
                 .cornerRadius(25)
                     .opacity(0.8)
             }

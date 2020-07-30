@@ -508,7 +508,7 @@ class ImagePickerViewController: UIImagePickerController {
                         
                         let phoneAngle = attitude.pitch * 180 / Double.pi
                         let degree = String(format: "Angle: %.2f°", phoneAngle)
-                        print("\(degree)")
+//                        print("\(degree)")
                         self.angle.attributedText = NSMutableAttributedString(string: degree, attributes: [NSAttributedString.Key.font: UIFont(name: "HelveticaNeue-Bold", size: 18.0)!])
                         
                     }
