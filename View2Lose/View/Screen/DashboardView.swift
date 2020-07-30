@@ -276,10 +276,16 @@ struct DashboardSectionView: View {
                     .opacity(0.6)
                     .edgesIgnoringSafeArea([.top, .bottom])
                 
-                VStack {
+                VStack (alignment: .center) {
                     HStack {
+                        Spacer()
+                        
                         Text("Well done!")
                             .foregroundColor(Color("primary"))
+                            .font(.title)
+                            .bold()
+                        
+                        Spacer()
                         
                         Button(action: {
                             self.isWellDone = false
@@ -290,23 +296,26 @@ struct DashboardSectionView: View {
                         })
                             .frame(alignment: .trailing)
                     }
-                    .frame(maxWidth: .infinity)
-                    
-                    Spacer()
-                    
-                    VStack (spacing: 10) {
+                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
+                    .padding()
+                                    
+                    VStack {
                         Text("Your new measurements have been updated. You are now one step closer to achieve your body goal. Keep it up!")
+                            .foregroundColor(Color(.black))
                         
                         Spacer()
                         
-                        Image(systemName: "hand.thumbsup.fill")
-                    }
+                        Image("welldone")
+                        .resizable()
+                            .frame(width: 60, height: 60, alignment: .bottom)
+                    }.padding()
+                    
+                    Spacer()
                     
                 }.background(Color(.white))
-                .frame(width: 250, height: 250)
-                .padding()
-                .cornerRadius(25)
-                    .opacity(0.8)
+                .frame(minWidth: 100, maxWidth: 320, minHeight: 100, maxHeight: 250)
+                .cornerRadius(30)
+                .opacity(0.8)
             }
         }
         
