@@ -52,14 +52,17 @@ struct Update: View {
                         HStack {
                             Button(action: {
                                 print("Tapped")
+                                self.facebookManager.isUserAuthenticated = .signedIn
                             }, label: {
-                                Image(systemName: "chevron.down")
-                                    .frame(alignment: .trailing)
-                                    .foregroundColor(Color(.black))
+                                Image(systemName: "xmark")
+                                    .resizable()
+                                    .frame(width: 15, height: 15, alignment: .trailing)
+                                    .foregroundColor(Color("primary"))
+                                
                             })
                                 .foregroundColor(Color(.black))
                         }.frame(minWidth: 0, maxWidth: .infinity, alignment: .trailing)
-                            .padding(15)
+                            .padding()
                         
                         Text("Update Measurement")
                             .bold()

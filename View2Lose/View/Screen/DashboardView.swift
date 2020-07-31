@@ -51,9 +51,6 @@ struct DashboardView: View {
         session.listen()
     }
     
-  
-    
-    
     var body: some View {
         Group {
             if isLoggedIn {
@@ -249,9 +246,7 @@ struct DashboardSectionView: View {
                         Text("My Health")
                     }).tag(1)
                     Update().tabItem({
-                        //Image("ruler").resizable().renderingMode(.template).foregroundColor(Color("secondary")).frame(width: 32, height: 32)
                         Image(systemName: "plus.square.fill")
-
                                    Text("Update")
                     }).tag(2)
                     ChatBot().tabItem({
@@ -262,10 +257,6 @@ struct DashboardSectionView: View {
                                    Image(systemName: "gear")
                                    Text("Settings")
                     }).tag(4)
-                    
-                    
-                
-                
                 
             }
             
