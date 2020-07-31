@@ -85,7 +85,7 @@ struct CustomFrontFacingCameraView: View {
                 }.onReceive(CameraPicker.shared.$image) { (image) in
                     
                     if let image = image {
-                        print("Side Image: \(self.sideImage)")
+                        //print("Side Image: \(self.sideImage)")
                         if !self.sideImage {
                             //CameraPicker.shared.image = nil
                             self.facebookManager.isUserAuthenticated = .cameraOnBoard2
@@ -601,7 +601,7 @@ class ImagePickerViewController: UIImagePickerController {
         } else {
             self.angle.textColor = .red
             self.positionHint.textColor = .red
-            self.positionHint.attributedText = NSAttributedString(string: "Position your phone at 90° angle", attributes: [NSAttributedString.Key.font : UIFont(name: "HelveticaNeue-Bold", size: 16)])
+            self.positionHint.attributedText = NSAttributedString(string: "Position your iPhone at 90° angle", attributes: [NSAttributedString.Key.font : UIFont(name: "HelveticaNeue-Bold", size: 16)])
             self.squareLayer.strokeColor = UIColor.red.cgColor
             self.capturePictureBtn?.isUserInteractionEnabled = false
             self.capturePictureBtn?.layer.opacity = 0.7

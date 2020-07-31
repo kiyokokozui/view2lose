@@ -190,7 +190,7 @@ struct UserGoalView: View {
                             
                             
                             self.saveDataToServer() {
-                                print("User created")
+                                print("Response Obtained from server")
                             }
                             self.facebookManager.isUserAuthenticated = .cameratutorial
                         }, secondaryButton: .cancel())
@@ -228,20 +228,23 @@ struct UserGoalView: View {
             
             switch result {
             case .success(let response):
+                //print("User Created!!!!!!!")
                 if response != nil {
-                    
+                    print("New User Created!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook) ")
+                    UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
+                    UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
                 }
                 
                 completion()
                 break
                 
             case.failure(let error):
-                print("Create user failed ====", error)
+                print("Creation of New user failed ==== Trying to Login", error)
                 
                 BBIModelEndpoint.sharedService.login(email: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName") { result in
                     switch result {
                     case.success(let response):
-                        print("Login success =========", response.ResponseObject.UserId)
+                        print("Login success!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook)")
                         UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
                         UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
                         completion()
