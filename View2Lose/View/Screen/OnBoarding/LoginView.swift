@@ -10,7 +10,7 @@ import SwiftUI
 import FBSDKLoginKit
 import SafariServices
 import AuthenticationServices
-
+import KeychainSwift
 
 struct LoginView: View {
     @State var fbLogin = FBLoginProvider()
@@ -269,9 +269,28 @@ struct LoginView: View {
         signInWithappleDelegates = SignInWithAppleDelegates(window: window, onSignedIn: { (result) in
             switch result {
             case .success(let userId):
-                //UserDefaults.standard.set(userId, forKey: self.facebookManager.userIdentifierKey)
+               
+//                self.didSignInToServer(){
+//                    self.facebookManager.isUserAuthenticated = .signedIn
+//                }else{
+//                    self.facebookManager.isUserAuthenticated = .userOnBoard
+//                }
+                self.signInToServer { (signedIn, signedInWithPics) in
+                    if signedIn && signedInWithPics{
+                        DispatchQueue.main.async {
+                            self.facebookManager.isUserAuthenticated = .signedIn
+                        }
+                        
+                    }else if signedIn && !signedInWithPics{
+                        self.facebookManager.isUserAuthenticated = .cameratutorial
+                    }else{
+                        self.facebookManager.isUserAuthenticated = .userOnBoard
+                    }
+                }
+               
+             //   UserDefaults.standard.set(userId, forKey: self.facebookManager.userIdentifierKey)
                 //self.signInWithAppleManager.isUserAuthenticated = .signedIn
-                self.facebookManager.isUserAuthenticated = .userOnBoard
+               
                 
             case .failure(let err):
                 //self.errDescription = err.localizedDescription
@@ -282,6 +301,50 @@ struct LoginView: View {
         controller.delegate = signInWithappleDelegates
         controller.presentationContextProvider = signInWithappleDelegates
         controller.performRequests()
+    }
+    
+    
+    
+    
+    private func signInToServer(completion: @escaping (Bool, Bool)->()) {
+        
+        let keychain = KeychainSwift()
+             
+               let emailFromApple = keychain.get("BBIEmailKey")
+               let emailFromFacebook = keychain.get("emailFromApple")
+            
+        
+        BBIModelEndpoint.sharedService.login(email: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName") { result in
+                           switch result {
+                           case.success(let response):
+                               print("Login success!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook)")
+                               UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
+                               UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
+                             
+                              
+//                               if self.gotImagesFromServer(){
+//                                completion(true,true) //signed in with pics
+//                               }else{
+//                                completion(true,false)// signed in, but without pics
+//                                self.facebookManager.isUserAuthenticated = .cameratutorial
+//                               }
+                                
+                               completion(true,true)
+                               break
+                           
+                           case .failure(let error):
+                               print("Login failed =========", error)
+                                self.facebookManager.isUserAuthenticated = .userOnBoard
+                               completion(false,false) //not signed in and no pics
+                               break
+                           }
+                       }
+    }
+    
+    
+    func gotImagesFromServer()->Bool{
+       
+        return true
     }
 }
 
