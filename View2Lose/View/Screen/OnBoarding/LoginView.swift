@@ -329,7 +329,7 @@ struct LoginView: View {
 //                                self.facebookManager.isUserAuthenticated = .cameratutorial
 //                               }
                                 
-                               completion(true,true)
+                               completion(true,false)
                                break
                            
                            case .failure(let error):
