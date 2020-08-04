@@ -10,13 +10,11 @@ import SwiftUI
 
 let screen = UIScreen.main.bounds
 
-enum Weeks: Int, CaseIterable, Identifiable, Hashable{
+enum Weeks: Int, CaseIterable, Identifiable, Hashable {
     case week0
     case week6
     case week12
     case week18
-
-
 }
 
 extension Weeks {
@@ -33,7 +31,6 @@ extension Weeks {
             return "Week 12"
         case .week18:
             return "Week 18"
-            
         default:
             return "Week 0"
         }
@@ -41,12 +38,12 @@ extension Weeks {
 }
 
 var downloadedImages: [UIImage] = []
+
 struct DashboardView: View {
     @EnvironmentObject var session: SessionStore
     @EnvironmentObject var facebookManager: FacebookManager
     @State var isLoggedIn = UserDefaults.standard.bool(forKey: "userLoggedIn")
-    
-    
+	
     func getUser() {
         session.listen()
     }
@@ -54,45 +51,31 @@ struct DashboardView: View {
     var body: some View {
         Group {
             if isLoggedIn {
-                //DashboardSectionView()
-                //LoginView()
                 ContentView(viewModel: UserViewModel())
-//DashboardSectionView().transition(.slide)
-
             } else {
                 if facebookManager.isUserAuthenticated == .undefined {
-                    //DashboardSectionView().transition(.slide)
-
                     LoginView()
                 } else if facebookManager.isUserAuthenticated == .userOnBoard {
-                    
                     ContentView(viewModel: UserViewModel()).transition(.slide)
-                    //TestView()
                 } else if facebookManager.isUserAuthenticated == .cameraOnboard {
                     FrontFacingCameraView().transition(.slide)
                 } else if facebookManager.isUserAuthenticated == .cameraOnBoard2 {
-                    
                     SideFacingCameraView().transition(.slide)
-                }else if facebookManager.isUserAuthenticated == .imagePreview{
+                } else if facebookManager.isUserAuthenticated == .imagePreview{
                     ImagePreview().transition(.slide)
-                }else if facebookManager.isUserAuthenticated == .frontBodyMeasurement {
+                } else if facebookManager.isUserAuthenticated == .frontBodyMeasurement {
                     FrontSideMeasurement().transition(.slide)
-                
                 } else if facebookManager.isUserAuthenticated == .sideBodyMeasurement {
                    SideMeasurement()
                 } else if facebookManager.isUserAuthenticated == .signedIn {
                     DashboardSectionView().transition(.slide)
-                    
                 } else if facebookManager.isUserAuthenticated == .postOnBoardLoading {
                     PostOnBoardingLoadingView()
-                }
-                else if facebookManager.isUserAuthenticated == .cameratutorial {
+                } else if facebookManager.isUserAuthenticated == .cameratutorial {
                     CameraTutorialFirstView()
-                }
-                else if facebookManager.isUserAuthenticated == .updateMeasurement {
+                } else if facebookManager.isUserAuthenticated == .updateMeasurement {
                     UpdateMeasurement()
                 }
-
             }
         }.onAppear(perform: getUser)
     }
@@ -112,11 +95,12 @@ struct DashboardSectionView: View {
     @State var image: Image? = nil
     
     @State var index = 0
-    @State private var selectedWeek = 1
+    @State private var selectedWeek = 0
+	
     var weeks = ["Week 0", "Week 6", "Week 12", "Week 18"]
 
     @State var isWellDone = UserDefaults.standard.bool(forKey: "showWellDonePop")
-
+	
     var actionSheet: ActionSheet {
         ActionSheet(title: Text("Photo Picker"), message: Text("Choose option"), buttons: [
             .default(Text("Take Photo")),
@@ -129,10 +113,10 @@ struct DashboardSectionView: View {
     }
     
     init() {
-          UISegmentedControl.appearance().selectedSegmentTintColor = .white
-                        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"primary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .selected)
-                        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"secondary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .normal)
-        UITabBar.appearance().tintColor = UIColor(named: "primary")
+		UISegmentedControl.appearance().selectedSegmentTintColor = .white
+		UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"primary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .selected)
+		UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor(named:"secondary")!, .font : UIFont(name: "Lato-Regular", size: 16)], for: .normal)
+		UITabBar.appearance().tintColor = UIColor(named: "primary")
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().barTintColor = .white
         UITabBarItem.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "primary")], for:.selected)
@@ -141,123 +125,134 @@ struct DashboardSectionView: View {
     func loadWarpImages() -> [UIImage] {
         var tempFillArray: [UIImage] = []
         let fileURL = try! FileManager.default
-        .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        .appendingPathComponent("/com.bbi.warpedImages")
+			.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+			.appendingPathComponent("/com.bbi.warpedImages")
         print(fileURL)
         
         if let nsData = NSData(contentsOf: fileURL) {
 
-            guard let warpedImageString = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSArray.self, from: nsData as Data) else {
+			guard let warpedImageString = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSArray.self, from: nsData as Data) else {
                 fatalError("warpedImageString - Can't encode data")
             }
             
             for imageData in warpedImageString {
-               // let imageData = NSData(base64Encoded: imageString, options: NSData.Base64DecodingOptions(rawValue: 0))
                 if (imageData != nil) {
                     let processedImage = UIImage(data: imageData as! Data)
                     if (processedImage != nil) {
                         tempFillArray.append(processedImage!)
-                        
                     }
                 }
             }
             downloadedImages = tempFillArray
             return tempFillArray
-            
         }
         return []
     }
-
-    
     
     var body: some View {
-        
-        ZStack {
-            TabView {
-                    VStack(alignment: .leading) {
-                                
-                                
-                                   // Image("bg_pattern").resizable().frame(width: screen.width, height: 400).aspectRatio(contentMode: .fit)
-                                    Text("My View").modifier(CustomBodyFontModifier(size: 35))
-                                        .padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20).padding(.top, 40)
-                                
-                                
-                            
-                            
-                                VStack (alignment: .leading, spacing: 10) {
-                    //                HStack {
-                    //                    Text("Your better \nbody image")
-                    //                        .font(.system(size: 40))
-                    //                        .fontWeight(.bold)
-                    //                        .lineLimit(2)
-                    //                        .multilineTextAlignment(.leading)
-                    //
-                    //                }
-                                    Picker("",selection:$selectedWeek) {
-                                                                                 ForEach(0 ..< weeks.count ) { index in
-                                                                                     //Text(week.weekLength).tag(week).foregroundColor(Color("primary"))
-                                                                                     Text(self.weeks[index]).tag(index)
-                                                                                 }
-                                    }.pickerStyle(SegmentedPickerStyle()).background(Color(#colorLiteral(red: 0.9490196078, green: 0.9254901961, blue: 1, alpha: 1))).cornerRadius(1).padding(.top, 20).padding(.bottom, 20).padding(.horizontal, 20)
-                                    VStack {
-                                            VStack {
-                                               
-                                                if image == nil {
-                                                    ZStack(alignment: .bottomTrailing) {
-                                                        Image(uiImage: loadWarpImages()[selectedWeek])
-                                                        .resizable()
-                                                        .aspectRatio(contentMode: .fill)
-                                                        .padding(20)
-                                                        
-                                                        Button(action: {
-                                                            self.shareImage()
-                                                        }, label: {
-                                                            Image(systemName: "square.and.arrow.up").resizable().renderingMode(.template).foregroundColor(Color("primary")).aspectRatio(contentMode: .fit).padding(15)
-                                                        }).background(Color(.white)).clipShape(Circle()).frame(width: 55, height: 55).padding(.trailing, 40).padding(.bottom, 40).shadow(color: Color("secondary"), radius: 5, x: 1, y: 2)
-                                                    }
-                                                } else {
-                                                    image?.resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                }
-                                                                            
-                                            } .frame(width: screen.width - 20,height: 450, alignment: .center)
-                                          
-
-                                            
-                                            
-                                        }.padding(.vertical, 10)
-                                        
-                                        
-                                    
-                                        
-                                    
-                                    Spacer()
-                                    
-                                    }.padding().background(Color(.white)).clipShape(Rounded())
-                                
-                            }.frame(minWidth: 0, maxWidth: .infinity).background(Color("primary")).edgesIgnoringSafeArea(.top)
-                    .tabItem({
-                        Image("rsz_ic_myview")
-                        Text("My View")
-                        }).tag(0)
-                    
-                    HealthView().tabItem({
-                        Image(systemName: "chart.bar.fill")
-                        Text("My Health")
-                    }).tag(1)
-                    Update().tabItem({
-                        Image(systemName: "plus.square.fill")
-                                   Text("Update")
-                    }).tag(2)
-                    ChatBot().tabItem({
-                        Image(systemName: "bubble.right.fill")
-                                   Text("Chat Bot")
-                    }).tag(3)
-                    SettingsView().tabItem({
-                                   Image(systemName: "gear")
-                                   Text("Settings")
-                    }).tag(4)
-                
+		ZStack {
+			TabView {
+				VStack(alignment: .leading) {
+					Text("My View").modifier(CustomBodyFontModifier(size: 35))
+						.padding(.vertical, 20).foregroundColor(.white).padding(.leading, 20).padding(.top, 40)
+					ScrollView {
+						VStack (alignment: .leading, spacing: 10) {
+							Picker("",selection:$selectedWeek) {
+								ForEach(0 ..< weeks.count ) { index in
+									Text(self.weeks[index]).tag(index)
+								}
+							}.pickerStyle(SegmentedPickerStyle()).background(Color("bg-color")).cornerRadius(1).padding(.top, 20).padding(.bottom, 20).padding(.horizontal, 20)
+							VStack {
+								VStack {
+									if image == nil {
+										ZStack(alignment: .bottomTrailing) {
+											Image(uiImage: loadWarpImages()[selectedWeek])
+												.resizable()
+												.aspectRatio(contentMode: .fill)
+												.padding(20)
+															
+											Button(action: {
+												self.shareImage()
+											}, label: {
+												Image(systemName: "square.and.arrow.up").resizable().renderingMode(.template).foregroundColor(Color("primary")).aspectRatio(contentMode: .fit).padding(15)
+											})
+											.background(Color(.white))
+											.clipShape(Circle())
+											.frame(width: 55, height: 55)
+											.padding(.trailing, 40)
+											.padding(.bottom, 40)
+											.shadow(color: Color("secondary"), radius: 5, x: 1, y: 2)
+										}
+									} else {
+										image?.resizable()
+											.aspectRatio(contentMode: .fit)
+									}
+								}.frame(width: screen.width - 20,height: 450, alignment: .center)
+							}.padding(.vertical, 10)
+							
+							Spacer()
+							
+							HStack {
+								Spacer()
+								VStack(alignment: .leading) {
+									Text("Weight").font(.caption).foregroundColor(Color("primary"))
+										.padding(.top)
+									Text("54Kg").font(.body).foregroundColor(Color("secondary"))
+										.padding(.bottom)
+								}
+								.clipShape(Rounded())
+								.background(Color("bg-color"))
+								.shadow(color: .black, radius: 5, x: 0, y: 5)
+								Spacer()
+								VStack(alignment: .leading) {
+									Text("Waist").font(.caption).foregroundColor(Color("primary"))
+										.padding(.top)
+									Text("68cm").font(.body).foregroundColor(Color("secondary"))
+										.padding(.bottom)
+								}
+								.clipShape(Rounded())
+								.background(Color("bg-color"))
+								.shadow(color: .black, radius: 5, x: 0, y: 5)
+								Spacer()
+								VStack(alignment: .leading) {
+									Text("BMI").font(.caption).foregroundColor(Color("primary"))
+										.padding(.top)
+									HStack {
+										Text("22").font(.body).foregroundColor(Color("secondary"))
+										Text("Healthy").font(.caption).foregroundColor(Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))) // fix color
+									}
+									.padding(.bottom)
+								}
+								.clipShape(Rounded())
+								.background(Color("bg-color"))
+								.shadow(color: .black, radius: 5, x: 0, y: 5)
+								Spacer()
+							}
+						}
+					}.padding().background(Color(.white)).clipShape(Rounded())
+				}
+				.frame(minWidth: 0, maxWidth: .infinity).background(Color("primary")).edgesIgnoringSafeArea(.top)
+				.tabItem({
+					Image("rsz_ic_myview")
+					Text("My View")
+					}).tag(0)
+				
+				HealthView().tabItem({
+					Image(systemName: "chart.bar.fill")
+					Text("My Health")
+				}).tag(1)
+				Update().tabItem({
+					Image(systemName: "plus.square.fill")
+							   Text("Update")
+				}).tag(2)
+				ChatBot().tabItem({
+					Image(systemName: "bubble.right.fill")
+							   Text("Chat Bot")
+				}).tag(3)
+				SettingsView().tabItem({
+							   Image(systemName: "gear")
+							   Text("Settings")
+				}).tag(4)
             }
             
             if isWellDone {
@@ -297,7 +292,7 @@ struct DashboardSectionView: View {
                         Spacer()
                         
                         Image("welldone")
-                        .resizable()
+							.resizable()
                             .frame(width: 60, height: 60, alignment: .bottom)
                     }.padding()
                     
@@ -309,11 +304,9 @@ struct DashboardSectionView: View {
                 .opacity(0.8)
             }
         }
-        
-        
-
     }
-    func shareImage(){
+	
+    func shareImage() {
         let shareSheet = UIActivityViewController(activityItems: [downloadedImages[0],downloadedImages[3]], applicationActivities: nil)
         shareSheet.excludedActivityTypes = [.message,.addToReadingList,.markupAsPDF,.openInIBooks,.print]
         UIApplication.shared.windows.first?.rootViewController?.present(shareSheet, animated: true, completion: nil)
@@ -326,5 +319,3 @@ struct Rounded: Shape {
         return Path(path.cgPath)
     }
 }
-
-
