@@ -97,6 +97,10 @@ class FrontViewController: UIViewController {
        
     }
     
+    func uiInit(){
+        
+        
+    }
  
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

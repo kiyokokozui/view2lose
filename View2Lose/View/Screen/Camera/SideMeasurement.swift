@@ -45,6 +45,7 @@ struct SideMeasurement: View {
                         self.facebookManager.isUserAuthenticated = .signedIn
                         print("Completed")
                     }
+                    //                    self.facebookManager.isUserAuthenticated = .signedIn
                 }, label: {
                     Text("Create").modifier(CustomBoldBodyFontModifier(size: 20))
                 }).padding(.top, 20).padding(.bottom, 20).foregroundColor(.white)
@@ -113,7 +114,7 @@ struct SideMainViewController: UIViewControllerRepresentable {
         
         let totalInches = 5.75
         let imageSize = self.sideviewController.sideControlView.imageView!.image?.size
-
+        
         
         // Get Actual Height In Pixels
         let frontHeightPixels = currentMeasurments.frontBottom - currentMeasurments.frontTop
@@ -136,9 +137,9 @@ struct SideMainViewController: UIViewControllerRepresentable {
         
         let pi_times_a_plus_b = .pi * (major_rad + minor_rad)
         let main_math = (1.0 + ((3.0 * h) / (10.0 + sqrt(4.0 - (3.0 * h)))))
-       let   currentApproximation = (pi_times_a_plus_b * main_math) / 2.0
+        let   currentApproximation = (pi_times_a_plus_b * main_math) / 2.0
         
-         let approx_inch = String(Int(currentApproximation))
+        let approx_inch = String(Int(currentApproximation))
         //  let approx_fraction = getDisplayFraction(currentApproximation)
         
         
@@ -149,10 +150,10 @@ struct SideMainViewController: UIViewControllerRepresentable {
         
         print("Top: \(convertPtTop), Bottom: \(convertPtBottom), Right: \(convertPtRight), Left: \(convertPtLeft)")
         
-
-
+        
+        
         let leftNavalDic = [ "X" : Int(convertPtLeft.x), "Y" : Int(convertPtLeft.y) ]
-
+        
         let rightNavalDic = [ "X" : Int(convertPtRight.x), "Y" : Int(convertPtRight.y) ]
         //            let encoder = JSONEncoder()
         //
@@ -194,35 +195,45 @@ struct SideMainViewController: UIViewControllerRepresentable {
         print("Top: \(convertPtTop)")
         
         var normalizedBodyImage: UIImage? = nil
-          let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
-          let documentsDirectory = paths[0]
+        let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsDirectory = paths[0]
         
         
-          
-          let fileNameStr = documentsDirectory + "/com.smr.front.png"
-          if let bodyImage = UIImage(contentsOfFile: fileNameStr) {
-              // This Eliminates The Image Sending To The Server With The Wrong Orientation
-              normalizedBodyImage = normalize(image: bodyImage)
-          }
+        
+        let fileNameStr = documentsDirectory + "/com.smr.front.png"
+        if let bodyImage = UIImage(contentsOfFile: fileNameStr) {
+            // This Eliminates The Image Sending To The Server With The Wrong Orientation
+            normalizedBodyImage = normalize(image: bodyImage)
+        }
         
         if let normalizedImage = normalizedBodyImage,
             let imageData = normalizedImage.jpegData(compressionQuality: 0) {
-//BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftWaist: [0:0], rightWaist: [:], yKneeCoord: [:], leftNaval: leftNavalDic, rightNaval: rightNavalDic, leftHips: [:], rightHips: [:], midChest: [:], leftBi: [:], rightBi: [:], bodyTypeId: 3, waistInInches: 31, userId: "15572", blurface: 0)
+            //BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftWaist: [0:0], rightWaist: [:], yKneeCoord: [:], leftNaval: leftNavalDic, rightNaval: rightNavalDic, leftHips: [:], rightHips: [:], midChest: [:], leftBi: [:], rightBi: [:], bodyTypeId: 3, waistInInches: 31, userId: "15572", blurface: 0)
             
-            BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftNavel: leftNavalDic, rightNavel: rightNavalDic, bodyTypeId: 3, topOfHead: Int(convertPtTop.y), bottomOfFeet: Int(convertPtBottom.y), heightInInches: Int(5.9), userName: "sagartech03@gmail.com", waistInInches: 31, userId: "15815", blurface: 1) { result in
+            
+            
+            print("userID:---",fetchUserData().userID)
+            print("userEmail:---",fetchUserData().userEmail)
+            print("Height:---",fetchUserData().userHeight)
+            print("Weight:---",fetchUserData().userWeight)
+            print("Waist:---",fetchUserData().userWaist)
+            print("BodyType:---",fetchUserData().userBodyType)
+            print("-----------------------------------------------------------------")
+            
+            BBIModelEndpoint.sharedService.warpImageWithImageData(imageData, leftNavel: leftNavalDic, rightNavel: rightNavalDic, bodyTypeId: fetchUserData().userBodyType, topOfHead: Int(convertPtTop.y), bottomOfFeet: Int(convertPtBottom.y), heightInInches: Int(fetchUserData().userHeight), userName: fetchUserData().userEmail, waistInInches: Float(fetchUserData().userWaist), userId: fetchUserData().userID, blurface: 1) { result in
                 
                 
                 switch result {
                 case .success(let warpImage):
-                   // print(warpImage)
+                    // print(warpImage)
                     if warpImage.ResponseObject.ProcessedImages.count > 0 {
                         let warpImages =  warpImage.ResponseObject.ProcessedImages
                         print(warpImages)
                         let path = documentsDirectory + "/com.bbi.warpedImages"
-                       // let urlPath = URL(fileURLWithPath: path)
+                        // let urlPath = URL(fileURLWithPath: path)
                         let fileURL = try! FileManager.default
-                        .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-                        .appendingPathComponent("/com.bbi.warpedImages")
+                            .url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+                            .appendingPathComponent("/com.bbi.warpedImages")
                         //NSKeyedArchiver.archiveRootObject(warpImages, toFile: path)
                         do {
                             let data = try NSKeyedArchiver.archivedData(withRootObject: warpImages, requiringSecureCoding: false)
@@ -238,7 +249,7 @@ struct SideMainViewController: UIViewControllerRepresentable {
                     print(error)
                 }
             }
-       
+            
             
         }
     }
@@ -265,12 +276,22 @@ struct SideMainViewController: UIViewControllerRepresentable {
         return normalizedImage ?? UIImage()
     }
     
+    // Fetch user data
+    func fetchUserData() -> (userID:Int, userEmail: String, userHeight: Double, userWeight: Double, userWaist: Double, userBodyType: Int){
+        let userId = UserDefaults.standard.integer(forKey: "userId")
+        let userEmail = UserDefaults.standard.string(forKey: "userEmail") ?? "testing@gmail.com"
+        let userHeight = UserDefaults.standard.double(forKey: "BBIHeightKey")
+        let userWeight = UserDefaults.standard.double(forKey: "BBIWeightKey")
+        let userWaist = UserDefaults.standard.double(forKey: "BBIWaistKey")
+        let userBodyType = UserDefaults.standard.integer(forKey: "BBIBodyTypeKey")
+        return(userId,userEmail,userHeight,userWeight,userWaist,userBodyType)
+    }
     
     // MARK: Convert Point To Picture Pt
     
     func convertPointToPicturePt(_ pt: CGPoint, imageView: UIImageView) -> CGPoint {
         let imageSize = self.sideviewController.sideControlView.imageView!.image?.size
-
+        
         let translatedImagePtX = (pt.x / imageView.bounds.size.width) * imageSize!.width
         print(imageView.bounds.size.width)
         // Need To Account For Top And Bottom Padding In ImageView When Taking Pt Percentages For Y

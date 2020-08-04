@@ -67,7 +67,7 @@ class FacebookManager: ObservableObject {
     
     func checkAppleUserAuth(completion: @escaping (AuthState) -> ()) {
         guard let userIdentifier = UserDefaults.standard.string(forKey: userIdentifierKey) else {
-            print("User identifier does not exist")
+           // print("User identifier does not exist in UserDeafults")
             self.isUserAuthenticated = .undefined
             completion(.undefined)
             return

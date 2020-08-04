@@ -34,10 +34,6 @@ class UserGoal: ObservableObject, Identifiable {
             WillChange.send()
         }
     }
-    
-   // var switchMetric =
-
-
 }
 
 
@@ -173,7 +169,6 @@ struct UserGoalView: View {
                     
                     
                 }, label: {
-                    Spacer()
                         Text("I am ready!")
                             .padding()
                             .foregroundColor(.white)
@@ -189,11 +184,14 @@ struct UserGoalView: View {
                     .alert(isPresented: $showingConfirmation) {
                         Alert(title: Text("Confirmation "), message: Text("Please confirm your details before continuing to the next step."), primaryButton: .default(Text("Confirm")) {
                             //Save The value
-                            UserDefaults.standard.set(self.userGoal.currentWeight, forKey: "BBIWeightKey")
+                            print("User Goal Current Weight ======= ", self.currentWeight)
+                            UserDefaults.standard.set(self.currentWeight, forKey: "BBIWeightKey")
                             UserDefaults.standard.set(self.userGoal.desiredWeight, forKey: "BBIUserGoalKey")
                             
                             
-                            self.saveDataToServer()
+                            self.saveDataToServer() {
+                                print("Response Obtained from server")
+                            }
                             self.facebookManager.isUserAuthenticated = .cameratutorial
                         }, secondaryButton: .cancel())
                 }
@@ -208,7 +206,7 @@ struct UserGoalView: View {
 
     }
     
-    func saveDataToServer() {
+    func saveDataToServer(completion: @escaping ()->() ) {
         let keychain = KeychainSwift()
         let firstName = keychain.get("BBIFirstNameKey")
         let lastName = keychain.get("BBILastNameKey")
@@ -224,7 +222,44 @@ struct UserGoalView: View {
         let weight = UserDefaults.standard.double(forKey: "BBIWeightKey")
         let userGoal = UserDefaults.standard.double(forKey: "BBIUserGoalKey")
         
-        BBIModelEndpoint.sharedService.createNewUsername(username: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName" , email: (emailFromApple ?? emailFromFacebook) ?? "test@BBI.com", fullName: fullName ?? "", gender: gender ?? "", height: height , weight: weight , waistSize: 0, bodyTypeId: bodyType , activityLevelId: activityType , firstName: firstName ?? "N/A", lastName: lastName ?? "N/A", BMR: "test", GoalWeightChange: 1, GoalWeight: userGoal, GoalType: 123, Password: "")
+        UserDefaults.standard.set(false, forKey: "showWellDonePop")
+        
+        BBIModelEndpoint.sharedService.createNewUsername(username: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName" , email: (emailFromApple ?? emailFromFacebook) ?? "test@BBI.com", fullName: fullName ?? "", gender: gender ?? "", height: height , weight: weight , waistSize: 0, bodyTypeId: bodyType , activityLevelId: activityType , firstName: firstName ?? "N/A", lastName: lastName ?? "N/A", BMR: "test", GoalWeightChange: 1, GoalWeight: userGoal, GoalType: 123, Password: "") { result in
+            
+            switch result {
+            case .success(let response):
+                //print("User Created!!!!!!!")
+                if response != nil {
+                    print("New User Created!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook) ")
+                    UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
+                    UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
+                }
+                
+                completion()
+                break
+                
+            case.failure(let error):
+                print("Creation of New user failed ==== Trying to Login", error)
+                
+                BBIModelEndpoint.sharedService.login(email: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName") { result in
+                    switch result {
+                    case.success(let response):
+                        print("Login success!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook)")
+                        UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
+                        UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
+                        completion()
+                        break
+                    
+                    case .failure(let error):
+                        print("Login failed =========", error)
+                        break
+                    }
+                }
+                
+                break
+            }
+        }
+        
     }
 }
 
