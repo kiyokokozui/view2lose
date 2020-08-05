@@ -165,11 +165,8 @@ struct SettingsView: View {
 					
 					Section(header: ListHeader("Support")) {
 						VStack(alignment: .leading) {
-							// TODO: - Replace with actual view.
-							NavigationLink(destination: Text("Calling")) {
-								Text("Call us")
-								.foregroundColor(Color("secondary"))
-							}
+							Text("Call us")
+							.foregroundColor(Color("secondary"))
 							
 							HStack {
 								Spacer()
@@ -237,7 +234,23 @@ struct SettingsView: View {
 	
 	func setNewWeightGoalTapped() {}
 	
-	func logOutTapped() { print("Logging out") }
+	func logOutTapped() {
+		UserDefaults.standard.removeObject(forKey: "BBIFirstNameKey")
+		UserDefaults.standard.removeObject(forKey: "BBILastNameKey")
+		UserDefaults.standard.removeObject(forKey: "BBIFullNameKey")
+		UserDefaults.standard.removeObject(forKey: "BBIEmailKey")
+		UserDefaults.standard.removeObject(forKey: "BBIGenderKey")
+		UserDefaults.standard.removeObject(forKey: "BBIHeightKey")
+		UserDefaults.standard.removeObject(forKey: "BBIWeightKey")
+		UserDefaults.standard.removeObject(forKey: "BBIAgeKey")
+		UserDefaults.standard.removeObject(forKey: "BBIBodyTypeKey")
+		UserDefaults.standard.removeObject(forKey: "BBIUserGoalKey")
+		UserDefaults.standard.removeObject(forKey: "BBIActivityKey")
+		UserDefaults.standard.removeObject(forKey: "BBISaveImageToPhoneKey")
+		UserDefaults.standard.removeObject(forKey: "BBISendPushNotificationsKey")
+		
+		KeychainSwift().clear()
+	}
 }
 
 struct SettingsView_Previews: PreviewProvider {
