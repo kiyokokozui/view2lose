@@ -161,15 +161,16 @@ struct DashboardSectionView: View {
 								ForEach(0 ..< weeks.count ) { index in
 									Text(self.weeks[index]).tag(index)
 								}
-							}.pickerStyle(SegmentedPickerStyle()).background(Color("bg-color")).cornerRadius(1).padding(.top, 20).padding(.bottom, 20).padding(.horizontal, 20)
+							}.pickerStyle(SegmentedPickerStyle()).background(Color("bg-color")).cornerRadius(1).padding([.top, .horizontal], 20).padding(.bottom, 5)
 							VStack {
-								VStack {
+								VStack(alignment: .center) {
 									if image == nil {
 										ZStack(alignment: .bottomTrailing) {
 											Image(uiImage: loadWarpImages()[selectedWeek])
 												.resizable()
 												.aspectRatio(contentMode: .fill)
-												.padding(20)
+												.padding(.horizontal, 20)
+												.padding(.vertical, 5)
 															
 											Button(action: {
 												self.shareImage()
@@ -190,46 +191,64 @@ struct DashboardSectionView: View {
 								}.frame(width: screen.width - 20,height: 450, alignment: .center)
 							}.padding(.vertical, 10)
 							
-							Spacer()
-							
 							HStack {
 								Spacer()
-								VStack(alignment: .leading) {
-									Text("Weight").font(.caption).foregroundColor(Color("primary"))
-										.padding(.top)
-									Text("54Kg").font(.body).foregroundColor(Color("secondary"))
-										.padding(.bottom)
-								}
-								.clipShape(Rounded())
-								.background(Color("bg-color"))
-								.shadow(color: .black, radius: 5, x: 0, y: 5)
-								Spacer()
-								VStack(alignment: .leading) {
-									Text("Waist").font(.caption).foregroundColor(Color("primary"))
-										.padding(.top)
-									Text("68cm").font(.body).foregroundColor(Color("secondary"))
-										.padding(.bottom)
-								}
-								.clipShape(Rounded())
-								.background(Color("bg-color"))
-								.shadow(color: .black, radius: 5, x: 0, y: 5)
-								Spacer()
-								VStack(alignment: .leading) {
-									Text("BMI").font(.caption).foregroundColor(Color("primary"))
-										.padding(.top)
-									HStack {
-										Text("22").font(.body).foregroundColor(Color("secondary"))
-										Text("Healthy").font(.caption).foregroundColor(Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1))) // fix color
+								ZStack {
+									Color("bg-color")
+										.background(Color("bg-color"))
+										.clipShape(RoundedRectangle(cornerRadius: 8))
+										.shadow(color: Color("secondary"), radius: 3, x: 0, y: 3)
+									VStack(alignment: .leading) {
+										HStack{
+											Text("Weight").font(.caption).foregroundColor(Color("primary"))
+											.padding(.top)
+											Spacer()
+										}.padding(.horizontal)
+										Text(self.getWeight()).font(.body).foregroundColor(Color("secondary"))
+											.padding(.bottom)
+											.padding(.horizontal)
 									}
-									.padding(.bottom)
-								}
-								.clipShape(Rounded())
-								.background(Color("bg-color"))
-								.shadow(color: .black, radius: 5, x: 0, y: 5)
+								}.padding(.horizontal, 3)
+								Spacer()
+								ZStack {
+									Color("bg-color")
+										.background(Color("bg-color"))
+										.clipShape(RoundedRectangle(cornerRadius: 8))
+										.shadow(color: Color("secondary"), radius: 3, x: 0, y: 3)
+									VStack(alignment: .leading) {
+										HStack {
+											Text("Waist").font(.caption).foregroundColor(Color("primary"))
+												.padding(.top)
+											Spacer()
+										}.padding(.horizontal)
+										Text(self.getWaist()).font(.body).foregroundColor(Color("secondary"))
+											.padding(.bottom)
+											.padding(.horizontal)
+									}
+								}.padding(.horizontal, 3)
+								Spacer()
+								ZStack {
+									Color("bg-color")
+										.background(Color("bg-color"))
+										.clipShape(RoundedRectangle(cornerRadius: 8))
+										.shadow(color: Color("secondary"), radius: 3, x: 0, y: 3)
+									VStack(alignment: .leading) {
+										Text("BMI").font(.caption).foregroundColor(Color("primary"))
+											.padding(.top)
+										HStack {
+											Text(self.getBMI()).font(.body).foregroundColor(Color("secondary"))
+											Text("Healthy").font(.caption).foregroundColor(Color("accent-text-green"))
+										}
+										.padding(.bottom)
+									}
+								}.padding(.horizontal, 3)
+								
 								Spacer()
 							}
-						}
-					}.padding().background(Color(.white)).clipShape(Rounded())
+							
+							Spacer()
+						}.padding()
+					}.background(Color(.white)).clipShape(Rounded()).padding(1)
 				}
 				.frame(minWidth: 0, maxWidth: .infinity).background(Color("primary")).edgesIgnoringSafeArea(.top)
 				.tabItem({
@@ -305,6 +324,55 @@ struct DashboardSectionView: View {
             }
         }
     }
+	
+	func getWeight() -> String {
+		let isMetric = UserDefaults.standard.bool(forKey: "Metrics")
+		var weight = UserDefaults.standard.double(forKey: "BBIWeightKey")
+		
+		var weightString: String
+		if isMetric {
+			weightString = "\(Int(weight))Kg"
+		} else {
+			// TODO:- Remove when metrics are saved correctly
+			weight = changeMetrics(metricType: .imperial, unit: .weight, value: weight)
+			weightString = "\(Int(weight))lb"
+		}
+		return weightString
+	}
+	
+	func getWaist() -> String {
+		let isMetric = UserDefaults.standard.bool(forKey: "Metrics")
+		var waist = UserDefaults.standard.double(forKey: "BBIWaistKey")
+		
+		var waistString: String
+		if isMetric {
+			waistString = "\(Int(waist))cm"
+		} else {
+			// TODO:- Consider removing
+			// Conversion should be unecessary if original data had been
+			// saved in the user selected unit system.
+			waist = changeMetrics(metricType: .imperial, unit: .height, value: waist)
+			waistString = "\(Double(Int(waist) * 10) / 10)in"
+		}
+		print("waist: \(waistString)")
+		return waistString
+	}
+	
+	func getBMI() -> String {
+		//let isMetric = UserDefaults.standard.bool(forKey: "Metrics")
+		var weight = UserDefaults.standard.double(forKey: "BBIWeightKey")
+		var height = UserDefaults.standard.double(forKey: "BBIHeightKey")
+		
+		var BMIString: String
+		// TODO:- Add the IF below again after getting metrics saved correctly.
+		//if !isMetric {
+		//	height = changeMetrics(metricType: .metric, unit: .height, value: height)
+		//	weight = changeMetrics(metricType: .metric, unit: .weight, value: weight)
+		//}
+		let bmi = Int(weight / height / height  * 10_000.0)
+		BMIString = "\(bmi)"
+		return BMIString
+	}
 	
     func shareImage() {
         let shareSheet = UIActivityViewController(activityItems: [downloadedImages[0],downloadedImages[3]], applicationActivities: nil)
