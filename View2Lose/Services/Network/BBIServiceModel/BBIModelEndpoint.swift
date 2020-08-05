@@ -96,8 +96,10 @@ let BBIRequestIdByEnums = [
     "ActivateAccount",
     "ValidateTeamName"
 ]
- let BaseURI = "http://104.211.63.244/BBIDataService/service.svc?wsdl"
+let BaseURI = "http://104.211.63.244/BBIDataService/service.svc?wsdl"
 let URL = "http://104.211.63.244/BBIDataService/service.svc/"
+
+let constantKey = "2706f370-a93a-4c4f-9fd4-3077db1140ff"
 
 
 class BBIModelEndpoint {
@@ -292,12 +294,65 @@ class BBIModelEndpoint {
     
     public func login(email: String, completion: @escaping (Result<LoginUserResponse, Error>) -> ()) {
         let dalegate = ""
-        let param = ["CredentialUsername": email
+        let param = ["CredentialUsername": email,
+            "CredentialPassword": constantKey
                      
             ] as [String : Any]
         
         do {
             let url = NSURL(string: BBIModelEndpoint.urlWithRequestId(requestId: BBIRequestLogin))
+
+            var request = URLRequest(url: url! as URL)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            guard let httpbody = try? JSONSerialization.data(withJSONObject: param, options: .prettyPrinted) else {return}
+            request.httpBody = httpbody
+            
+            let session = URLSession.shared
+            session.dataTask(with: request) { (data, response, error) in
+                if error != nil {
+                    print(error)
+                }
+                if let response = response {
+                    print("!!!!!", response)
+                }
+                 
+                if let data = data {
+                    print(data)
+                    do {
+                        let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                        print("?????", json)
+                        
+                        let loginUser = try JSONDecoder().decode(LoginUserResponse.self, from: data)
+                        
+                        if loginUser.ResponseObject != nil {
+                            print("login ", loginUser)
+                        } else {
+                            print("Data is null")
+                        }
+                        
+                        completion(.success(loginUser))
+                         
+                    } catch {
+                        print(error.localizedDescription)
+                        completion(.failure(error))
+                    }
+                }
+            }.resume()
+        }
+    }
+    
+    public func getAllUserImages(email: String, completion: @escaping (Result<LoginUserResponse, Error>) -> ()) {
+        let dalegate = ""
+        let param = ["CredentialUsername": email,
+            "CredentialPassword": constantKey
+                     
+            ] as [String : Any]
+        
+        do {
+            let url = NSURL(string: BBIModelEndpoint.urlWithRequestId(requestId: BBIRequestGetUserImages))
 
             var request = URLRequest(url: url! as URL)
             request.httpMethod = "POST"
