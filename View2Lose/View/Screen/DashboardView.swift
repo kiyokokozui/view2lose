@@ -236,8 +236,10 @@ struct DashboardSectionView: View {
 										Text("BMI").font(.caption).foregroundColor(Color("primary"))
 											.padding(.top)
 										HStack {
-											Text(self.getBMI()).font(.body).foregroundColor(Color("secondary"))
-											Text("Healthy").font(.caption).foregroundColor(Color("accent-text-green"))
+											Text("\(Int(self.getBMI()))").font(.body)
+												.foregroundColor(Color("secondary"))
+											Text("\(self.getLabel(for: self.getBMI()))")
+												.font(.caption).foregroundColor(Color("accent-text-green"))
 										}
 										.padding(.bottom)
 									}
@@ -331,11 +333,11 @@ struct DashboardSectionView: View {
 		
 		var weightString: String
 		if isMetric {
-			weightString = "\(Int(weight))Kg"
+			weightString = "\(Int(weight)) Kg"
 		} else {
 			// TODO:- Remove when metrics are saved correctly
 			weight = changeMetrics(metricType: .imperial, unit: .weight, value: weight)
-			weightString = "\(Int(weight))lb"
+			weightString = "\(Int(weight)) lb"
 		}
 		return weightString
 	}
@@ -346,32 +348,37 @@ struct DashboardSectionView: View {
 		
 		var waistString: String
 		if isMetric {
-			waistString = "\(Int(waist))cm"
+			waistString = "\(Int(waist)) cm"
 		} else {
 			// TODO:- Consider removing
 			// Conversion should be unecessary if original data had been
 			// saved in the user selected unit system.
 			waist = changeMetrics(metricType: .imperial, unit: .height, value: waist)
-			waistString = "\(Double(Int(waist) * 10) / 10)in"
+			waistString = "\(Double(Int(waist) * 10) / 10) ft"
 		}
 		print("waist: \(waistString)")
 		return waistString
 	}
 	
-	func getBMI() -> String {
-		//let isMetric = UserDefaults.standard.bool(forKey: "Metrics")
+	func getBMI() -> Double {
+		let isMetric = UserDefaults.standard.bool(forKey: "Metrics")
 		var weight = UserDefaults.standard.double(forKey: "BBIWeightKey")
 		var height = UserDefaults.standard.double(forKey: "BBIHeightKey")
 		
-		var BMIString: String
-		// TODO:- Add the IF below again after getting metrics saved correctly.
-		//if !isMetric {
-		//	height = changeMetrics(metricType: .metric, unit: .height, value: height)
-		//	weight = changeMetrics(metricType: .metric, unit: .weight, value: weight)
-		//}
+		// TODO:- Add the WEIGHT calculation below again after getting metrics saved correctly.
+		if !isMetric {
+			height = changeMetrics(metricType: .metric, unit: .height, value: height)
+			//weight = changeMetrics(metricType: .metric, unit: .weight, value: weight)
+		}
 		let bmi = Int(weight / height / height  * 10_000.0)
-		BMIString = "\(bmi)"
-		return BMIString
+		return Double(bmi)
+	}
+	
+	func getLabel(for bmi: Double) -> String {
+		if bmi < 18.5 { return "Underweight" }
+		if bmi < 25 { return "Healthy" }
+		if bmi < 30 { return "Overweight" }
+		return "Obese"
 	}
 	
     func shareImage() {
