@@ -322,14 +322,28 @@ struct LoginView: View {
                                UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
                              
                               
-//                               if self.gotImagesFromServer(){
+//                               if self.gotImagesFromServer(emailFromApple: emailFromApple, emailFromFacebook: emailFromFacebook){
 //                                completion(true,true) //signed in with pics
 //                               }else{
 //                                completion(true,false)// signed in, but without pics
 //                                self.facebookManager.isUserAuthenticated = .cameratutorial
 //                               }
+                               
+                               BBIModelEndpoint.sharedService.getAllUserImages(email: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName") { result in
+                                   
+                                   switch result {
+                                   case .success(let response):
+                                    print("GET USER IMAGES RESPONSE ===== ", response)
+                                    completion(true,true)
+                                    break
+                                   case .failure(let error):
+                                    print("GET USER IMAGES FAILED ====== ", error)
+                                    completion(true, false)
+                                    break    
+                                   }
+                               }
                                 
-                               completion(true,false)
+                               
                                break
                            
                            case .failure(let error):
@@ -339,12 +353,6 @@ struct LoginView: View {
                                break
                            }
                        }
-    }
-    
-    
-    func gotImagesFromServer()->Bool{
-       
-        return true
     }
 }
 

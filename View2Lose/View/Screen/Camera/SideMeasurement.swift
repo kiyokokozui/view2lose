@@ -41,7 +41,7 @@ struct SideMeasurement: View {
                 Button(action: {
                     self.facebookManager.isUserAuthenticated = .postOnBoardLoading
                     self.sideMainViewController.calculateSize {
-                        //HAVE TO FIX THIS
+//                        HAVE TO FIX THIS
                         self.facebookManager.isUserAuthenticated = .signedIn
                         print("Completed")
                     }
@@ -112,10 +112,6 @@ struct SideMainViewController: UIViewControllerRepresentable {
             return
         }
         
-        let totalInches = 5.75
-        let imageSize = self.sideviewController.sideControlView.imageView!.image?.size
-        
-        
         // Get Actual Height In Pixels
         let frontHeightPixels = currentMeasurments.frontBottom - currentMeasurments.frontTop
         let sideHeightPixels = currentMeasurments.sideBottom - currentMeasurments.sideTop
@@ -123,8 +119,8 @@ struct SideMainViewController: UIViewControllerRepresentable {
         // Calculate The Pixels Per Inch For Front & Back
         // These Might Be Different As The Height Might Be Different In Each Picture
         // We Will Use This To Calculate How To Scale The Side Picture To Match The Front
-        let frontPixelsPerInch = frontHeightPixels / CGFloat(totalInches)
-        let sidePixelsPerInch = sideHeightPixels / CGFloat(totalInches)
+        let frontPixelsPerInch = frontHeightPixels / CGFloat(200)
+        let sidePixelsPerInch = sideHeightPixels / CGFloat(200)
         
         // Get Major Radius In Inches (Front Pic) & Minor Radius In Inches (Side Pic)
         let major_rad = ((abs(currentMeasurments.frontLeftX - currentMeasurments.frontRightX)) / frontPixelsPerInch)
@@ -137,11 +133,15 @@ struct SideMainViewController: UIViewControllerRepresentable {
         
         let pi_times_a_plus_b = .pi * (major_rad + minor_rad)
         let main_math = (1.0 + ((3.0 * h) / (10.0 + sqrt(4.0 - (3.0 * h)))))
-        let   currentApproximation = (pi_times_a_plus_b * main_math) / 2.0
+        let currentApproximation = (pi_times_a_plus_b * main_math) / 2.0
         
         let approx_inch = String(Int(currentApproximation))
         //  let approx_fraction = getDisplayFraction(currentApproximation)
         
+        print("WAIST SIZE ======", approx_inch)
+        
+//        let totalInches = 5.75
+//        let imageSize = self.sideviewController.sideControlView.imageView!.image?.size
         
         let convertPtLeft = self.convertPointToPicturePt(CGPoint(x: currentMeasurments.frontLeftX, y: currentMeasurments.frontLeftY), imageView: self.sideviewController.sideControlView.imageView!)
         let convertPtRight = self.convertPointToPicturePt(CGPoint(x: currentMeasurments.frontRightX, y: currentMeasurments.frontRightY), imageView: self.sideviewController.sideControlView.imageView!)
