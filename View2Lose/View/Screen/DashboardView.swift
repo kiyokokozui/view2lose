@@ -96,7 +96,7 @@ struct DashboardSectionView: View {
     
     @State var index = 0
     @State private var selectedWeek = 0
-	
+
     var weeks = ["Week 0", "Week 6", "Week 12", "Week 18"]
 
     @State var isWellDone = UserDefaults.standard.bool(forKey: "showWellDonePop")

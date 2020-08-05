@@ -270,17 +270,13 @@ struct LoginView: View {
             switch result {
             case .success(let userId):
                
-//                self.didSignInToServer(){
-//                    self.facebookManager.isUserAuthenticated = .signedIn
-//                }else{
-//                    self.facebookManager.isUserAuthenticated = .userOnBoard
-//                }
+
                 self.signInToServer { (signedIn, signedInWithPics) in
                     if signedIn && signedInWithPics{
                         DispatchQueue.main.async {
                             self.facebookManager.isUserAuthenticated = .signedIn
                         }
-                        
+
                     }else if signedIn && !signedInWithPics{
                         self.facebookManager.isUserAuthenticated = .cameratutorial
                     }else{
@@ -320,14 +316,16 @@ struct LoginView: View {
                                print("Login success!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook)")
                                UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
                                UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
-                             
+                               self.getImagesFromServer(email: emailFromApple!)
                               
-//                               if self.gotImagesFromServer(){
+//                               if self.gotImagesFromServer(email: emailFromApple){
 //                                completion(true,true) //signed in with pics
 //                               }else{
 //                                completion(true,false)// signed in, but without pics
 //                                self.facebookManager.isUserAuthenticated = .cameratutorial
 //                               }
+                               
+                               
                                 
                                completion(true,false)
                                break
@@ -341,10 +339,27 @@ struct LoginView: View {
                        }
     }
     
-    
-    func gotImagesFromServer()->Bool{
-       
-        return true
+    func getImagesFromServer(email: String!){
+        BBIModelEndpoint.sharedService.getAllUserImages(email: email) { result in
+            
+            switch result {
+            case .success(let response):
+             print("GET USER IMAGES RESPONSE ===== ", response)
+             DispatchQueue.main.async {
+                 self.facebookManager.isUserAuthenticated = .signedIn
+             }
+            
+             break
+            case .failure(let error):
+             print("GET USER IMAGES FAILED ====== ", error)
+             DispatchQueue.main.async {
+                self.facebookManager.isUserAuthenticated = .cameratutorial
+             }
+            
+             break
+            }
+        }
+        
     }
 }
 
