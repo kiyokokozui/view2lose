@@ -46,22 +46,25 @@ struct ListHeader: View {
 }
 
 struct SettingsView: View {
-	@State private var saveImageToPhone = true {
-		didSet {
+	@EnvironmentObject var user: SessionStore
+	@EnvironmentObject var facebookManager: FacebookManager
+	@EnvironmentObject var signInWithAppleManager: SignInWithAppleManager
+	
+	@State private var showingLogoutConfirmation = false
+	
+	@State private var saveImageToPhone = true
+	{ didSet {
 			let encoder = JSONEncoder()
 			if let encoded = try? encoder.encode(saveImageToPhone) {
 				UserDefaults.standard.set(encoded, forKey: "BBISaveImageToPhoneKey")
-			}
-		}
-	}
-	@State private var sendPushNotifications = false {
-		didSet {
+	} } }
+	
+	@State private var sendPushNotifications = false
+	{ didSet {
 			let encoder = JSONEncoder()
 			if let encoded = try? encoder.encode(sendPushNotifications) {
 				UserDefaults.standard.set(encoded, forKey: "BBISendPushNotificationsKey")
-			}
-		}
-	}
+	} } }
 	
 	@State private var name = ""
 	@State private var gender = ""
@@ -97,7 +100,8 @@ struct SettingsView: View {
 									.font(.body)
 									.foregroundColor(Color("primary"))
 									.padding(.top)
-								Text("Sydney, Australia")
+								// Replace with location
+								Text("World")
 									.font(.body)
 									.foregroundColor(Color("secondary"))
 									.padding(.top, 9)
@@ -125,21 +129,21 @@ struct SettingsView: View {
 									Text("Gender")
 									Spacer()
 									// TODO: - replace with picker
-									Text(self.gender)
+									Text("-- --")
 								}
 								.foregroundColor(Color("secondary"))
 								HStack {
 									Text("Height")
 									Spacer()
 									// TODO: - replace with picker
-									Text(self.height) // "5ft 8in"
+									Text("-- --") // "5ft 8in"
 								}
 								.foregroundColor(Color("secondary"))
 								HStack {
 									Text("Weight")
 									Spacer()
 									// TODO: - replace with picker
-									Text(self.weight) //"154 lbs"
+									Text("-- --") //"154 lbs"
 								}
 								.foregroundColor(Color("secondary"))
 							}
@@ -187,6 +191,31 @@ struct SettingsView: View {
 			.background(Color("primary"))
 			.edgesIgnoringSafeArea(.top)
 			.onAppear(perform: initializeData)
+			.alert(isPresented: $showingLogoutConfirmation) {
+				Alert(title: Text("Log out"), message: Text("Are you sure you want to log out?"),
+					  primaryButton:   .cancel(Text("No")),
+					  secondaryButton: .default(Text("Yes"), action: {
+							UserDefaults.standard.removeObject(forKey: "BBIFirstNameKey")
+							UserDefaults.standard.removeObject(forKey: "BBILastNameKey")
+							UserDefaults.standard.removeObject(forKey: "BBIFullNameKey")
+							UserDefaults.standard.removeObject(forKey: "BBIEmailKey")
+							UserDefaults.standard.removeObject(forKey: "BBIGenderKey")
+							UserDefaults.standard.removeObject(forKey: "BBIHeightKey")
+							UserDefaults.standard.removeObject(forKey: "BBIWeightKey")
+							UserDefaults.standard.removeObject(forKey: "BBIAgeKey")
+							UserDefaults.standard.removeObject(forKey: "BBIBodyTypeKey")
+							UserDefaults.standard.removeObject(forKey: "BBIUserGoalKey")
+							UserDefaults.standard.removeObject(forKey: "BBIActivityKey")
+							UserDefaults.standard.removeObject(forKey: "BBISaveImageToPhoneKey")
+							UserDefaults.standard.removeObject(forKey: "BBISendPushNotificationsKey")
+							
+							KeychainSwift().clear()
+							
+							self.user.isLoggedIn = false
+							self.facebookManager.isUserAuthenticated = .signedOut
+							self.signInWithAppleManager.isUserAuthenticated = .signedOut
+					}))
+			}
 		}
 	}
 	
@@ -198,7 +227,12 @@ struct SettingsView: View {
 			let lName: String = keychain.get("BBILastNameKey") ?? ""
 			name = "\(fName) \(lName)"
 		} else {
-			name = "Name Unknown"
+			if let fuName: String = keychain.get("BBIFullNameKey") {
+				name = "\(fuName)"
+			}
+			else {
+				name = "Name Unknown"
+			}
 		}
 		if let data = UserDefaults.standard.string(forKey: "BBIGenderKey") {
 			gender = data == "M" ? "Male" : "Female"
@@ -234,23 +268,7 @@ struct SettingsView: View {
 	
 	func setNewWeightGoalTapped() {}
 	
-	func logOutTapped() {
-		UserDefaults.standard.removeObject(forKey: "BBIFirstNameKey")
-		UserDefaults.standard.removeObject(forKey: "BBILastNameKey")
-		UserDefaults.standard.removeObject(forKey: "BBIFullNameKey")
-		UserDefaults.standard.removeObject(forKey: "BBIEmailKey")
-		UserDefaults.standard.removeObject(forKey: "BBIGenderKey")
-		UserDefaults.standard.removeObject(forKey: "BBIHeightKey")
-		UserDefaults.standard.removeObject(forKey: "BBIWeightKey")
-		UserDefaults.standard.removeObject(forKey: "BBIAgeKey")
-		UserDefaults.standard.removeObject(forKey: "BBIBodyTypeKey")
-		UserDefaults.standard.removeObject(forKey: "BBIUserGoalKey")
-		UserDefaults.standard.removeObject(forKey: "BBIActivityKey")
-		UserDefaults.standard.removeObject(forKey: "BBISaveImageToPhoneKey")
-		UserDefaults.standard.removeObject(forKey: "BBISendPushNotificationsKey")
-		
-		KeychainSwift().clear()
-	}
+	func logOutTapped() { showingLogoutConfirmation = true }
 }
 
 struct SettingsView_Previews: PreviewProvider {
