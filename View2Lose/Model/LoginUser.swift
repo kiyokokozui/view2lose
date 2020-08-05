@@ -22,4 +22,5 @@ struct LoginUserResponse: Codable {
 
 struct ResLoginObj: Codable {
     var UserId: Int
+    var Height: String
 }
