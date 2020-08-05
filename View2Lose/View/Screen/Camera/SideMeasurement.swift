@@ -90,9 +90,8 @@ struct SideMainViewController: UIViewControllerRepresentable {
     var cameraAspectRatio: CGFloat = 0.0
     var imageHeightRelativeToScreen: CGFloat = 0.0
     
-    var totalInches: Int = 0
-    
-    
+    var totalInches: Int = Int(UserDefaults.standard.double(forKey: "BBIHeightKey"))
+        
     public func makeUIViewController(context: Context) -> SideViewController {
         self.sideviewController.sideControlView.delegate = context.coordinator
         return sideviewController
@@ -107,6 +106,7 @@ struct SideMainViewController: UIViewControllerRepresentable {
     }
     
     func calculateSize(completion: @escaping ()->() ) {
+        print("TOTAL INCHES ======= ", totalInches)
         //  Put this below "|| totalInches == 0"
         if !currentMeasurments.frontSet || !currentMeasurments.sideSet  {
             return
@@ -119,8 +119,11 @@ struct SideMainViewController: UIViewControllerRepresentable {
         // Calculate The Pixels Per Inch For Front & Back
         // These Might Be Different As The Height Might Be Different In Each Picture
         // We Will Use This To Calculate How To Scale The Side Picture To Match The Front
-        let frontPixelsPerInch = frontHeightPixels / CGFloat(200)
-        let sidePixelsPerInch = sideHeightPixels / CGFloat(200)
+        let frontPixelsPerInch = frontHeightPixels / CGFloat(totalInches)
+        let sidePixelsPerInch = sideHeightPixels / CGFloat(totalInches)
+        
+//        let frontPixelsPerInch = frontHeightPixels / CGFloat(200)
+//        let sidePixelsPerInch = sideHeightPixels / CGFloat(200)
         
         // Get Major Radius In Inches (Front Pic) & Minor Radius In Inches (Side Pic)
         let major_rad = ((abs(currentMeasurments.frontLeftX - currentMeasurments.frontRightX)) / frontPixelsPerInch)
@@ -139,6 +142,8 @@ struct SideMainViewController: UIViewControllerRepresentable {
         //  let approx_fraction = getDisplayFraction(currentApproximation)
         
         print("WAIST SIZE ======", approx_inch)
+        
+        UserDefaults.standard.set(approx_inch, forKey: "BBIWaistKey")
         
 //        let totalInches = 5.75
 //        let imageSize = self.sideviewController.sideControlView.imageView!.image?.size

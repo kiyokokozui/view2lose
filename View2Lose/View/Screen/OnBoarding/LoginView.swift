@@ -316,6 +316,7 @@ struct LoginView: View {
                                print("Login success!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook)")
                                UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
                                UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
+                               UserDefaults.standard.set(response.ResponseObject.Height, forKey: "BBIHeightKey")
                                self.getImagesFromServer(email: emailFromApple!)
                               
 //                               if self.gotImagesFromServer(email: emailFromApple){
