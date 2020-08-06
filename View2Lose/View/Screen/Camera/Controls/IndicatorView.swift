@@ -20,9 +20,9 @@ class IndicatorView: UIImageView
         didSet {
             switch side {
             case .left:
-                self.frame = CGRect(x: touchPoint.x - 90.0, y: touchPoint.y - 93.0, width: 70, height: 26)
+                self.frame = CGRect(x: touchPoint.x - 10, y: touchPoint.y - 50.0, width: 70, height: 26)
             case .right:
-                self.frame = CGRect(x: touchPoint.x, y: touchPoint.y - 93.0, width: 70, height: 26)
+                self.frame = CGRect(x: touchPoint.x - 60, y: touchPoint.y - 50.0, width: 70, height: 26)
             }
         }
     }

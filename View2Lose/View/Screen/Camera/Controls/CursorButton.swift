@@ -47,25 +47,35 @@ enum CursorType {
 class CursorButton: UIButton {
     var cursorType: CursorType = .free
     var isTop: Bool = false
+	var radius: CGFloat
     var touchPoint: CGPoint = CGPoint.zero {
         didSet {
             switch cursorType {
             case .free:
-                self.frame = CGRect(x: touchPoint.x - 35.0, y: touchPoint.y - 35.0, width: 70.0, height: 70.0)
+                self.frame = CGRect(x: touchPoint.x - radius, y: touchPoint.y - radius, width: radius * 2, height: radius * 2)
                 self.alpha = 0.9
                 break
             case .vertical:
-                self.frame = CGRect(x: touchPoint.x - 30.0, y: touchPoint.y - 30.0, width: 60.0, height: 60.0)
+                self.frame = CGRect(x: touchPoint.x - radius, y: touchPoint.y - radius, width: radius * 2, height: radius * 2)
                 break
             }
         }
     }
     
     required init?(coder aDecoder: NSCoder) {
+		self.radius = 0
         super.init(coder: aDecoder)
     }
-    
-    required init(frame: CGRect, type: CursorType, isTop: Bool) {
+	
+	convenience init(frame: CGRect, type: CursorType, isTop: Bool) {
+		switch type {
+			case .free: self.init(frame: frame, type: type, diameter: 35, isTop: isTop)
+			case .vertical: self.init(frame: frame, type: type, diameter: 30, isTop: isTop)
+		}
+	}
+	
+	required init(frame: CGRect, type: CursorType, diameter: CGFloat, isTop: Bool) {
+		self.radius = diameter / 2
         super.init(frame: frame)
         self.cursorType = type
         self.showsTouchWhenHighlighted = false
@@ -77,12 +87,12 @@ class CursorButton: UIButton {
         
         switch type {
         case .free:
-            self.layer.cornerRadius = 35.0
-            self.setImage(UIImage(named: "finger_tap"), for: UIControl.State())
-            self.setImage(UIImage(named: "finger_tap"), for: .highlighted)
+            self.layer.cornerRadius = radius
+            self.setImage(UIImage(named: "right"), for: UIControl.State())
+            self.setImage(UIImage(named: "right"), for: .highlighted)
             break
         case .vertical:
-            self.layer.cornerRadius = 30.0
+            self.layer.cornerRadius = radius
             if isTop{
                 self.setImage(UIImage(named: "down"), for: UIControl.State())
                 self.setImage(UIImage(named: "down"), for: .highlighted)
@@ -90,7 +100,6 @@ class CursorButton: UIButton {
                 self.setImage(UIImage(named: "right"), for: UIControl.State())
                 self.setImage(UIImage(named: "right"), for: .highlighted)
             }
-            
             break
         }
     }
