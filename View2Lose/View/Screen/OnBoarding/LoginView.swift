@@ -317,7 +317,7 @@ struct LoginView: View {
                                UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
                                UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
                                UserDefaults.standard.set(response.ResponseObject.Height, forKey: "BBIHeightKey")
-                               self.getImagesFromServer(email: emailFromApple!)
+                               self.getImagesFromServer(email: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName")
                               
 //                               if self.gotImagesFromServer(email: emailFromApple){
 //                                completion(true,true) //signed in with pics
