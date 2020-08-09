@@ -270,24 +270,10 @@ struct LoginView: View {
             switch result {
             case .success(let userId):
                
-
-                self.signInToServer { (signedIn, signedInWithPics) in
-                    if signedIn && signedInWithPics{
-                        DispatchQueue.main.async {
-                            self.facebookManager.isUserAuthenticated = .signedIn
-                        }
-
-                    }else if signedIn && !signedInWithPics{
-                        self.facebookManager.isUserAuthenticated = .cameratutorial
-                    }else{
-                        self.facebookManager.isUserAuthenticated = .userOnBoard
-                    }
-                }
-               
+                self.signInToServer()
              //   UserDefaults.standard.set(userId, forKey: self.facebookManager.userIdentifierKey)
                 //self.signInWithAppleManager.isUserAuthenticated = .signedIn
                
-                
             case .failure(let err):
                 //self.errDescription = err.localizedDescription
                 print("Sign In with App Failure: \(err)")
@@ -302,7 +288,7 @@ struct LoginView: View {
     
     
     
-    private func signInToServer(completion: @escaping (Bool, Bool)->()) {
+    private func signInToServer() {
         
         let keychain = KeychainSwift()
              
@@ -313,10 +299,11 @@ struct LoginView: View {
         BBIModelEndpoint.sharedService.login(email: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName") { result in
                            switch result {
                            case.success(let response):
-                               print("Login success!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook)")
+                               print("Login success!!!!!!! \nUser ID:\(response.ResponseObject.UserId)\nUser Email:\(emailFromApple ?? emailFromFacebook)\n")
                                UserDefaults.standard.set(response.ResponseObject.UserId, forKey: "userId")
                                UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
                                UserDefaults.standard.set(response.ResponseObject.Height, forKey: "BBIHeightKey")
+
                                self.getImagesFromServer(email: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName")
                               
 //                               if self.gotImagesFromServer(email: emailFromApple){
@@ -334,27 +321,27 @@ struct LoginView: View {
                            case .failure(let error):
                                print("Login failed =========", error)
                                 self.facebookManager.isUserAuthenticated = .userOnBoard
-                               completion(false,false) //not signed in and no pics
                                break
                            }
                        }
     }
     
-    func getImagesFromServer(email: String!){
-        BBIModelEndpoint.sharedService.getAllUserImages(email: email) { result in
+    func getImagesFromServer(userEmail: String!){
+        BBIModelEndpoint.sharedService.getAllUserImages(email: userEmail) { result in
             
             switch result {
             case .success(let response):
              print("GET USER IMAGES RESPONSE ===== ", response)
              DispatchQueue.main.async {
-                 self.facebookManager.isUserAuthenticated = .signedIn
+                self.facebookManager.isUserAuthenticated = .signedIn
              }
             
              break
             case .failure(let error):
              print("GET USER IMAGES FAILED ====== ", error)
              DispatchQueue.main.async {
-                self.facebookManager.isUserAuthenticated = .cameratutorial
+                 self.facebookManager.isUserAuthenticated = .userOnBoard
+               // self.facebookManager.isUserAuthenticated = .cameratutorial
              }
             
              break

@@ -164,7 +164,8 @@ struct ContentView: View {
                 
                 HStack (alignment: .center, spacing: 25) {
                     
-                    GenderButton(isSelected: $userbasicInfo.isFemale, type: "👩🏻")
+                    GenderButton(isMale: $userbasicInfo.isMale, isFemale: $userbasicInfo.isFemale)
+                    //GenderButton(isSelected: $userbasicInfo.isFemale, type: "👩🏻")
                     
                 }
                 .frame(minWidth: 0, maxWidth: .infinity)
@@ -270,11 +271,12 @@ struct ContentView: View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                             }
                             
-                        } .background(Color("primary"))
+                        } .background((!userbasicInfo.isFemale && !userbasicInfo.isMale) ? Color(UIColor.gray) : Color("primary"))
 
                             .cornerRadius(30)
                         .padding(.bottom, 20)
                     .shadow(color: Color(#colorLiteral(red: 0.8680125475, green: 0.8301205635, blue: 0.9628856778, alpha: 1)),radius: 5, x: 1, y: 2)
+                            .disabled(!userbasicInfo.isFemale && !userbasicInfo.isMale)
                         
                 
                         
@@ -301,12 +303,21 @@ struct GenderButton: View {
     
     @State var selected = ""
     @State var show = false
-    @Binding var isSelected: Bool
-    var type: String
+   // @Binding var isSelected: Bool
+    @Binding var isMale: Bool
+    @Binding var isFemale: Bool
+   // var type: String
     var body: some View {
         ForEach(genderData, id: \.self) { i in
             Button(action: {
                 self.selected = i
+                if i=="👩🏻"{
+                    self.isFemale=true
+                    self.isMale=false
+                }else{
+                    self.isMale=true
+                    self.isFemale=false
+                }
             }, label: {
                 HStack (alignment: .center) {
                     Text(i)
