@@ -304,7 +304,7 @@ struct LoginView: View {
                                UserDefaults.standard.set((emailFromApple ?? emailFromFacebook), forKey: "userEmail")
                                UserDefaults.standard.set(response.ResponseObject.Height, forKey: "BBIHeightKey")
 
-                               self.getImagesFromServer(email: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName")
+                               self.getImagesFromServer(userEmail: (emailFromApple ?? emailFromFacebook) ?? "defaultUserName")
                               
 //                               if self.gotImagesFromServer(email: emailFromApple){
 //                                completion(true,true) //signed in with pics
@@ -315,7 +315,7 @@ struct LoginView: View {
                                
                                
                                 
-                               completion(true,false)
+                             //  completion(true,false)
                                break
                            
                            case .failure(let error):
